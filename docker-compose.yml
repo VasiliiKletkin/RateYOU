@@ -1,0 +1,92 @@
+services:
+  postgres:
+    # postgis/postgis:17-* ships amd64 only (as of 2026-05). On Apple Silicon
+    # Docker Desktop runs it via Rosetta — fast enough for dev workloads.
+    # In production we'd deploy to native amd64 anyway.
+    image: postgis/postgis:17-3.5
+    platform: linux/amd64
+    container_name: rateme-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rateme}
+      POSTGRES_USER: ${POSTGRES_USER:-rateme}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rateme}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rateme}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: rateme-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    build: .
+    container_name: rateme-migrate
+    command: python -m alembic upgrade head
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  bot:
+    build: .
+    container_name: rateme-bot
+    command: python -m src.presentation.bot.main
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  admin:
+    build: .
+    container_name: rateme-admin
+    command: python -m src.presentation.admin.main
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

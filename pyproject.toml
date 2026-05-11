@@ -1,0 +1,93 @@
+[project]
+name = "rateme"
+version = "0.1.0"
+description = "Telegram bot for rating profiles with payments via Telegram Stars"
+authors = [
+    {name = "Vasilii Kletkin",email = "kletkinvasilii@gmail.com"}
+]
+license = {text = "MIT"}
+requires-python = ">=3.13,<3.14"
+dependencies = ["aiogram (>=3.28.2,<4.0.0)", "fastapi (>=0.136.1,<0.137.0)", "uvicorn[standard] (>=0.46.0,<0.47.0)", "starlette-admin (>=0.16.0,<0.17.0)", "sqlalchemy[asyncio] (>=2.0.49,<3.0.0)", "asyncpg (>=0.31.0,<0.32.0)", "alembic (>=1.18.4,<2.0.0)", "redis (>=7.4.0,<8.0.0)", "dishka (>=1.10.1,<2.0.0)", "pydantic-settings (>=2.14.1,<3.0.0)", "structlog (>=25.5.0,<26.0.0)", "itsdangerous (>=2.2.0,<3.0.0)", "babel (>=2.18.0,<3.0.0)", "geoalchemy2 (>=0.18.0,<0.19.0)", "shapely (>=2.0.7,<3.0.0)"]
+
+[tool.poetry]
+package-mode = false
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.3,<10.0.0)",
+    "pytest-asyncio (>=1.3.0,<2.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "ruff (>=0.15.12,<0.16.0)",
+    "mypy (>=2.0.0,<3.0.0)",
+]
+
+# ─── Ruff ────────────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "N",      # pep8-naming
+    "SIM",    # flake8-simplify
+    "ASYNC",  # flake8-async
+    "RUF",    # ruff-specific
+]
+ignore = [
+    "B008",  # function calls in arg defaults (FastAPI Depends pattern)
+    "N818",  # exception naming — DDD prefers domain-language names like UserIsBanned
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "tests"]
+
+[tool.ruff.lint.per-file-ignores]
+# Starlette-Admin's documented pattern is class-level field lists; RUF012
+# would force us to wrap each list in ClassVar, which then conflicts with
+# the base class's instance-variable types. Disable just for views.
+"src/presentation/admin/views.py" = ["RUF012"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ─── Mypy ────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_optional = true
+show_error_codes = true
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["alembic.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# Starlette-Admin defines its ModelView attributes as instance vars typed as
+# Sequence[BaseField] / Callable. At runtime it accepts str lists and bools,
+# which is the documented usage. We disable the resulting mypy complaints
+# only for the views module.
+module = ["src.presentation.admin.views"]
+disable_error_code = ["assignment", "misc", "list-item"]
+
+# ─── Pytest ──────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-ra --strict-markers --strict-config"

@@ -1,0 +1,420 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-05-12 01:40+0300\n"
+"PO-Revision-Date: 2026-05-11 23:03+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: src/presentation/bot/keyboards.py:32
+msgid "♂️ Male"
+msgstr "♂️ Парень"
+
+#: src/presentation/bot/keyboards.py:34
+msgid "♀️ Female"
+msgstr "♀️ Девушка"
+
+#: src/presentation/bot/keyboards.py:63
+msgid "⏭ Skip"
+msgstr "⏭ Пропустить"
+
+#: src/presentation/bot/keyboards.py:73
+msgid "Name"
+msgstr "Имя"
+
+#: src/presentation/bot/keyboards.py:74
+msgid "Age"
+msgstr "Возраст"
+
+#: src/presentation/bot/keyboards.py:77
+msgid "Gender"
+msgstr "Пол"
+
+#: src/presentation/bot/keyboards.py:82
+msgid "Location"
+msgstr "Геопозиция"
+
+#: src/presentation/bot/keyboards.py:85
+msgid "Bio"
+msgstr "Био"
+
+#: src/presentation/bot/keyboards.py:86
+msgid "Photo"
+msgstr "Фото"
+
+#: src/presentation/bot/keyboards.py:89
+msgid "✅ Done"
+msgstr "✅ Готово"
+
+#: src/presentation/bot/keyboards.py:106
+#, python-brace-format
+msgid "{name} — {price} ⭐ / {days}d"
+msgstr "{name} — {price} ⭐ / {days}д"
+
+#: src/presentation/bot/handlers/create_profile.py:43
+msgid "Nothing to cancel."
+msgstr "Нечего отменять."
+
+#: src/presentation/bot/handlers/create_profile.py:46
+msgid "Cancelled."
+msgstr "Отменено."
+
+#: src/presentation/bot/handlers/create_profile.py:62
+#: src/presentation/bot/handlers/create_profile.py:191
+msgid "You already have a profile."
+msgstr "У тебя уже есть анкета."
+
+#: src/presentation/bot/handlers/create_profile.py:67
+msgid ""
+"Let's create your profile.\n"
+"What's your name?"
+msgstr ""
+"Давай создадим анкету.\n"
+"Как тебя зовут?"
+
+#: src/presentation/bot/handlers/create_profile.py:73
+#: src/presentation/bot/handlers/edit_profile.py:161
+msgid "Please send text."
+msgstr "Пожалуйста, отправь текст."
+
+#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/edit_profile.py:166
+msgid "❌ Name must be 1-50 non-empty characters. Try again:"
+msgstr "❌ Имя - от 1 до 50 символов. Попробуй ещё раз:"
+
+#: src/presentation/bot/handlers/create_profile.py:82
+msgid "How old are you? (18-100)"
+msgstr "Сколько тебе лет? (18-100)"
+
+#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/edit_profile.py:178
+msgid "Please send a number."
+msgstr "Пожалуйста, отправь число."
+
+#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/edit_profile.py:184
+msgid "❌ That's not a number. Try again:"
+msgstr "❌ Это не число. Попробуй ещё раз:"
+
+#: src/presentation/bot/handlers/create_profile.py:96
+#: src/presentation/bot/handlers/edit_profile.py:187
+msgid "❌ Age must be between 18 and 100. Try again:"
+msgstr "❌ Возраст должен быть от 18 до 100. Попробуй ещё раз:"
+
+#: src/presentation/bot/handlers/create_profile.py:100
+#: src/presentation/bot/handlers/edit_profile.py:133
+msgid "Pick gender:"
+msgstr "Выбери пол:"
+
+#: src/presentation/bot/handlers/create_profile.py:113
+msgid "Invalid choice"
+msgstr "Неверный выбор"
+
+#: src/presentation/bot/handlers/create_profile.py:119
+msgid "Share your location — it's used to find nearby profiles:"
+msgstr "Поделись геопозицией — она нужна, чтобы находить анкеты рядом:"
+
+#: src/presentation/bot/handlers/create_profile.py:120
+#: src/presentation/bot/handlers/edit_profile.py:143
+msgid "📍 Share location"
+msgstr "📍 Поделиться геопозицией"
+
+#: src/presentation/bot/handlers/create_profile.py:135
+msgid "Tell something about yourself (or /skip):"
+msgstr "Расскажи о себе (или /skip):"
+
+#: src/presentation/bot/handlers/create_profile.py:142
+msgid "Please share a location to continue."
+msgstr "Поделись геопозицией, чтобы продолжить."
+
+#: src/presentation/bot/handlers/create_profile.py:150
+#: src/presentation/bot/handlers/create_profile.py:167
+#, python-brace-format
+msgid "Send up to {max} photos:"
+msgstr "Отправь до {max} фото:"
+
+#: src/presentation/bot/handlers/create_profile.py:157
+msgid "Please send text or /skip."
+msgstr "Пожалуйста, отправь текст или /skip."
+
+#: src/presentation/bot/handlers/create_profile.py:162
+#: src/presentation/bot/handlers/edit_profile.py:230
+msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
+msgstr "❌ Био слишком длинное (макс 500 символов). Попробуй ещё раз или /skip:"
+
+#: src/presentation/bot/handlers/create_profile.py:198
+#, python-brace-format
+msgid ""
+"<b>✅ Profile created!</b>\n"
+"Name: {name}\n"
+"Age: {age}\n"
+"Send /feed to start rating profiles."
+msgstr ""
+"<b>✅ Анкета создана!</b>\n"
+"Имя: {name}\n"
+"Возраст: {age}\n"
+"Отправь /feed, чтобы начать оценивать анкеты."
+
+#: src/presentation/bot/handlers/create_profile.py:245
+msgid "Please send a photo (not text)."
+msgstr "Пожалуйста, отправь фото (не текст)."
+
+#: src/presentation/bot/handlers/edit_profile.py:58
+msgid "Session lost. Use /edit again."
+msgstr "Сессия потеряна. Используй /edit ещё раз."
+
+#: src/presentation/bot/handlers/edit_profile.py:74
+msgid "Profile not found."
+msgstr "Анкета не найдена."
+
+#: src/presentation/bot/handlers/edit_profile.py:80
+msgid "Location updated."
+msgstr "Геопозиция обновлена."
+
+#: src/presentation/bot/handlers/edit_profile.py:81
+msgid "Updated. Pick another field or [Done]:"
+msgstr "Обновлено. Выбери другое поле или [Готово]:"
+
+#: src/presentation/bot/handlers/edit_profile.py:98
+msgid "No profile to edit. Use /create first."
+msgstr "Нет анкеты для редактирования. Сначала /create."
+
+#: src/presentation/bot/handlers/edit_profile.py:101
+msgid "Pick a field to edit:"
+msgstr "Выбери поле для редактирования:"
+
+#: src/presentation/bot/handlers/edit_profile.py:113
+msgid "Saved. /feed to keep rating."
+msgstr "Сохранено. /feed чтобы продолжить."
+
+#: src/presentation/bot/handlers/edit_profile.py:126
+msgid "Unknown field"
+msgstr "Неизвестное поле"
+
+#: src/presentation/bot/handlers/edit_profile.py:131
+msgid "Send new name:"
+msgstr "Отправь новое имя:"
+
+#: src/presentation/bot/handlers/edit_profile.py:132
+msgid "Send new age (18-100):"
+msgstr "Отправь новый возраст (18-100):"
+
+#: src/presentation/bot/handlers/edit_profile.py:134
+msgid "Share your new location:"
+msgstr "Поделись новой геопозицией:"
+
+#: src/presentation/bot/handlers/edit_profile.py:135
+msgid "Send new bio (or /skip to clear):"
+msgstr "Отправь новое био (или /skip чтобы очистить):"
+
+#: src/presentation/bot/handlers/edit_profile.py:136
+#, python-brace-format
+msgid "Send up to {max} new photos:"
+msgstr "Отправь до {max} новых фото:"
+
+#: src/presentation/bot/handlers/edit_profile.py:203
+msgid "Invalid"
+msgstr "Неверно"
+
+#: src/presentation/bot/handlers/edit_profile.py:225
+msgid "Please send text or /skip to clear."
+msgstr "Пожалуйста, отправь текст или /skip чтобы очистить."
+
+#: src/presentation/bot/handlers/edit_profile.py:269
+msgid "Please send a photo."
+msgstr "Пожалуйста, отправь фото."
+
+#: src/presentation/bot/handlers/edit_profile.py:290
+msgid "Please share a location."
+msgstr "Пожалуйста, поделись геопозицией."
+
+#: src/presentation/bot/handlers/feed.py:52
+msgid "No more profiles to rate. Come back later!"
+msgstr "Анкет для оценки больше нет. Загляни позже!"
+
+#: src/presentation/bot/handlers/feed.py:79
+msgid "Rate this profile:"
+msgstr "Оцени анкету:"
+
+#: src/presentation/bot/handlers/feed.py:103
+msgid "You need a profile of your own first. Send /create to make one."
+msgstr "Сначала нужна твоя анкета. Отправь /create, чтобы создать."
+
+#: src/presentation/bot/handlers/feed.py:122
+#: src/presentation/bot/handlers/feed.py:128
+msgid "Bad payload"
+msgstr "Неверные данные"
+
+#: src/presentation/bot/handlers/feed.py:142
+msgid "Can't rate yourself"
+msgstr "Нельзя оценивать себя"
+
+#: src/presentation/bot/handlers/feed.py:145
+msgid "Bad score"
+msgstr "Неверная оценка"
+
+#: src/presentation/bot/handlers/feed.py:148
+#, python-brace-format
+msgid "Rated {score}/10 ✓"
+msgstr "Оценено: {score}/10 ✓"
+
+#: src/presentation/bot/handlers/feed.py:157
+#, python-brace-format
+msgid "📊 Their average: {avg}/10 (from {count} rating)"
+msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
+msgstr[0] "📊 Средняя оценка: {avg}/10 (на основе {count} оценки)"
+msgstr[1] "📊 Средняя оценка: {avg}/10 (на основе {count} оценок)"
+msgstr[2] "📊 Средняя оценка: {avg}/10 (на основе {count} оценок)"
+
+#: src/presentation/bot/handlers/feed.py:193
+msgid "Skipped"
+msgstr "Пропущено"
+
+#: src/presentation/bot/handlers/premium.py:33
+#, python-brace-format
+msgid "Expires in {days} day."
+msgid_plural "Expires in {days} days."
+msgstr[0] "Истекает через {days} день."
+msgstr[1] "Истекает через {days} дня."
+msgstr[2] "Истекает через {days} дней."
+
+#: src/presentation/bot/handlers/premium.py:57
+#, python-brace-format
+msgid ""
+"<b>Your premium: {tier}</b>\n"
+"{expires}\n"
+"Feed shows profiles with avg rating >= {threshold}.\n"
+"\n"
+"Pick a tier to renew or upgrade:"
+msgstr ""
+"<b>Твой премиум: {tier}</b>\n"
+"{expires}\n"
+"Лента показывает анкеты со средним рейтингом >= {threshold}.\n"
+"\n"
+"Выбери тариф для продления или апгрейда:"
+
+#: src/presentation/bot/handlers/premium.py:68
+msgid ""
+"<b>Premium</b> filters your /feed to highly rated profiles.\n"
+"\n"
+"Pick a tier:"
+msgstr ""
+"<b>Премиум</b> фильтрует /feed по высокому рейтингу.\n"
+"\n"
+"Выбери тариф:"
+
+#: src/presentation/bot/handlers/premium.py:99
+msgid "Unknown tier"
+msgstr "Неизвестный тариф"
+
+#: src/presentation/bot/handlers/premium.py:102
+msgid "Invoice sent — pay in the chat"
+msgstr "Счёт отправлен - оплати в чате"
+
+#: src/presentation/bot/handlers/premium.py:124
+msgid "Unknown payment payload."
+msgstr "Неизвестные данные платежа."
+
+#: src/presentation/bot/handlers/premium.py:135
+msgid "This payment is not in our records."
+msgstr "Этого платежа нет в наших записях."
+
+#: src/presentation/bot/handlers/premium.py:146
+msgid "✅ Payment confirmed."
+msgstr "✅ Платёж подтверждён."
+
+#: src/presentation/bot/handlers/premium.py:151
+#, python-brace-format
+msgid ""
+"<b>✅ Premium activated!</b>\n"
+"Tier: {tier}\n"
+"{expires}\n"
+"Now /feed shows profiles rated >= {threshold}."
+msgstr ""
+"<b>✅ Премиум активирован!</b>\n"
+"Тариф: {tier}\n"
+"{expires}\n"
+"Теперь /feed показывает анкеты с рейтингом >= {threshold}."
+
+#: src/presentation/bot/handlers/start.py:30
+msgid ""
+"<b>Welcome to RateMe!</b>\n"
+"You don't have a profile yet - send /create to make one."
+msgstr ""
+"<b>Добро пожаловать в RateMe!</b>\n"
+"У тебя ещё нет анкеты - отправь /create, чтобы создать."
+
+#: src/presentation/bot/handlers/start.py:36
+#, python-brace-format
+msgid ""
+"<b>Welcome back, {name}!</b>\n"
+"Send /feed to rate other profiles."
+msgstr ""
+"<b>С возвращением, {name}!</b>\n"
+"Отправь /feed, чтобы оценивать другие анкеты."
+
+#~ msgid "Send a photo:"
+#~ msgstr "Отправь фото:"
+
+#~ msgid "Send new photo:"
+#~ msgstr "Отправь новое фото:"
+
+#~ msgid "Please send a photo."
+#~ msgstr "Пожалуйста, отправь фото."
+
+#~ msgid "📸 {n}/{max} photos received. Send more or /done."
+#~ msgstr "📸 Получено {n}/{max} фото. Отправь ещё или /done."
+
+#~ msgid "Send at least one photo first."
+#~ msgstr "Сначала отправь хотя бы одно фото."
+
+#~ msgid "Please send a photo. /done when finished."
+#~ msgstr "Пожалуйста, отправь фото. /done когда закончишь."
+
+#~ msgid "City"
+#~ msgstr "Город"
+
+#~ msgid "Which city are you in?"
+#~ msgstr "В каком ты городе?"
+
+#~ msgid "❌ City must be 1-100 non-empty characters. Try again:"
+#~ msgstr "❌ Город - от 1 до 100 символов. Попробуй ещё раз:"
+
+#~ msgid "Share your location to find nearby profiles (or /skip):"
+#~ msgstr "Поделись геопозицией, чтобы видеть ближайшие анкеты (или /skip):"
+
+#~ msgid "Please share a location or /skip."
+#~ msgstr "Пожалуйста, поделись геопозицией или /skip."
+
+#~ msgid ""
+#~ "<b>✅ Profile created!</b>\n"
+#~ "Name: {name}\n"
+#~ "Age: {age}\n"
+#~ "City: {city}\n"
+#~ "Send /feed to start rating profiles."
+#~ msgstr ""
+#~ "<b>✅ Анкета создана!</b>\n"
+#~ "Имя: {name}\n"
+#~ "Возраст: {age}\n"
+#~ "Город: {city}\n"
+#~ "Отправь /feed, чтобы начать оценивать анкеты."
+
+#~ msgid "Send new city:"
+#~ msgstr "Отправь новый город:"
+
+#~ msgid "Send 1-{max} photos, then /done:"
+#~ msgstr "Отправь от 1 до {max} фото, потом /done:"
+
