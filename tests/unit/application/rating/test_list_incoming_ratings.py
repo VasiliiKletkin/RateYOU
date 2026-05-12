@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 import pytest
 
 from src.application.rating.list_incoming_ratings import ListIncomingRatingsUseCase
+from src.domain.payment.value_objects import TransactionId
 from src.domain.profile.entities import Profile
 from src.domain.profile.value_objects import (
     Age,
@@ -18,9 +19,9 @@ from src.domain.profile.value_objects import (
 from src.domain.rating.entities import Rating
 from src.domain.rating.value_objects import RatingId, Score
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import Subscription
+from src.domain.subscription.entities import SubscriptionGrant
 from src.domain.subscription.exceptions import PremiumRequired
-from src.domain.subscription.value_objects import Tier
+from src.domain.subscription.value_objects import GrantSource, Tier
 
 
 @dataclass
@@ -61,13 +62,35 @@ class FakeProfileRepo:
 
 @dataclass
 class FakeSubscriptionRepo:
-    subs: dict[UUID, Subscription] = field(default_factory=dict)
+    grants: list[SubscriptionGrant] = field(default_factory=list)
 
-    async def get_for(self, owner_id: UserId) -> Subscription | None:
-        return self.subs.get(owner_id.value)
+    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+        return [g for g in self.grants if g.owner_id == owner_id]
 
-    async def upsert(self, sub: Subscription) -> None:
-        self.subs[sub.owner_id.value] = sub
+    async def add(self, grant: SubscriptionGrant) -> None:
+        self.grants.append(grant)
+
+    async def list_active_purchases_for(
+        self, owner_id: UserId, now: datetime
+    ) -> list[SubscriptionGrant]:
+        return [
+            g
+            for g in self.grants
+            if g.owner_id == owner_id
+            and g.source == GrantSource.PURCHASE
+            and g.is_active_at(now)
+        ]
+
+    async def find_by_transaction(
+        self, transaction_id: TransactionId
+    ) -> SubscriptionGrant | None:
+        return None
+
+    async def update(self, grant: SubscriptionGrant) -> None:
+        for idx, existing in enumerate(self.grants):
+            if existing.id == grant.id:
+                self.grants[idx] = grant
+                return
 
 
 def _make_profile(owner: UserId, name: str) -> Profile:
@@ -95,11 +118,12 @@ def _make_rating(rater: UserId, rated: UserId, score: int, at: datetime) -> Rati
     )
 
 
-def _active_sub(owner: UserId) -> Subscription:
-    return Subscription.activate(
+def _active_sub(owner: UserId) -> SubscriptionGrant:
+    return SubscriptionGrant.create_purchase(
         owner_id=owner,
         tier=Tier.BRONZE,
         duration_days=7,
+        transaction_id=None,
         now=datetime.now(UTC),
     )
 
@@ -118,14 +142,14 @@ async def test_premium_required_when_subscription_expired() -> None:
     viewer_uuid = uuid4()
     viewer = UserId(viewer_uuid)
     subs = FakeSubscriptionRepo()
-    expired = Subscription(
+    expired = SubscriptionGrant.create_purchase(
         owner_id=viewer,
         tier=Tier.BRONZE,
-        expires_at=datetime.now(UTC) - timedelta(days=1),
-        is_revoked=False,
-        updated_at=datetime.now(UTC),
+        duration_days=7,
+        transaction_id=None,
+        now=datetime.now(UTC) - timedelta(days=30),
     )
-    await subs.upsert(expired)
+    await subs.add(expired)
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=FakeRatingRepo(),
@@ -139,7 +163,7 @@ async def test_returns_empty_when_no_ratings() -> None:
     viewer_uuid = uuid4()
     viewer = UserId(viewer_uuid)
     subs = FakeSubscriptionRepo()
-    await subs.upsert(_active_sub(viewer))
+    await subs.add(_active_sub(viewer))
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=FakeRatingRepo(),
@@ -170,7 +194,7 @@ async def test_returns_ratings_with_rater_names_newest_first() -> None:
         }
     )
     subs = FakeSubscriptionRepo()
-    await subs.upsert(_active_sub(viewer))
+    await subs.add(_active_sub(viewer))
 
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
@@ -198,7 +222,7 @@ async def test_rater_without_profile_returns_none_name() -> None:
         ratings=[_make_rating(rater, viewer, 9, now)]
     )
     subs = FakeSubscriptionRepo()
-    await subs.upsert(_active_sub(viewer))
+    await subs.add(_active_sub(viewer))
 
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
@@ -222,7 +246,7 @@ async def test_limit_caps_returned_items() -> None:
         for i in range(1, 11)
     ]
     subs = FakeSubscriptionRepo()
-    await subs.upsert(_active_sub(viewer))
+    await subs.add(_active_sub(viewer))
 
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,

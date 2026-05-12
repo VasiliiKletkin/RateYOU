@@ -16,10 +16,13 @@ from src.domain.identity.entities import User
 from src.domain.identity.value_objects import TelegramId
 from src.domain.rating.events import RatingGiven
 from src.domain.rating.services import RatingFulfillmentService
+from src.domain.referral.services import ReferralRewardService
 from src.infrastructure.db.repositories.rating import (
     ProfileScoreSummaryRepository,
     RatingRepository,
 )
+from src.infrastructure.db.repositories.referral import ReferralRepository
+from src.infrastructure.db.repositories.subscription import SubscriptionRepository
 from src.infrastructure.db.repositories.user import UserRepository
 from src.infrastructure.db.uow import SqlAlchemyUnitOfWork
 from src.infrastructure.events.in_memory_bus import InMemoryEventBus
@@ -38,8 +41,14 @@ def _make_use_case(session: AsyncSession) -> RateUserUseCase:
     handler = OnRatingGiven(rating_repo=rating_repo, summary_repo=summary_repo)
     bus = InMemoryEventBus()
     bus.subscribe(RatingGiven, handler.handle)
+    referral_service = ReferralRewardService(
+        referral_repo=ReferralRepository(session=session),
+        user_repo=UserRepository(session=session),
+        subscription_repo=SubscriptionRepository(session=session),
+    )
     return RateUserUseCase(
         fulfillment_service=RatingFulfillmentService(rating_repo=rating_repo),
+        referral_service=referral_service,
         event_bus=bus,
         uow=SqlAlchemyUnitOfWork(session=session),
     )

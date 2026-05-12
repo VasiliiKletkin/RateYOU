@@ -12,9 +12,9 @@ from src.domain.payment.events import PaymentConfirmed
 from src.domain.payment.exceptions import TransactionNotFound
 from src.domain.payment.value_objects import Money, Provider, TransactionId
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import Subscription
+from src.domain.subscription.entities import SubscriptionGrant
 from src.domain.subscription.services import SubscriptionActivationService
-from src.domain.subscription.value_objects import Tier
+from src.domain.subscription.value_objects import GrantSource, Tier
 from src.infrastructure.events.in_memory_bus import InMemoryEventBus
 
 
@@ -34,16 +34,38 @@ class FakeTransactionRepository:
 
 @dataclass
 class FakeSubscriptionRepository:
-    subs: dict[UUID, Subscription] = field(default_factory=dict)
+    grants: list[SubscriptionGrant] = field(default_factory=list)
 
-    async def add(self, s: Subscription) -> None:
-        self.subs[s.owner_id.value] = s
+    async def add(self, g: SubscriptionGrant) -> None:
+        self.grants.append(g)
 
-    async def get_for(self, owner_id: UserId) -> Subscription | None:
-        return self.subs.get(owner_id.value)
+    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+        return [g for g in self.grants if g.owner_id == owner_id]
 
-    async def update(self, s: Subscription) -> None:
-        self.subs[s.owner_id.value] = s
+    async def list_active_purchases_for(
+        self, owner_id: UserId, now: datetime
+    ) -> list[SubscriptionGrant]:
+        return [
+            g
+            for g in self.grants
+            if g.owner_id == owner_id
+            and g.source == GrantSource.PURCHASE
+            and g.is_active_at(now)
+        ]
+
+    async def find_by_transaction(
+        self, transaction_id: TransactionId
+    ) -> SubscriptionGrant | None:
+        for g in self.grants:
+            if g.transaction_id == transaction_id:
+                return g
+        return None
+
+    async def update(self, grant: SubscriptionGrant) -> None:
+        for idx, existing in enumerate(self.grants):
+            if existing.id == grant.id:
+                self.grants[idx] = grant
+                return
 
 
 @dataclass
@@ -67,7 +89,7 @@ def _make_pending_transaction(
         amount=Money(amount=300, currency="XTR"),
         provider=Provider.TELEGRAM_STARS,
         purpose=f"premium:{tier}",
-        now=datetime.now(UTC),
+        now=datetime(2026, 1, 1, tzinfo=UTC),
     )
     repo.transactions[t.id.value] = t
     return t
@@ -89,7 +111,7 @@ def _make_use_case(
     )
 
 
-async def test_confirm_marks_paid_and_activates_premium() -> None:
+async def test_confirm_marks_paid_and_creates_purchase_grant() -> None:
     payer = uuid4()
     tx_repo = FakeTransactionRepository()
     sub_repo = FakeSubscriptionRepository()
@@ -106,8 +128,12 @@ async def test_confirm_marks_paid_and_activates_premium() -> None:
 
     assert transaction.status.value == "paid"
     assert transaction.external_id == "tg-charge-abc"
-    assert payer in sub_repo.subs
-    assert sub_repo.subs[payer].tier == Tier.SILVER
+    assert len(sub_repo.grants) == 1
+    grant = sub_repo.grants[0]
+    assert grant.owner_id == UserId(payer)
+    assert grant.tier == Tier.SILVER
+    assert grant.source == GrantSource.PURCHASE
+    assert grant.transaction_id == transaction.id
     assert uow.committed is True
 
 
@@ -124,18 +150,34 @@ async def test_confirm_unknown_transaction_raises() -> None:
         )
 
 
-async def test_confirm_existing_subscription_is_upgraded() -> None:
+async def test_confirm_with_existing_purchase_revokes_old_grant() -> None:
     payer = uuid4()
     tx_repo = FakeTransactionRepository()
     sub_repo = FakeSubscriptionRepository()
-    sub_repo.subs[payer] = Subscription.activate(
-        UserId(payer), Tier.BRONZE, duration_days=7, now=datetime.now(UTC)
+    # Pre-existing active BRONZE purchase (recent — must still be active
+    # when the new confirm runs).
+    seeded_at = datetime.now(UTC)
+    old_tx = _make_pending_transaction(tx_repo, payer, tier="bronze")
+    old_tx.mark_paid(external_id="ch-0", now=seeded_at)
+    await sub_repo.add(
+        SubscriptionGrant.create_purchase(
+            owner_id=UserId(payer),
+            tier=Tier.BRONZE,
+            duration_days=7,
+            transaction_id=old_tx.id,
+            now=seeded_at,
+        )
     )
-    transaction = _make_pending_transaction(tx_repo, payer, tier="gold")
+
+    new_tx = _make_pending_transaction(tx_repo, payer, tier="gold")
     use_case = _make_use_case(tx_repo, sub_repo, FakeUoW())
 
     await use_case.execute(
-        ConfirmPaymentRequest(transaction_id=transaction.id.value, external_id="x")
+        ConfirmPaymentRequest(transaction_id=new_tx.id.value, external_id="x")
     )
 
-    assert sub_repo.subs[payer].tier == Tier.GOLD
+    # Two grants in ledger: old revoked, new active
+    assert len(sub_repo.grants) == 2
+    by_tier = {g.tier: g for g in sub_repo.grants}
+    assert by_tier[Tier.BRONZE].is_revoked is True
+    assert by_tier[Tier.GOLD].is_revoked is False

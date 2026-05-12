@@ -14,6 +14,7 @@ from src.domain.rating.services import RatingFulfillmentService
 from src.domain.rating.value_objects import RatingId
 from src.domain.shared.identifiers import UserId
 from src.infrastructure.events.in_memory_bus import InMemoryEventBus
+from tests._fakes.referral import make_noop_referral_service
 
 
 @dataclass
@@ -48,6 +49,15 @@ class FakeRatingRepository:
             return 0.0, 0
         return sum(scores) / len(scores), len(scores)
 
+    async def list_for_rated(
+        self,
+        rated_id: UserId,
+        limit: int,
+    ) -> list[Rating]:
+        belonging = [r for r in self.ratings.values() if r.rated_id == rated_id]
+        belonging.sort(key=lambda r: r.created_at, reverse=True)
+        return belonging[:limit]
+
 
 @dataclass
 class FakeSummaryRepository:
@@ -80,7 +90,12 @@ def _make_use_case(
     handler = OnRatingGiven(rating_repo=ratings, summary_repo=summaries)
     bus = InMemoryEventBus()
     bus.subscribe(RatingGiven, handler.handle)
-    return RateUserUseCase(fulfillment_service=service, event_bus=bus, uow=uow)
+    return RateUserUseCase(
+        fulfillment_service=service,
+        referral_service=make_noop_referral_service(),
+        event_bus=bus,
+        uow=uow,
+    )
 
 
 async def test_first_rating_creates_and_updates_summary() -> None:

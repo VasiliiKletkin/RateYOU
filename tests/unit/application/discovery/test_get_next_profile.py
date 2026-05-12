@@ -24,7 +24,7 @@ from src.domain.profile.value_objects import (
 )
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import AndSpec, Specification
-from src.domain.subscription.entities import Subscription
+from src.domain.subscription.entities import SubscriptionGrant
 from src.domain.subscription.value_objects import Tier
 
 
@@ -82,16 +82,29 @@ class FakeSearchPreferencesRepository:
 
 @dataclass
 class FakeSubscriptionRepository:
-    subscription: Subscription | None = None
+    """Thin fake — Discovery only reads `list_for`; other methods are stubs."""
 
-    async def add(self, sub: Subscription) -> None:
-        self.subscription = sub
+    grants: list[SubscriptionGrant] = field(default_factory=list)
 
-    async def get_for(self, owner_id: UserId) -> Subscription | None:
-        return self.subscription
+    async def add(self, grant: SubscriptionGrant) -> None:
+        self.grants.append(grant)
 
-    async def update(self, sub: Subscription) -> None:
-        self.subscription = sub
+    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+        return [g for g in self.grants if g.owner_id == owner_id]
+
+    async def list_active_purchases_for(
+        self, owner_id: UserId, now: datetime
+    ) -> list[SubscriptionGrant]:
+        return []
+
+    async def find_by_transaction(self, transaction_id):  # type: ignore[no-untyped-def]
+        return None
+
+    async def update(self, grant: SubscriptionGrant) -> None:
+        for idx, existing in enumerate(self.grants):
+            if existing.id == grant.id:
+                self.grants[idx] = grant
+                return
 
 
 @dataclass
@@ -207,12 +220,18 @@ async def test_premium_without_user_pref_adds_no_threshold() -> None:
     """Premium no longer baked in a tier-specific floor — without an
     explicit `min_rating` in the user's prefs, the feed stays unfiltered."""
     viewer_id = uuid4()
-    sub = Subscription.activate(
-        UserId(viewer_id), Tier.SILVER, duration_days=30, now=datetime.now(UTC)
+    grant = SubscriptionGrant.create_purchase(
+        owner_id=UserId(viewer_id),
+        tier=Tier.SILVER,
+        duration_days=30,
+        transaction_id=None,
+        now=datetime.now(UTC),
     )
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
     use_case = _make_use_case(
-        discovery, FakeSubscriptionRepository(subscription=sub), FakeSkipRegistry()
+        discovery,
+        FakeSubscriptionRepository(grants=[grant]),
+        FakeSkipRegistry(),
     )
 
     await use_case.execute(viewer_id)
@@ -276,14 +295,18 @@ async def test_user_min_rating_ignored_without_premium() -> None:
 
 async def test_user_min_rating_applied_when_premium() -> None:
     viewer_id = uuid4()
-    sub = Subscription.activate(
-        UserId(viewer_id), Tier.GOLD, duration_days=30, now=datetime.now(UTC)
+    grant = SubscriptionGrant.create_purchase(
+        owner_id=UserId(viewer_id),
+        tier=Tier.GOLD,
+        duration_days=30,
+        transaction_id=None,
+        now=datetime.now(UTC),
     )
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
     prefs = FakeSearchPreferencesRepository(preferences=_make_prefs(min_rating=6))
     use_case = _make_use_case(
         discovery,
-        FakeSubscriptionRepository(subscription=sub),
+        FakeSubscriptionRepository(grants=[grant]),
         FakeSkipRegistry(),
         prefs=prefs,
     )
@@ -299,15 +322,18 @@ async def test_user_min_rating_applied_when_premium() -> None:
 
 async def test_expired_subscription_omits_threshold_spec() -> None:
     viewer_id = uuid4()
-    sub = Subscription.activate(
-        UserId(viewer_id),
-        Tier.SILVER,
+    grant = SubscriptionGrant.create_purchase(
+        owner_id=UserId(viewer_id),
+        tier=Tier.SILVER,
         duration_days=30,
+        transaction_id=None,
         now=datetime.now(UTC) - timedelta(days=60),
     )
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
     use_case = _make_use_case(
-        discovery, FakeSubscriptionRepository(subscription=sub), FakeSkipRegistry()
+        discovery,
+        FakeSubscriptionRepository(grants=[grant]),
+        FakeSkipRegistry(),
     )
 
     await use_case.execute(viewer_id)
@@ -318,13 +344,19 @@ async def test_expired_subscription_omits_threshold_spec() -> None:
 
 async def test_revoked_subscription_omits_threshold_spec() -> None:
     viewer_id = uuid4()
-    sub = Subscription.activate(
-        UserId(viewer_id), Tier.GOLD, duration_days=30, now=datetime.now(UTC)
+    grant = SubscriptionGrant.create_purchase(
+        owner_id=UserId(viewer_id),
+        tier=Tier.GOLD,
+        duration_days=30,
+        transaction_id=None,
+        now=datetime.now(UTC),
     )
-    sub.revoke(now=datetime.now(UTC))
+    grant.revoke(now=datetime.now(UTC))
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
     use_case = _make_use_case(
-        discovery, FakeSubscriptionRepository(subscription=sub), FakeSkipRegistry()
+        discovery,
+        FakeSubscriptionRepository(grants=[grant]),
+        FakeSkipRegistry(),
     )
 
     await use_case.execute(viewer_id)

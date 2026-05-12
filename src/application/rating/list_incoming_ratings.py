@@ -6,6 +6,7 @@ from src.application.rating.dto import IncomingRatingItem, IncomingRatingsRespon
 from src.domain.profile.repositories import IProfileRepository
 from src.domain.rating.repositories import IRatingRepository
 from src.domain.shared.identifiers import UserId
+from src.domain.subscription.entities import SubscriptionStatus
 from src.domain.subscription.exceptions import PremiumRequired
 from src.domain.subscription.repositories import ISubscriptionRepository
 
@@ -33,8 +34,8 @@ class ListIncomingRatingsUseCase:
     ) -> IncomingRatingsResponse:
         viewer = UserId(viewer_id)
 
-        sub = await self.subscription_repo.get_for(viewer)
-        if sub is None or not sub.is_active_at(datetime.now(UTC)):
+        grants = await self.subscription_repo.list_for(viewer)
+        if not SubscriptionStatus.from_grants(grants, datetime.now(UTC)).is_active:
             raise PremiumRequired
 
         ratings = await self.rating_repo.list_for_rated(viewer, limit)

@@ -14,9 +14,11 @@ class UserAdmin(ModelView):
         "ban_reason",
         "banned_at",
         "language",
+        "referral_code",
+        "referred_by_user_id",
         "created_at",
     ]
-    searchable_fields = ["telegram_id"]
+    searchable_fields = ["telegram_id", "referral_code"]
     sortable_fields = ["created_at", "telegram_id"]
 
     # Users are created via the bot's RegisterUserUseCase, not from admin.
@@ -139,20 +141,31 @@ class SearchPreferencesAdmin(ModelView):
         return False
 
 
-class SubscriptionAdmin(ModelView):
-    label = "Subscriptions"
+class SubscriptionGrantAdmin(ModelView):
+    label = "Subscription grants"
     icon = "fa fa-crown"
-    # `owner` is the SQLA relationship — Starlette-Admin renders it as a
-    # searchable HasOne dropdown. `owner_id` (the PK column) is auto-excluded
-    # from create forms, so referencing it directly would yield NULL on insert.
+    # Append-only ledger of granted premium periods. Each row = one grant
+    # (purchase / bonus / ...). A user typically has many over time; current
+    # premium state is derived by projecting the active set.
     fields = [
+        "id",
         "owner",
         "tier",
+        "source",
+        "transaction",
+        "starts_at",
         "expires_at",
         "is_revoked",
-        "updated_at",
+        "created_at",
     ]
-    sortable_fields = ["expires_at", "updated_at"]
+    sortable_fields = ["created_at", "expires_at"]
+    fields_default_sort = [("created_at", True)]  # DESC
+
+    def can_create(self, request: Request) -> bool:
+        return False
+
+    def can_edit(self, request: Request) -> bool:
+        return False
 
 
 class TransactionAdmin(ModelView):
@@ -174,6 +187,34 @@ class TransactionAdmin(ModelView):
     sortable_fields = ["created_at", "amount"]
 
     # State transitions only via Payment use cases.
+    def can_create(self, request: Request) -> bool:
+        return False
+
+    def can_edit(self, request: Request) -> bool:
+        return False
+
+
+class ReferralAdmin(ModelView):
+    label = "Referrals"
+    icon = "fa fa-user-plus"
+    # Append-only ledger of referrer→referee invitations. State machine:
+    # PENDING → QUALIFIED → REWARDED. Bonus grants land in
+    # `subscription_grants` with source=BONUS once a referral hits REWARDED.
+    fields = [
+        "id",
+        "referrer",
+        "referee",
+        "status",
+        "profile_created",
+        "first_rating_given",
+        "created_at",
+        "qualified_at",
+        "rewarded_at",
+    ]
+    searchable_fields = ["status"]
+    sortable_fields = ["created_at", "qualified_at", "rewarded_at"]
+    fields_default_sort = [("created_at", True)]  # DESC
+
     def can_create(self, request: Request) -> bool:
         return False
 

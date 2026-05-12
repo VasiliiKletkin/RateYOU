@@ -16,3 +16,11 @@ class UserIsBanned(IdentityError):
 
 class InvalidBanReason(IdentityError):
     pass
+
+
+class InvalidReferralCode(IdentityError):
+    """Raised when a referral code string is malformed (wrong length or chars).
+
+    Looking up a well-formed but unknown code is NOT this error — repositories
+    return `None` instead.
+    """

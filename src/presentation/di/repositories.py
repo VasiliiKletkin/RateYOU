@@ -12,6 +12,7 @@ from src.domain.rating.repositories import (
     IProfileScoreSummaryRepository,
     IRatingRepository,
 )
+from src.domain.referral.repositories import IReferralRepository
 from src.domain.subscription.repositories import ISubscriptionRepository
 from src.infrastructure.db.repositories.discovery import DiscoveryRepository
 from src.infrastructure.db.repositories.payment import TransactionRepository
@@ -20,6 +21,7 @@ from src.infrastructure.db.repositories.rating import (
     ProfileScoreSummaryRepository,
     RatingRepository,
 )
+from src.infrastructure.db.repositories.referral import ReferralRepository
 from src.infrastructure.db.repositories.search_preferences import (
     SearchPreferencesRepository,
 )
@@ -69,3 +71,7 @@ class RepositoryProvider(Provider):
     @provide
     def transaction_repo(self, session: AsyncSession) -> ITransactionRepository:
         return TransactionRepository(session=session)
+
+    @provide
+    def referral_repo(self, session: AsyncSession) -> IReferralRepository:
+        return ReferralRepository(session=session)

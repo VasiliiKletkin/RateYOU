@@ -13,6 +13,7 @@ from src.domain.profile.value_objects import (
     Name,
     Photos,
 )
+from src.domain.referral.services import ReferralRewardService
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.uow import UnitOfWork
 
@@ -24,9 +25,14 @@ class CreateProfileUseCase:
     The caller (handler) must have ensured the user exists in the Identity
     context. One profile per owner is enforced via exists_for_owner check
     and a UNIQUE constraint at the DB level.
+
+    After successful creation, signals the Referral context so a PENDING
+    referral whose referee just got a profile can advance. For users without
+    a referral the signal is a cheap no-op.
     """
 
     profile_repo: IProfileRepository
+    referral_service: ReferralRewardService
     uow: UnitOfWork
 
     async def execute(self, request: CreateProfileRequest) -> ProfileResponse:
@@ -35,6 +41,7 @@ class CreateProfileUseCase:
         if await self.profile_repo.exists_for_owner(owner_id):
             raise ProfileAlreadyExists(f"User {owner_id.value} already has a profile")
 
+        now = datetime.now(UTC)
         profile = Profile.create(
             owner_id=owner_id,
             name=Name(request.name),
@@ -43,9 +50,10 @@ class CreateProfileUseCase:
             bio=Bio(request.bio),
             photos=Photos.from_strings(list(request.photo_file_ids)),
             location=Location(lat=request.location[0], lon=request.location[1]),
-            now=datetime.now(UTC),
+            now=now,
         )
         await self.profile_repo.add(profile)
+        await self.referral_service.mark_profile_created(owner_id, now)
         await self.uow.commit()
         return _to_response(profile)
 

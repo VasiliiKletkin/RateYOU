@@ -19,6 +19,7 @@ from src.domain.profile.repositories import IProfileRepository
 from src.domain.profile.value_objects import Gender
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
+from src.domain.subscription.entities import SubscriptionStatus
 from src.domain.subscription.repositories import ISubscriptionRepository
 
 
@@ -93,5 +94,6 @@ class GetNextProfileForRatingUseCase:
         )
 
     async def _is_premium(self, viewer: UserId) -> bool:
-        sub = await self.subscription_repo.get_for(viewer)
-        return sub is not None and sub.is_active_at(datetime.now(UTC))
+        grants = await self.subscription_repo.list_for(viewer)
+        status = SubscriptionStatus.from_grants(grants, datetime.now(UTC))
+        return status.is_active

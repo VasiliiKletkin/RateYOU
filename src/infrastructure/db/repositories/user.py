@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.identity.entities import User
-from src.domain.identity.value_objects import TelegramId
+from src.domain.identity.value_objects import ReferralCode, TelegramId
 from src.domain.shared.identifiers import UserId
 from src.infrastructure.db.mappers.identity import orm_to_user, user_to_orm
 from src.infrastructure.db.models.identity import UserORM
@@ -30,6 +30,13 @@ class UserRepository:
     async def get_by_telegram_id(self, telegram_id: TelegramId) -> User | None:
         result = await self.session.execute(
             select(UserORM).where(UserORM.telegram_id == telegram_id.value)
+        )
+        orm = result.scalar_one_or_none()
+        return orm_to_user(orm) if orm is not None else None
+
+    async def get_by_referral_code(self, code: ReferralCode) -> User | None:
+        result = await self.session.execute(
+            select(UserORM).where(UserORM.referral_code == code.value)
         )
         orm = result.scalar_one_or_none()
         return orm_to_user(orm) if orm is not None else None

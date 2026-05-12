@@ -9,6 +9,7 @@ from src.domain.profile.entities import Profile
 from src.domain.profile.exceptions import ProfileAlreadyExists
 from src.domain.profile.value_objects import ProfileId
 from src.domain.shared.identifiers import UserId
+from tests._fakes.referral import make_noop_referral_service
 
 
 @dataclass
@@ -60,7 +61,11 @@ def _make_request(owner_id: UUID) -> CreateProfileRequest:
 async def test_create_persists_profile_and_commits() -> None:
     repo = FakeProfileRepository()
     uow = FakeUoW()
-    use_case = CreateProfileUseCase(profile_repo=repo, uow=uow)
+    use_case = CreateProfileUseCase(
+        profile_repo=repo,
+        referral_service=make_noop_referral_service(),
+        uow=uow,
+    )
     owner = uuid4()
 
     response = await use_case.execute(_make_request(owner))
@@ -75,7 +80,11 @@ async def test_create_persists_profile_and_commits() -> None:
 async def test_create_raises_when_profile_exists_for_owner() -> None:
     repo = FakeProfileRepository()
     uow = FakeUoW()
-    use_case = CreateProfileUseCase(profile_repo=repo, uow=uow)
+    use_case = CreateProfileUseCase(
+        profile_repo=repo,
+        referral_service=make_noop_referral_service(),
+        uow=uow,
+    )
     owner = uuid4()
 
     await use_case.execute(_make_request(owner))

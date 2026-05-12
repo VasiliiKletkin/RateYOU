@@ -10,10 +10,11 @@ from src.domain.subscription.value_objects import Tier
 
 @dataclass
 class ActivatePremiumUseCase:
-    """Activates premium for the user with the given tier.
+    """Admin-direct premium activation (no payment flow).
 
-    Replace policy: a fresh `duration_days` from now, regardless of what
-    the user had before. Old remaining time is forfeited.
+    Creates a PURCHASE grant with `transaction_id=None`. Existing active
+    PURCHASE grants of the same owner are revoked (the long-standing
+    "remaining paid days are forfeited" rule). BONUS grants are untouched.
     """
 
     activation_service: SubscriptionActivationService
@@ -24,12 +25,17 @@ class ActivatePremiumUseCase:
         tier = Tier(request.tier)
         now = datetime.now(UTC)
 
-        sub = await self.activation_service.activate(owner_id, tier, now)
+        grant = await self.activation_service.activate_purchase(
+            owner_id=owner_id,
+            tier=tier,
+            transaction_id=None,
+            now=now,
+        )
         await self.uow.commit()
 
         return PremiumResponse(
-            owner_id=sub.owner_id.value,
-            tier=sub.tier.value,
-            expires_at=sub.expires_at,
-            days_remaining=max(0, (sub.expires_at - now).days),
+            owner_id=grant.owner_id.value,
+            tier=grant.tier.value,
+            expires_at=grant.expires_at,
+            days_remaining=max(0, (grant.expires_at - now).days),
         )

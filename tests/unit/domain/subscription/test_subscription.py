@@ -1,71 +1,123 @@
 from datetime import UTC, datetime, timedelta
 
+from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import Subscription
-from src.domain.subscription.value_objects import Tier
+from src.domain.subscription.entities import SubscriptionGrant, SubscriptionStatus
+from src.domain.subscription.value_objects import GrantSource, Tier
 
 
-def test_activate_sets_expiry_from_now_plus_duration() -> None:
+def test_create_purchase_sets_fields_and_expiry() -> None:
     now = datetime.now(UTC)
     owner = UserId.new()
+    tx = TransactionId.new()
 
-    sub = Subscription.activate(owner, Tier.BRONZE, duration_days=7, now=now)
+    grant = SubscriptionGrant.create_purchase(
+        owner_id=owner,
+        tier=Tier.BRONZE,
+        duration_days=7,
+        transaction_id=tx,
+        now=now,
+    )
 
-    assert sub.owner_id == owner
-    assert sub.tier == Tier.BRONZE
-    assert sub.expires_at == now + timedelta(days=7)
-    assert sub.is_revoked is False
-    assert sub.is_active_at(now) is True
+    assert grant.owner_id == owner
+    assert grant.tier == Tier.BRONZE
+    assert grant.source == GrantSource.PURCHASE
+    assert grant.transaction_id == tx
+    assert grant.starts_at == now
+    assert grant.expires_at == now + timedelta(days=7)
+    assert grant.is_revoked is False
+    assert grant.is_active_at(now) is True
 
 
-def test_is_active_at_returns_false_for_expired() -> None:
+def test_create_bonus_uses_bonus_tier_and_no_transaction() -> None:
     now = datetime.now(UTC)
-    sub = Subscription.activate(UserId.new(), Tier.BRONZE, duration_days=7, now=now)
+    grant = SubscriptionGrant.create_bonus(
+        owner_id=UserId.new(), duration_days=3, now=now
+    )
 
-    later = now + timedelta(days=8)
+    assert grant.tier == Tier.BONUS
+    assert grant.source == GrantSource.BONUS
+    assert grant.transaction_id is None
+    assert grant.expires_at == now + timedelta(days=3)
 
-    assert sub.is_active_at(later) is False
 
-
-def test_is_active_at_returns_false_for_revoked() -> None:
+def test_is_active_at_returns_false_when_expired() -> None:
     now = datetime.now(UTC)
-    sub = Subscription.activate(UserId.new(), Tier.GOLD, duration_days=30, now=now)
-    sub.revoke(now=now)
+    grant = SubscriptionGrant.create_purchase(
+        UserId.new(), Tier.BRONZE, duration_days=7,
+        transaction_id=None, now=now,
+    )
 
-    assert sub.is_active_at(now) is False
+    assert grant.is_active_at(now + timedelta(days=8)) is False
 
 
-def test_renew_or_upgrade_replaces_period_and_tier() -> None:
+def test_is_active_at_returns_false_when_revoked() -> None:
     now = datetime.now(UTC)
-    sub = Subscription.activate(UserId.new(), Tier.BRONZE, duration_days=7, now=now)
-    later = now + timedelta(days=3)
+    grant = SubscriptionGrant.create_purchase(
+        UserId.new(), Tier.GOLD, duration_days=30,
+        transaction_id=None, now=now,
+    )
+    grant.revoke(now=now)
 
-    sub.renew_or_upgrade(Tier.GOLD, duration_days=30, now=later)
-
-    assert sub.tier == Tier.GOLD
-    assert sub.expires_at == later + timedelta(days=30)  # NOT old + 30 — replace policy
-    assert sub.is_revoked is False
+    assert grant.is_active_at(now) is False
+    assert grant.is_revoked is True
+    assert grant.expires_at == now
 
 
-def test_renew_reactivates_revoked() -> None:
+def test_status_from_no_grants_is_inactive() -> None:
+    status = SubscriptionStatus.from_grants([], datetime.now(UTC))
+
+    assert status.is_active is False
+    assert status.tier is None
+    assert status.expires_at is None
+
+
+def test_status_picks_highest_priority_tier_among_active() -> None:
     now = datetime.now(UTC)
-    sub = Subscription.activate(UserId.new(), Tier.SILVER, duration_days=30, now=now)
-    sub.revoke(now=now)
-    assert sub.is_revoked is True
+    owner = UserId.new()
+    bronze = SubscriptionGrant.create_purchase(
+        owner, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
+    )
+    bonus = SubscriptionGrant.create_bonus(owner, duration_days=3, now=now)
 
-    later = now + timedelta(hours=1)
-    sub.renew_or_upgrade(Tier.SILVER, duration_days=30, now=later)
+    status = SubscriptionStatus.from_grants([bronze, bonus], now)
 
-    assert sub.is_revoked is False
-    assert sub.is_active_at(later) is True
+    # BRONZE > BONUS in priority
+    assert status.is_active is True
+    assert status.tier == Tier.BRONZE
+    # expires_at is the LATEST among actives — bronze (7d) > bonus (3d)
+    assert status.expires_at == bronze.expires_at
 
 
-def test_revoke_sets_expires_at_to_now_and_marks_revoked() -> None:
+def test_status_ignores_revoked_grants() -> None:
     now = datetime.now(UTC)
-    sub = Subscription.activate(UserId.new(), Tier.GOLD, duration_days=30, now=now)
-    later = now + timedelta(days=5)
+    owner = UserId.new()
+    revoked_gold = SubscriptionGrant.create_purchase(
+        owner, Tier.GOLD, duration_days=30, transaction_id=None, now=now,
+    )
+    revoked_gold.revoke(now=now)
+    live_bronze = SubscriptionGrant.create_purchase(
+        owner, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
+    )
 
-    sub.revoke(now=later)
+    status = SubscriptionStatus.from_grants([revoked_gold, live_bronze], now)
 
-    assert sub.is_revoked is True
-    assert sub.expires_at == later
+    assert status.is_active is True
+    assert status.tier == Tier.BRONZE
+
+
+def test_status_ignores_expired_grants() -> None:
+    now = datetime.now(UTC)
+    long_ago = now - timedelta(days=60)
+    owner = UserId.new()
+    expired = SubscriptionGrant.create_purchase(
+        owner, Tier.GOLD, duration_days=30,
+        transaction_id=None, now=long_ago,
+    )
+    fresh_bonus = SubscriptionGrant.create_bonus(owner, duration_days=3, now=now)
+
+    status = SubscriptionStatus.from_grants([expired, fresh_bonus], now)
+
+    assert status.is_active is True
+    assert status.tier == Tier.BONUS
+    assert status.expires_at == fresh_bonus.expires_at
