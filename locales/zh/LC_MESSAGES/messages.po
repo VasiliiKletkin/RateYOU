@@ -1,4 +1,4 @@
-# English translations for PROJECT.
+# Chinese (Simplified) translations for PROJECT.
 # Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
@@ -8,153 +8,152 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-05-12 15:03+0300\n"
-"PO-Revision-Date: 2026-05-11 23:03+0300\n"
+"PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
-"Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+# WARNING: Machine translation — review by a native speaker before production.
 #: src/presentation/bot/keyboards.py:32
 msgid "♂️ Male"
-msgstr ""
+msgstr "♂️ 男"
 
 #: src/presentation/bot/keyboards.py:34
 msgid "♀️ Female"
-msgstr ""
+msgstr "♀️ 女"
 
 #: src/presentation/bot/keyboards.py:63
-#, fuzzy
 msgid "⏭ Skip"
-msgstr "Skipped"
+msgstr "⏭ 跳过"
 
 #: src/presentation/bot/keyboards.py:73
 msgid "Name"
-msgstr ""
+msgstr "姓名"
 
 #: src/presentation/bot/keyboards.py:74
 msgid "Age"
-msgstr ""
+msgstr "年龄"
 
 #: src/presentation/bot/keyboards.py:77
-#, fuzzy
 msgid "Gender"
-msgstr "Pick gender:"
+msgstr "性别"
 
 #: src/presentation/bot/keyboards.py:82
 msgid "Location"
-msgstr ""
+msgstr "位置"
 
 #: src/presentation/bot/keyboards.py:85
 msgid "Bio"
-msgstr ""
+msgstr "简介"
 
 #: src/presentation/bot/keyboards.py:86
 msgid "Photo"
-msgstr ""
+msgstr "照片"
 
 #: src/presentation/bot/keyboards.py:89
 msgid "✅ Done"
-msgstr ""
+msgstr "✅ 完成"
 
 #: src/presentation/bot/keyboards.py:106
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
-msgstr ""
+msgstr "{name} — {price} ⭐ / {days} 天"
 
 #: src/presentation/bot/handlers/create_profile.py:43
 msgid "Nothing to cancel."
-msgstr "Nothing to cancel."
+msgstr "没有可取消的内容。"
 
 #: src/presentation/bot/handlers/create_profile.py:46
 msgid "Cancelled."
-msgstr "Cancelled."
+msgstr "已取消。"
 
 #: src/presentation/bot/handlers/create_profile.py:62
 #: src/presentation/bot/handlers/create_profile.py:194
 msgid "You already have a profile."
-msgstr "You already have a profile."
+msgstr "你已经有个人资料了。"
 
 #: src/presentation/bot/handlers/create_profile.py:67
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
 msgstr ""
-"Let's create your profile.\n"
-"What's your name?"
+"我们来创建你的个人资料吧。\n"
+"你叫什么名字?"
 
 #: src/presentation/bot/handlers/create_profile.py:73
 #: src/presentation/bot/handlers/edit_profile.py:162
 msgid "Please send text."
-msgstr "Please send text."
+msgstr "请发送文字。"
 
 #: src/presentation/bot/handlers/create_profile.py:78
 #: src/presentation/bot/handlers/edit_profile.py:167
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
-msgstr "❌ Name must be 1-50 non-empty characters. Try again:"
+msgstr "❌ 姓名必须是 1-50 个非空字符。请重试:"
 
 #: src/presentation/bot/handlers/create_profile.py:82
 msgid "How old are you?"
-msgstr "How old are you?"
+msgstr "你多大了?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
 #: src/presentation/bot/handlers/edit_profile.py:179
 msgid "Please send a number."
-msgstr "Please send a number."
+msgstr "请发送数字。"
 
 #: src/presentation/bot/handlers/create_profile.py:93
 #: src/presentation/bot/handlers/edit_profile.py:185
 msgid "❌ That's not a number. Try again:"
-msgstr "❌ That's not a number. Try again:"
+msgstr "❌ 这不是数字。请重试:"
 
 #: src/presentation/bot/handlers/create_profile.py:96
 #: src/presentation/bot/handlers/edit_profile.py:188
 msgid "❌ Age must be between 18 and 100. Try again:"
-msgstr "❌ Age must be between 18 and 100. Try again:"
+msgstr "❌ 年龄必须在 18 到 100 之间。请重试:"
 
 #: src/presentation/bot/handlers/create_profile.py:100
 #: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Pick gender:"
-msgstr "Pick gender:"
+msgstr "选择性别:"
 
 #: src/presentation/bot/handlers/create_profile.py:113
 msgid "Invalid choice"
-msgstr "Invalid choice"
+msgstr "无效选择"
 
 #: src/presentation/bot/handlers/create_profile.py:119
 msgid "Share your location — it's used to find nearby profiles:"
-msgstr ""
+msgstr "分享你的位置 — 用于查找附近的个人资料:"
 
 #: src/presentation/bot/handlers/create_profile.py:120
 #: src/presentation/bot/handlers/edit_profile.py:144
 msgid "📍 Share location"
-msgstr ""
+msgstr "📍 分享位置"
 
 #: src/presentation/bot/handlers/create_profile.py:135
 msgid "Tell something about yourself (or /skip):"
-msgstr "Tell something about yourself (or /skip):"
+msgstr "介绍一下你自己(或 /skip):"
 
 #: src/presentation/bot/handlers/create_profile.py:142
 msgid "Please share a location to continue."
-msgstr ""
+msgstr "请分享位置以继续。"
 
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:167
 #, python-brace-format
 msgid "Send up to {max} photos:"
-msgstr ""
+msgstr "最多发送 {max} 张照片:"
 
 #: src/presentation/bot/handlers/create_profile.py:157
 msgid "Please send text or /skip."
-msgstr "Please send text or /skip."
+msgstr "请发送文字或 /skip。"
 
 #: src/presentation/bot/handlers/create_profile.py:162
 #: src/presentation/bot/handlers/edit_profile.py:231
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
-msgstr "❌ Bio is too long (max 500 chars). Try again or /skip:"
+msgstr "❌ 简介太长(最多 500 字符)。请重试或 /skip:"
 
 #: src/presentation/bot/handlers/create_profile.py:201
 #, python-brace-format
@@ -164,133 +163,132 @@ msgid ""
 "Age: {age}\n"
 "Send /feed to start rating profiles."
 msgstr ""
+"<b>✅ 个人资料已创建!</b>\n"
+"姓名: {name}\n"
+"年龄: {age}\n"
+"发送 /feed 开始评分。"
 
 #: src/presentation/bot/handlers/create_profile.py:238
-#, fuzzy
 msgid "Please send a photo (not text)."
-msgstr "Please send a photo (not text)."
+msgstr "请发送照片(不是文字)。"
 
 #: src/presentation/bot/handlers/edit_profile.py:59
 msgid "Session lost. Use /edit again."
-msgstr "Session lost. Use /edit again."
+msgstr "会话已丢失。请再次使用 /edit。"
 
 #: src/presentation/bot/handlers/edit_profile.py:75
 msgid "Profile not found."
-msgstr "Profile not found."
+msgstr "未找到个人资料。"
 
 #: src/presentation/bot/handlers/edit_profile.py:81
 msgid "Location updated."
-msgstr ""
+msgstr "位置已更新。"
 
 #: src/presentation/bot/handlers/edit_profile.py:82
 msgid "Updated. Pick another field or [Done]:"
-msgstr "Updated. Pick another field or [Done]:"
+msgstr "已更新。选择另一个字段或 [完成]:"
 
 #: src/presentation/bot/handlers/edit_profile.py:99
 msgid "No profile to edit. Use /create first."
-msgstr "No profile to edit. Use /create first."
+msgstr "没有可编辑的个人资料。请先使用 /create。"
 
 #: src/presentation/bot/handlers/edit_profile.py:102
 msgid "Pick a field to edit:"
-msgstr "Pick a field to edit:"
+msgstr "选择要编辑的字段:"
 
 #: src/presentation/bot/handlers/edit_profile.py:114
 msgid "Saved. /feed to keep rating."
-msgstr "Saved. /feed to keep rating."
+msgstr "已保存。/feed 继续评分。"
 
 #: src/presentation/bot/handlers/edit_profile.py:127
 msgid "Unknown field"
-msgstr "Unknown field"
+msgstr "未知字段"
 
 #: src/presentation/bot/handlers/edit_profile.py:132
 msgid "Send new name:"
-msgstr "Send new name:"
+msgstr "发送新姓名:"
 
 #: src/presentation/bot/handlers/edit_profile.py:133
 msgid "Send new age (18-100):"
-msgstr "Send new age (18-100):"
+msgstr "发送新年龄(18-100):"
 
 #: src/presentation/bot/handlers/edit_profile.py:135
 msgid "Share your new location:"
-msgstr ""
+msgstr "分享你的新位置:"
 
 #: src/presentation/bot/handlers/edit_profile.py:136
 msgid "Send new bio (or /skip to clear):"
-msgstr "Send new bio (or /skip to clear):"
+msgstr "发送新简介(或 /skip 清空):"
 
 #: src/presentation/bot/handlers/edit_profile.py:137
 #, python-brace-format
 msgid "Send up to {max} new photos:"
-msgstr ""
+msgstr "最多发送 {max} 张新照片:"
 
 #: src/presentation/bot/handlers/edit_profile.py:204
 msgid "Invalid"
-msgstr "Invalid"
+msgstr "无效"
 
 #: src/presentation/bot/handlers/edit_profile.py:226
 msgid "Please send text or /skip to clear."
-msgstr "Please send text or /skip to clear."
+msgstr "请发送文字或 /skip 清空。"
 
 #: src/presentation/bot/handlers/edit_profile.py:264
-#, fuzzy
 msgid "Please send a photo."
-msgstr "Please send text."
+msgstr "请发送照片。"
 
 #: src/presentation/bot/handlers/edit_profile.py:285
-#, fuzzy
 msgid "Please share a location."
-msgstr "Please send a photo."
+msgstr "请分享位置。"
 
 #: src/presentation/bot/handlers/feed.py:52
 msgid "No more profiles to rate. Come back later!"
-msgstr "No more profiles to rate. Come back later!"
+msgstr "没有更多的个人资料可评分了。稍后再来吧!"
 
 #: src/presentation/bot/handlers/feed.py:79
 msgid "Rate this profile:"
-msgstr ""
+msgstr "为这个个人资料评分:"
 
 #: src/presentation/bot/handlers/feed.py:103
 msgid "You need a profile of your own first. Send /create to make one."
-msgstr "You need a profile of your own first. Send /create to make one."
+msgstr "你需要先有自己的个人资料。发送 /create 来创建。"
 
 #: src/presentation/bot/handlers/feed.py:122
 #: src/presentation/bot/handlers/feed.py:128
 msgid "Bad payload"
-msgstr "Bad payload"
+msgstr "数据无效"
 
 #: src/presentation/bot/handlers/feed.py:142
 msgid "Can't rate yourself"
-msgstr "Can't rate yourself"
+msgstr "不能给自己评分"
 
 #: src/presentation/bot/handlers/feed.py:145
 msgid "Bad score"
-msgstr "Bad score"
+msgstr "分数无效"
 
 #: src/presentation/bot/handlers/feed.py:148
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
-msgstr "Rated {score}/10 ✓"
+msgstr "已评分 {score}/10 ✓"
 
 #: src/presentation/bot/handlers/feed.py:157
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "📊 他们的平均分: {avg}/10 (来自 {count} 次评分)"
 
 #: src/presentation/bot/handlers/feed.py:193
 msgid "Skipped"
-msgstr "Skipped"
+msgstr "已跳过"
 
 #: src/presentation/bot/handlers/premium.py:33
 #, python-brace-format
 msgid "Expires in {days} day."
 msgid_plural "Expires in {days} days."
-msgstr[0] "Expires in {days} day."
-msgstr[1] "Expires in {days} days."
+msgstr[0] "{days} 天后过期。"
 
 #: src/presentation/bot/handlers/premium.py:57
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -298,11 +296,11 @@ msgid ""
 "\n"
 "Pick a tier to renew or upgrade:"
 msgstr ""
-"<b>Your premium: {tier}</b>\n"
+"<b>你的高级会员: {tier}</b>\n"
 "{expires}\n"
-"Feed shows profiles with avg rating >= {threshold}.\n"
+"Feed 显示平均评分 >= {threshold} 的个人资料。\n"
 "\n"
-"Pick a tier to renew or upgrade:"
+"选择一个等级来续费或升级:"
 
 #: src/presentation/bot/handlers/premium.py:68
 msgid ""
@@ -310,48 +308,50 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
-"<b>Premium</b> filters your /feed to highly rated profiles.\n"
+"<b>高级会员</b>会将你的 /feed 过滤为高评分的个人资料。\n"
 "\n"
-"Pick a tier:"
+"选择一个等级:"
 
 #: src/presentation/bot/handlers/premium.py:99
 msgid "Unknown tier"
-msgstr "Unknown tier"
+msgstr "未知等级"
 
 #: src/presentation/bot/handlers/premium.py:102
 msgid "Invoice sent — pay in the chat"
-msgstr "Invoice sent — pay in the chat"
+msgstr "账单已发送 — 在聊天中支付"
 
 #: src/presentation/bot/handlers/premium.py:124
 msgid "Unknown payment payload."
-msgstr "Unknown payment payload."
+msgstr "未知的支付数据。"
 
 #: src/presentation/bot/handlers/premium.py:135
 msgid "This payment is not in our records."
-msgstr "This payment is not in our records."
+msgstr "这笔付款不在我们的记录中。"
 
 #: src/presentation/bot/handlers/premium.py:146
 msgid "✅ Payment confirmed."
-msgstr "✅ Payment confirmed."
+msgstr "✅ 已确认付款。"
 
 #: src/presentation/bot/handlers/premium.py:151
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
 "{expires}\n"
 "Now /feed shows profiles rated >= {threshold}."
 msgstr ""
-"<b>✅ Premium activated!</b>\n"
-"Tier: {tier}\n"
+"<b>✅ 高级会员已激活!</b>\n"
+"等级: {tier}\n"
 "{expires}\n"
-"Now /feed shows profiles rated >= {threshold}."
+"现在 /feed 显示评分 >= {threshold} 的个人资料。"
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
 "You don't have a profile yet - send /create to make one."
 msgstr ""
+"<b>欢迎来到 RateYou!</b>\n"
+"你还没有个人资料 - 发送 /create 来创建一个。"
 
 #: src/presentation/bot/handlers/start.py:36
 #, python-brace-format
@@ -359,68 +359,6 @@ msgid ""
 "<b>Welcome back, {name}!</b>\n"
 "Send /feed to rate other profiles."
 msgstr ""
-"<b>Welcome back, {name}!</b>\n"
-"Send /feed to rate other profiles."
-
-#~ msgid "Send a photo:"
-#~ msgstr "Send a photo:"
-
-#~ msgid "Send new photo:"
-#~ msgstr "Send new photo:"
-
-#~ msgid "Please send a photo."
-#~ msgstr "Please send a photo."
-
-#~ msgid "📸 {n}/{max} photos received. Send more or /done."
-#~ msgstr ""
-
-#~ msgid "Send at least one photo first."
-#~ msgstr ""
-
-#~ msgid "Send 1-{max} new photos, then /done:"
-#~ msgstr ""
-
-#~ msgid "Please send a photo. /done when finished."
-#~ msgstr "Please send a photo (not text)."
-
-#~ msgid "City"
-#~ msgstr ""
-
-#~ msgid "Which city are you in?"
-#~ msgstr "Which city are you in?"
-
-#~ msgid "❌ City must be 1-100 non-empty characters. Try again:"
-#~ msgstr "❌ City must be 1-100 non-empty characters. Try again:"
-
-#~ msgid "Share your location to find nearby profiles (or /skip):"
-#~ msgstr ""
-
-#~ msgid "Please share a location or /skip."
-#~ msgstr "Please send text or /skip."
-
-#~ msgid ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-#~ msgstr ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-
-#~ msgid "Send new city:"
-#~ msgstr "Send new city:"
-
-#~ msgid "Send 1-{max} photos, then /done:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
-#~ msgstr ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
+"<b>欢迎回来,{name}!</b>\n"
+"发送 /feed 来给其他个人资料评分。"
 

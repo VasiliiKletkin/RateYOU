@@ -1,4 +1,4 @@
-# English translations for PROJECT.
+# Korean translations for PROJECT.
 # Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
@@ -8,153 +8,152 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-05-12 15:03+0300\n"
-"PO-Revision-Date: 2026-05-11 23:03+0300\n"
+"PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
-"Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ko\n"
+"Language-Team: ko <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+# WARNING: Machine translation — review by a native speaker before production.
 #: src/presentation/bot/keyboards.py:32
 msgid "♂️ Male"
-msgstr ""
+msgstr "♂️ 남성"
 
 #: src/presentation/bot/keyboards.py:34
 msgid "♀️ Female"
-msgstr ""
+msgstr "♀️ 여성"
 
 #: src/presentation/bot/keyboards.py:63
-#, fuzzy
 msgid "⏭ Skip"
-msgstr "Skipped"
+msgstr "⏭ 건너뛰기"
 
 #: src/presentation/bot/keyboards.py:73
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: src/presentation/bot/keyboards.py:74
 msgid "Age"
-msgstr ""
+msgstr "나이"
 
 #: src/presentation/bot/keyboards.py:77
-#, fuzzy
 msgid "Gender"
-msgstr "Pick gender:"
+msgstr "성별"
 
 #: src/presentation/bot/keyboards.py:82
 msgid "Location"
-msgstr ""
+msgstr "위치"
 
 #: src/presentation/bot/keyboards.py:85
 msgid "Bio"
-msgstr ""
+msgstr "소개"
 
 #: src/presentation/bot/keyboards.py:86
 msgid "Photo"
-msgstr ""
+msgstr "사진"
 
 #: src/presentation/bot/keyboards.py:89
 msgid "✅ Done"
-msgstr ""
+msgstr "✅ 완료"
 
 #: src/presentation/bot/keyboards.py:106
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
-msgstr ""
+msgstr "{name} — {price} ⭐ / {days}일"
 
 #: src/presentation/bot/handlers/create_profile.py:43
 msgid "Nothing to cancel."
-msgstr "Nothing to cancel."
+msgstr "취소할 게 없어요."
 
 #: src/presentation/bot/handlers/create_profile.py:46
 msgid "Cancelled."
-msgstr "Cancelled."
+msgstr "취소했어요."
 
 #: src/presentation/bot/handlers/create_profile.py:62
 #: src/presentation/bot/handlers/create_profile.py:194
 msgid "You already have a profile."
-msgstr "You already have a profile."
+msgstr "이미 프로필이 있어요."
 
 #: src/presentation/bot/handlers/create_profile.py:67
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
 msgstr ""
-"Let's create your profile.\n"
-"What's your name?"
+"프로필을 만들어 볼까요.\n"
+"이름이 어떻게 되세요?"
 
 #: src/presentation/bot/handlers/create_profile.py:73
 #: src/presentation/bot/handlers/edit_profile.py:162
 msgid "Please send text."
-msgstr "Please send text."
+msgstr "텍스트로 보내주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:78
 #: src/presentation/bot/handlers/edit_profile.py:167
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
-msgstr "❌ Name must be 1-50 non-empty characters. Try again:"
+msgstr "❌ 이름은 1~50자여야 해요. 다시 입력해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:82
 msgid "How old are you?"
-msgstr "How old are you?"
+msgstr "나이가 어떻게 되세요?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
 #: src/presentation/bot/handlers/edit_profile.py:179
 msgid "Please send a number."
-msgstr "Please send a number."
+msgstr "숫자로 보내주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:93
 #: src/presentation/bot/handlers/edit_profile.py:185
 msgid "❌ That's not a number. Try again:"
-msgstr "❌ That's not a number. Try again:"
+msgstr "❌ 숫자가 아니에요. 다시 입력해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:96
 #: src/presentation/bot/handlers/edit_profile.py:188
 msgid "❌ Age must be between 18 and 100. Try again:"
-msgstr "❌ Age must be between 18 and 100. Try again:"
+msgstr "❌ 나이는 18세에서 100세 사이여야 해요. 다시 입력해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:100
 #: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Pick gender:"
-msgstr "Pick gender:"
+msgstr "성별을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:113
 msgid "Invalid choice"
-msgstr "Invalid choice"
+msgstr "잘못된 선택이에요"
 
 #: src/presentation/bot/handlers/create_profile.py:119
 msgid "Share your location — it's used to find nearby profiles:"
-msgstr ""
+msgstr "위치를 공유해 주세요 — 근처 프로필을 찾는 데 사용해요:"
 
 #: src/presentation/bot/handlers/create_profile.py:120
 #: src/presentation/bot/handlers/edit_profile.py:144
 msgid "📍 Share location"
-msgstr ""
+msgstr "📍 위치 공유"
 
 #: src/presentation/bot/handlers/create_profile.py:135
 msgid "Tell something about yourself (or /skip):"
-msgstr "Tell something about yourself (or /skip):"
+msgstr "자기소개를 해주세요 (또는 /skip):"
 
 #: src/presentation/bot/handlers/create_profile.py:142
 msgid "Please share a location to continue."
-msgstr ""
+msgstr "계속하려면 위치를 공유해 주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:167
 #, python-brace-format
 msgid "Send up to {max} photos:"
-msgstr ""
+msgstr "최대 {max}장의 사진을 보내주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:157
 msgid "Please send text or /skip."
-msgstr "Please send text or /skip."
+msgstr "텍스트로 보내거나 /skip 해주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:162
 #: src/presentation/bot/handlers/edit_profile.py:231
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
-msgstr "❌ Bio is too long (max 500 chars). Try again or /skip:"
+msgstr "❌ 소개가 너무 길어요 (최대 500자). 다시 입력하거나 /skip:"
 
 #: src/presentation/bot/handlers/create_profile.py:201
 #, python-brace-format
@@ -164,133 +163,132 @@ msgid ""
 "Age: {age}\n"
 "Send /feed to start rating profiles."
 msgstr ""
+"<b>✅ 프로필이 생성되었어요!</b>\n"
+"이름: {name}\n"
+"나이: {age}\n"
+"/feed 를 보내서 프로필 평가를 시작해 보세요."
 
 #: src/presentation/bot/handlers/create_profile.py:238
-#, fuzzy
 msgid "Please send a photo (not text)."
-msgstr "Please send a photo (not text)."
+msgstr "사진을 보내주세요 (텍스트 말고요)."
 
 #: src/presentation/bot/handlers/edit_profile.py:59
 msgid "Session lost. Use /edit again."
-msgstr "Session lost. Use /edit again."
+msgstr "세션이 끊겼어요. /edit 을 다시 사용해 주세요."
 
 #: src/presentation/bot/handlers/edit_profile.py:75
 msgid "Profile not found."
-msgstr "Profile not found."
+msgstr "프로필을 찾을 수 없어요."
 
 #: src/presentation/bot/handlers/edit_profile.py:81
 msgid "Location updated."
-msgstr ""
+msgstr "위치를 업데이트했어요."
 
 #: src/presentation/bot/handlers/edit_profile.py:82
 msgid "Updated. Pick another field or [Done]:"
-msgstr "Updated. Pick another field or [Done]:"
+msgstr "업데이트했어요. 다른 항목을 선택하거나 [완료]를 눌러주세요:"
 
 #: src/presentation/bot/handlers/edit_profile.py:99
 msgid "No profile to edit. Use /create first."
-msgstr "No profile to edit. Use /create first."
+msgstr "수정할 프로필이 없어요. 먼저 /create 를 사용해 주세요."
 
 #: src/presentation/bot/handlers/edit_profile.py:102
 msgid "Pick a field to edit:"
-msgstr "Pick a field to edit:"
+msgstr "수정할 항목을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/edit_profile.py:114
 msgid "Saved. /feed to keep rating."
-msgstr "Saved. /feed to keep rating."
+msgstr "저장했어요. 계속 평가하려면 /feed 하세요."
 
 #: src/presentation/bot/handlers/edit_profile.py:127
 msgid "Unknown field"
-msgstr "Unknown field"
+msgstr "알 수 없는 항목"
 
 #: src/presentation/bot/handlers/edit_profile.py:132
 msgid "Send new name:"
-msgstr "Send new name:"
+msgstr "새 이름을 보내주세요:"
 
 #: src/presentation/bot/handlers/edit_profile.py:133
 msgid "Send new age (18-100):"
-msgstr "Send new age (18-100):"
+msgstr "새 나이를 보내주세요 (18~100):"
 
 #: src/presentation/bot/handlers/edit_profile.py:135
 msgid "Share your new location:"
-msgstr ""
+msgstr "새 위치를 공유해 주세요:"
 
 #: src/presentation/bot/handlers/edit_profile.py:136
 msgid "Send new bio (or /skip to clear):"
-msgstr "Send new bio (or /skip to clear):"
+msgstr "새 소개를 보내주세요 (또는 /skip 으로 비우기):"
 
 #: src/presentation/bot/handlers/edit_profile.py:137
 #, python-brace-format
 msgid "Send up to {max} new photos:"
-msgstr ""
+msgstr "최대 {max}장의 새 사진을 보내주세요:"
 
 #: src/presentation/bot/handlers/edit_profile.py:204
 msgid "Invalid"
-msgstr "Invalid"
+msgstr "잘못된 값이에요"
 
 #: src/presentation/bot/handlers/edit_profile.py:226
 msgid "Please send text or /skip to clear."
-msgstr "Please send text or /skip to clear."
+msgstr "텍스트로 보내거나 /skip 으로 비워주세요."
 
 #: src/presentation/bot/handlers/edit_profile.py:264
-#, fuzzy
 msgid "Please send a photo."
-msgstr "Please send text."
+msgstr "사진을 보내주세요."
 
 #: src/presentation/bot/handlers/edit_profile.py:285
-#, fuzzy
 msgid "Please share a location."
-msgstr "Please send a photo."
+msgstr "위치를 공유해 주세요."
 
 #: src/presentation/bot/handlers/feed.py:52
 msgid "No more profiles to rate. Come back later!"
-msgstr "No more profiles to rate. Come back later!"
+msgstr "더 이상 평가할 프로필이 없어요. 나중에 다시 와주세요!"
 
 #: src/presentation/bot/handlers/feed.py:79
 msgid "Rate this profile:"
-msgstr ""
+msgstr "이 프로필을 평가해 주세요:"
 
 #: src/presentation/bot/handlers/feed.py:103
 msgid "You need a profile of your own first. Send /create to make one."
-msgstr "You need a profile of your own first. Send /create to make one."
+msgstr "먼저 본인의 프로필이 필요해요. /create 를 보내서 만들어 주세요."
 
 #: src/presentation/bot/handlers/feed.py:122
 #: src/presentation/bot/handlers/feed.py:128
 msgid "Bad payload"
-msgstr "Bad payload"
+msgstr "잘못된 데이터예요"
 
 #: src/presentation/bot/handlers/feed.py:142
 msgid "Can't rate yourself"
-msgstr "Can't rate yourself"
+msgstr "자기 자신은 평가할 수 없어요"
 
 #: src/presentation/bot/handlers/feed.py:145
 msgid "Bad score"
-msgstr "Bad score"
+msgstr "잘못된 점수예요"
 
 #: src/presentation/bot/handlers/feed.py:148
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
-msgstr "Rated {score}/10 ✓"
+msgstr "{score}/10 평가 완료 ✓"
 
 #: src/presentation/bot/handlers/feed.py:157
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "📊 평균: {avg}/10 (평가 {count}개 기준)"
 
 #: src/presentation/bot/handlers/feed.py:193
 msgid "Skipped"
-msgstr "Skipped"
+msgstr "건너뛰었어요"
 
 #: src/presentation/bot/handlers/premium.py:33
 #, python-brace-format
 msgid "Expires in {days} day."
 msgid_plural "Expires in {days} days."
-msgstr[0] "Expires in {days} day."
-msgstr[1] "Expires in {days} days."
+msgstr[0] "{days}일 후에 만료돼요."
 
 #: src/presentation/bot/handlers/premium.py:57
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -298,11 +296,11 @@ msgid ""
 "\n"
 "Pick a tier to renew or upgrade:"
 msgstr ""
-"<b>Your premium: {tier}</b>\n"
+"<b>현재 프리미엄: {tier}</b>\n"
 "{expires}\n"
-"Feed shows profiles with avg rating >= {threshold}.\n"
+"피드에는 평균 평점 {threshold} 이상의 프로필이 표시돼요.\n"
 "\n"
-"Pick a tier to renew or upgrade:"
+"갱신하거나 업그레이드할 등급을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/premium.py:68
 msgid ""
@@ -310,48 +308,50 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
-"<b>Premium</b> filters your /feed to highly rated profiles.\n"
+"<b>프리미엄</b>은 /feed 에서 평점이 높은 프로필만 보여줘요.\n"
 "\n"
-"Pick a tier:"
+"등급을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/premium.py:99
 msgid "Unknown tier"
-msgstr "Unknown tier"
+msgstr "알 수 없는 등급이에요"
 
 #: src/presentation/bot/handlers/premium.py:102
 msgid "Invoice sent — pay in the chat"
-msgstr "Invoice sent — pay in the chat"
+msgstr "청구서를 보냈어요 — 채팅에서 결제해 주세요"
 
 #: src/presentation/bot/handlers/premium.py:124
 msgid "Unknown payment payload."
-msgstr "Unknown payment payload."
+msgstr "알 수 없는 결제 정보예요."
 
 #: src/presentation/bot/handlers/premium.py:135
 msgid "This payment is not in our records."
-msgstr "This payment is not in our records."
+msgstr "기록에 없는 결제예요."
 
 #: src/presentation/bot/handlers/premium.py:146
 msgid "✅ Payment confirmed."
-msgstr "✅ Payment confirmed."
+msgstr "✅ 결제가 확인되었어요."
 
 #: src/presentation/bot/handlers/premium.py:151
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
 "{expires}\n"
 "Now /feed shows profiles rated >= {threshold}."
 msgstr ""
-"<b>✅ Premium activated!</b>\n"
-"Tier: {tier}\n"
+"<b>✅ 프리미엄이 활성화되었어요!</b>\n"
+"등급: {tier}\n"
 "{expires}\n"
-"Now /feed shows profiles rated >= {threshold}."
+"이제 /feed 에는 평점 {threshold} 이상의 프로필이 표시돼요."
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
 "You don't have a profile yet - send /create to make one."
 msgstr ""
+"<b>RateYou에 오신 것을 환영해요!</b>\n"
+"아직 프로필이 없네요 - /create 를 보내서 만들어 주세요."
 
 #: src/presentation/bot/handlers/start.py:36
 #, python-brace-format
@@ -359,68 +359,6 @@ msgid ""
 "<b>Welcome back, {name}!</b>\n"
 "Send /feed to rate other profiles."
 msgstr ""
-"<b>Welcome back, {name}!</b>\n"
-"Send /feed to rate other profiles."
-
-#~ msgid "Send a photo:"
-#~ msgstr "Send a photo:"
-
-#~ msgid "Send new photo:"
-#~ msgstr "Send new photo:"
-
-#~ msgid "Please send a photo."
-#~ msgstr "Please send a photo."
-
-#~ msgid "📸 {n}/{max} photos received. Send more or /done."
-#~ msgstr ""
-
-#~ msgid "Send at least one photo first."
-#~ msgstr ""
-
-#~ msgid "Send 1-{max} new photos, then /done:"
-#~ msgstr ""
-
-#~ msgid "Please send a photo. /done when finished."
-#~ msgstr "Please send a photo (not text)."
-
-#~ msgid "City"
-#~ msgstr ""
-
-#~ msgid "Which city are you in?"
-#~ msgstr "Which city are you in?"
-
-#~ msgid "❌ City must be 1-100 non-empty characters. Try again:"
-#~ msgstr "❌ City must be 1-100 non-empty characters. Try again:"
-
-#~ msgid "Share your location to find nearby profiles (or /skip):"
-#~ msgstr ""
-
-#~ msgid "Please share a location or /skip."
-#~ msgstr "Please send text or /skip."
-
-#~ msgid ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-#~ msgstr ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-
-#~ msgid "Send new city:"
-#~ msgstr "Send new city:"
-
-#~ msgid "Send 1-{max} photos, then /done:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
-#~ msgstr ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
+"<b>다시 오셨네요, {name}님!</b>\n"
+"/feed 를 보내서 다른 프로필을 평가해 보세요."
 

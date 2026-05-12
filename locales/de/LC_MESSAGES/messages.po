@@ -1,4 +1,4 @@
-# English translations for PROJECT.
+# German translations for PROJECT.
 # Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-05-12 15:03+0300\n"
-"PO-Revision-Date: 2026-05-11 23:03+0300\n"
+"PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
-"Language-Team: en <LL@li.org>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -20,141 +20,139 @@ msgstr ""
 
 #: src/presentation/bot/keyboards.py:32
 msgid "♂️ Male"
-msgstr ""
+msgstr "♂️ Männlich"
 
 #: src/presentation/bot/keyboards.py:34
 msgid "♀️ Female"
-msgstr ""
+msgstr "♀️ Weiblich"
 
 #: src/presentation/bot/keyboards.py:63
-#, fuzzy
 msgid "⏭ Skip"
-msgstr "Skipped"
+msgstr "⏭ Überspringen"
 
 #: src/presentation/bot/keyboards.py:73
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: src/presentation/bot/keyboards.py:74
 msgid "Age"
-msgstr ""
+msgstr "Alter"
 
 #: src/presentation/bot/keyboards.py:77
-#, fuzzy
 msgid "Gender"
-msgstr "Pick gender:"
+msgstr "Geschlecht"
 
 #: src/presentation/bot/keyboards.py:82
 msgid "Location"
-msgstr ""
+msgstr "Standort"
 
 #: src/presentation/bot/keyboards.py:85
 msgid "Bio"
-msgstr ""
+msgstr "Bio"
 
 #: src/presentation/bot/keyboards.py:86
 msgid "Photo"
-msgstr ""
+msgstr "Foto"
 
 #: src/presentation/bot/keyboards.py:89
 msgid "✅ Done"
-msgstr ""
+msgstr "✅ Fertig"
 
 #: src/presentation/bot/keyboards.py:106
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
-msgstr ""
+msgstr "{name} — {price} ⭐ / {days} T"
 
 #: src/presentation/bot/handlers/create_profile.py:43
 msgid "Nothing to cancel."
-msgstr "Nothing to cancel."
+msgstr "Nichts zum Abbrechen."
 
 #: src/presentation/bot/handlers/create_profile.py:46
 msgid "Cancelled."
-msgstr "Cancelled."
+msgstr "Abgebrochen."
 
 #: src/presentation/bot/handlers/create_profile.py:62
 #: src/presentation/bot/handlers/create_profile.py:194
 msgid "You already have a profile."
-msgstr "You already have a profile."
+msgstr "Du hast bereits ein Profil."
 
 #: src/presentation/bot/handlers/create_profile.py:67
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
 msgstr ""
-"Let's create your profile.\n"
-"What's your name?"
+"Lass uns dein Profil erstellen.\n"
+"Wie heißt du?"
 
 #: src/presentation/bot/handlers/create_profile.py:73
 #: src/presentation/bot/handlers/edit_profile.py:162
 msgid "Please send text."
-msgstr "Please send text."
+msgstr "Bitte sende Text."
 
 #: src/presentation/bot/handlers/create_profile.py:78
 #: src/presentation/bot/handlers/edit_profile.py:167
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
-msgstr "❌ Name must be 1-50 non-empty characters. Try again:"
+msgstr "❌ Der Name muss 1-50 Zeichen lang sein. Versuch es nochmal:"
 
 #: src/presentation/bot/handlers/create_profile.py:82
 msgid "How old are you?"
-msgstr "How old are you?"
+msgstr "Wie alt bist du?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
 #: src/presentation/bot/handlers/edit_profile.py:179
 msgid "Please send a number."
-msgstr "Please send a number."
+msgstr "Bitte sende eine Zahl."
 
 #: src/presentation/bot/handlers/create_profile.py:93
 #: src/presentation/bot/handlers/edit_profile.py:185
 msgid "❌ That's not a number. Try again:"
-msgstr "❌ That's not a number. Try again:"
+msgstr "❌ Das ist keine Zahl. Versuch es nochmal:"
 
 #: src/presentation/bot/handlers/create_profile.py:96
 #: src/presentation/bot/handlers/edit_profile.py:188
 msgid "❌ Age must be between 18 and 100. Try again:"
-msgstr "❌ Age must be between 18 and 100. Try again:"
+msgstr "❌ Das Alter muss zwischen 18 und 100 liegen. Versuch es nochmal:"
 
 #: src/presentation/bot/handlers/create_profile.py:100
 #: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Pick gender:"
-msgstr "Pick gender:"
+msgstr "Wähle dein Geschlecht:"
 
 #: src/presentation/bot/handlers/create_profile.py:113
 msgid "Invalid choice"
-msgstr "Invalid choice"
+msgstr "Ungültige Auswahl"
 
 #: src/presentation/bot/handlers/create_profile.py:119
 msgid "Share your location — it's used to find nearby profiles:"
-msgstr ""
+msgstr "Teile deinen Standort — er wird genutzt, um Profile in der Nähe zu finden:"
 
 #: src/presentation/bot/handlers/create_profile.py:120
 #: src/presentation/bot/handlers/edit_profile.py:144
 msgid "📍 Share location"
-msgstr ""
+msgstr "📍 Standort teilen"
 
 #: src/presentation/bot/handlers/create_profile.py:135
 msgid "Tell something about yourself (or /skip):"
-msgstr "Tell something about yourself (or /skip):"
+msgstr "Erzähl etwas über dich (oder /skip):"
 
 #: src/presentation/bot/handlers/create_profile.py:142
 msgid "Please share a location to continue."
-msgstr ""
+msgstr "Bitte teile einen Standort, um fortzufahren."
 
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:167
 #, python-brace-format
 msgid "Send up to {max} photos:"
-msgstr ""
+msgstr "Sende bis zu {max} Fotos:"
 
 #: src/presentation/bot/handlers/create_profile.py:157
 msgid "Please send text or /skip."
-msgstr "Please send text or /skip."
+msgstr "Bitte sende Text oder /skip."
 
 #: src/presentation/bot/handlers/create_profile.py:162
 #: src/presentation/bot/handlers/edit_profile.py:231
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
-msgstr "❌ Bio is too long (max 500 chars). Try again or /skip:"
+msgstr "❌ Die Bio ist zu lang (max. 500 Zeichen). Versuch es nochmal oder /skip:"
 
 #: src/presentation/bot/handlers/create_profile.py:201
 #, python-brace-format
@@ -164,133 +162,136 @@ msgid ""
 "Age: {age}\n"
 "Send /feed to start rating profiles."
 msgstr ""
+"<b>✅ Profil erstellt!</b>\n"
+"Name: {name}\n"
+"Alter: {age}\n"
+"Sende /feed, um Profile zu bewerten."
 
 #: src/presentation/bot/handlers/create_profile.py:238
-#, fuzzy
 msgid "Please send a photo (not text)."
-msgstr "Please send a photo (not text)."
+msgstr "Bitte sende ein Foto (keinen Text)."
 
 #: src/presentation/bot/handlers/edit_profile.py:59
 msgid "Session lost. Use /edit again."
-msgstr "Session lost. Use /edit again."
+msgstr "Sitzung verloren. Nutze /edit erneut."
 
 #: src/presentation/bot/handlers/edit_profile.py:75
 msgid "Profile not found."
-msgstr "Profile not found."
+msgstr "Profil nicht gefunden."
 
 #: src/presentation/bot/handlers/edit_profile.py:81
 msgid "Location updated."
-msgstr ""
+msgstr "Standort aktualisiert."
 
 #: src/presentation/bot/handlers/edit_profile.py:82
 msgid "Updated. Pick another field or [Done]:"
-msgstr "Updated. Pick another field or [Done]:"
+msgstr "Aktualisiert. Wähle ein weiteres Feld oder [Fertig]:"
 
 #: src/presentation/bot/handlers/edit_profile.py:99
 msgid "No profile to edit. Use /create first."
-msgstr "No profile to edit. Use /create first."
+msgstr "Kein Profil zum Bearbeiten. Nutze zuerst /create."
 
 #: src/presentation/bot/handlers/edit_profile.py:102
 msgid "Pick a field to edit:"
-msgstr "Pick a field to edit:"
+msgstr "Wähle ein Feld zum Bearbeiten:"
 
 #: src/presentation/bot/handlers/edit_profile.py:114
 msgid "Saved. /feed to keep rating."
-msgstr "Saved. /feed to keep rating."
+msgstr "Gespeichert. /feed zum Weiterbewerten."
 
 #: src/presentation/bot/handlers/edit_profile.py:127
 msgid "Unknown field"
-msgstr "Unknown field"
+msgstr "Unbekanntes Feld"
 
 #: src/presentation/bot/handlers/edit_profile.py:132
 msgid "Send new name:"
-msgstr "Send new name:"
+msgstr "Sende neuen Namen:"
 
 #: src/presentation/bot/handlers/edit_profile.py:133
 msgid "Send new age (18-100):"
-msgstr "Send new age (18-100):"
+msgstr "Sende neues Alter (18-100):"
 
 #: src/presentation/bot/handlers/edit_profile.py:135
 msgid "Share your new location:"
-msgstr ""
+msgstr "Teile deinen neuen Standort:"
 
 #: src/presentation/bot/handlers/edit_profile.py:136
 msgid "Send new bio (or /skip to clear):"
-msgstr "Send new bio (or /skip to clear):"
+msgstr "Sende neue Bio (oder /skip zum Löschen):"
 
 #: src/presentation/bot/handlers/edit_profile.py:137
 #, python-brace-format
 msgid "Send up to {max} new photos:"
-msgstr ""
+msgstr "Sende bis zu {max} neue Fotos:"
 
 #: src/presentation/bot/handlers/edit_profile.py:204
 msgid "Invalid"
-msgstr "Invalid"
+msgstr "Ungültig"
 
 #: src/presentation/bot/handlers/edit_profile.py:226
 msgid "Please send text or /skip to clear."
-msgstr "Please send text or /skip to clear."
+msgstr "Bitte sende Text oder /skip zum Löschen."
 
 #: src/presentation/bot/handlers/edit_profile.py:264
-#, fuzzy
 msgid "Please send a photo."
-msgstr "Please send text."
+msgstr "Bitte sende ein Foto."
 
 #: src/presentation/bot/handlers/edit_profile.py:285
-#, fuzzy
 msgid "Please share a location."
-msgstr "Please send a photo."
+msgstr "Bitte teile einen Standort."
 
 #: src/presentation/bot/handlers/feed.py:52
 msgid "No more profiles to rate. Come back later!"
-msgstr "No more profiles to rate. Come back later!"
+msgstr "Keine weiteren Profile zum Bewerten. Komm später wieder!"
 
 #: src/presentation/bot/handlers/feed.py:79
 msgid "Rate this profile:"
-msgstr ""
+msgstr "Bewerte dieses Profil:"
 
 #: src/presentation/bot/handlers/feed.py:103
 msgid "You need a profile of your own first. Send /create to make one."
-msgstr "You need a profile of your own first. Send /create to make one."
+msgstr ""
+"Du brauchst zuerst ein eigenes Profil. Sende /create, um eines zu "
+"erstellen."
 
 #: src/presentation/bot/handlers/feed.py:122
 #: src/presentation/bot/handlers/feed.py:128
 msgid "Bad payload"
-msgstr "Bad payload"
+msgstr "Ungültige Daten"
 
 #: src/presentation/bot/handlers/feed.py:142
 msgid "Can't rate yourself"
-msgstr "Can't rate yourself"
+msgstr "Du kannst dich nicht selbst bewerten"
 
 #: src/presentation/bot/handlers/feed.py:145
 msgid "Bad score"
-msgstr "Bad score"
+msgstr "Ungültige Bewertung"
 
 #: src/presentation/bot/handlers/feed.py:148
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
-msgstr "Rated {score}/10 ✓"
+msgstr "Bewertet mit {score}/10 ✓"
 
 #: src/presentation/bot/handlers/feed.py:157
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "📊 Durchschnitt: {avg}/10 (aus {count} Bewertung)"
+msgstr[1] "📊 Durchschnitt: {avg}/10 (aus {count} Bewertungen)"
 
 #: src/presentation/bot/handlers/feed.py:193
 msgid "Skipped"
-msgstr "Skipped"
+msgstr "Übersprungen"
 
 #: src/presentation/bot/handlers/premium.py:33
 #, python-brace-format
 msgid "Expires in {days} day."
 msgid_plural "Expires in {days} days."
-msgstr[0] "Expires in {days} day."
-msgstr[1] "Expires in {days} days."
+msgstr[0] "Läuft in {days} Tag ab."
+msgstr[1] "Läuft in {days} Tagen ab."
 
 #: src/presentation/bot/handlers/premium.py:57
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -298,11 +299,11 @@ msgid ""
 "\n"
 "Pick a tier to renew or upgrade:"
 msgstr ""
-"<b>Your premium: {tier}</b>\n"
+"<b>Dein Premium: {tier}</b>\n"
 "{expires}\n"
-"Feed shows profiles with avg rating >= {threshold}.\n"
+"Der Feed zeigt Profile mit Durchschnittsbewertung >= {threshold}.\n"
 "\n"
-"Pick a tier to renew or upgrade:"
+"Wähle eine Stufe zum Verlängern oder Upgraden:"
 
 #: src/presentation/bot/handlers/premium.py:68
 msgid ""
@@ -310,48 +311,50 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
-"<b>Premium</b> filters your /feed to highly rated profiles.\n"
+"<b>Premium</b> filtert deinen /feed nach hoch bewerteten Profilen.\n"
 "\n"
-"Pick a tier:"
+"Wähle eine Stufe:"
 
 #: src/presentation/bot/handlers/premium.py:99
 msgid "Unknown tier"
-msgstr "Unknown tier"
+msgstr "Unbekannte Stufe"
 
 #: src/presentation/bot/handlers/premium.py:102
 msgid "Invoice sent — pay in the chat"
-msgstr "Invoice sent — pay in the chat"
+msgstr "Rechnung gesendet — bezahle im Chat"
 
 #: src/presentation/bot/handlers/premium.py:124
 msgid "Unknown payment payload."
-msgstr "Unknown payment payload."
+msgstr "Unbekannte Zahlungsdaten."
 
 #: src/presentation/bot/handlers/premium.py:135
 msgid "This payment is not in our records."
-msgstr "This payment is not in our records."
+msgstr "Diese Zahlung ist nicht in unseren Aufzeichnungen."
 
 #: src/presentation/bot/handlers/premium.py:146
 msgid "✅ Payment confirmed."
-msgstr "✅ Payment confirmed."
+msgstr "✅ Zahlung bestätigt."
 
 #: src/presentation/bot/handlers/premium.py:151
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
 "{expires}\n"
 "Now /feed shows profiles rated >= {threshold}."
 msgstr ""
-"<b>✅ Premium activated!</b>\n"
-"Tier: {tier}\n"
+"<b>✅ Premium aktiviert!</b>\n"
+"Stufe: {tier}\n"
 "{expires}\n"
-"Now /feed shows profiles rated >= {threshold}."
+"Jetzt zeigt /feed Profile mit Bewertung >= {threshold}."
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
 "You don't have a profile yet - send /create to make one."
 msgstr ""
+"<b>Willkommen bei RateYou!</b>\n"
+"Du hast noch kein Profil – sende /create, um eines zu erstellen."
 
 #: src/presentation/bot/handlers/start.py:36
 #, python-brace-format
@@ -359,68 +362,6 @@ msgid ""
 "<b>Welcome back, {name}!</b>\n"
 "Send /feed to rate other profiles."
 msgstr ""
-"<b>Welcome back, {name}!</b>\n"
-"Send /feed to rate other profiles."
-
-#~ msgid "Send a photo:"
-#~ msgstr "Send a photo:"
-
-#~ msgid "Send new photo:"
-#~ msgstr "Send new photo:"
-
-#~ msgid "Please send a photo."
-#~ msgstr "Please send a photo."
-
-#~ msgid "📸 {n}/{max} photos received. Send more or /done."
-#~ msgstr ""
-
-#~ msgid "Send at least one photo first."
-#~ msgstr ""
-
-#~ msgid "Send 1-{max} new photos, then /done:"
-#~ msgstr ""
-
-#~ msgid "Please send a photo. /done when finished."
-#~ msgstr "Please send a photo (not text)."
-
-#~ msgid "City"
-#~ msgstr ""
-
-#~ msgid "Which city are you in?"
-#~ msgstr "Which city are you in?"
-
-#~ msgid "❌ City must be 1-100 non-empty characters. Try again:"
-#~ msgstr "❌ City must be 1-100 non-empty characters. Try again:"
-
-#~ msgid "Share your location to find nearby profiles (or /skip):"
-#~ msgstr ""
-
-#~ msgid "Please share a location or /skip."
-#~ msgstr "Please send text or /skip."
-
-#~ msgid ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-#~ msgstr ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-
-#~ msgid "Send new city:"
-#~ msgstr "Send new city:"
-
-#~ msgid "Send 1-{max} photos, then /done:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
-#~ msgstr ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
+"<b>Willkommen zurück, {name}!</b>\n"
+"Sende /feed, um andere Profile zu bewerten."
 

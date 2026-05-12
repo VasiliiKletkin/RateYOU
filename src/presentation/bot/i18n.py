@@ -10,7 +10,30 @@ log = logging.getLogger(__name__)
 
 # locales/ at the project root, sibling to src/.
 LOCALES_DIR = Path(__file__).resolve().parents[3] / "locales"
-SUPPORTED_LANGUAGES: tuple[str, ...] = ("en", "ru")
+SUPPORTED_LANGUAGES: tuple[str, ...] = (
+    "en",
+    "ru",
+    "es",
+    "pt",
+    "de",
+    "fr",
+    "it",
+    "tr",
+    "uk",
+    "pl",
+    "ar",
+    "fa",
+    "id",
+    "vi",
+    "zh",
+    "hi",
+    "bn",
+    "am",
+    "uz",
+    "ko",
+    "ja",
+    "th",
+)
 DEFAULT_LANGUAGE = "en"
 
 i18n = I18n(

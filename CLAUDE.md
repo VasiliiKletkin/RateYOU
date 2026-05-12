@@ -129,4 +129,4 @@ The domain `Protocol` (e.g. `IUserRepository`) lives in `domain/<ctx>/repositori
 
 ## Memory
 
-`~/.claude/projects/-Users-vasiliikletkin-SynologyDrive-Development-MyProjects-RateMe/memory/` holds the user's preferences (e.g. always-latest dependencies) and the documented Poetry workaround. CLAUDE.md repeats the workaround because the memory is per-machine; CLAUDE.md is checked in.
+`~/.claude/projects/-Users-vasiliikletkin-SynologyDrive-Development-MyProjects-RateYou/memory/` holds the user's preferences (e.g. always-latest dependencies) and the documented Poetry workaround. CLAUDE.md repeats the workaround because the memory is per-machine; CLAUDE.md is checked in.
