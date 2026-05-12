@@ -5,7 +5,7 @@ from src.domain.identity.repositories import IUserRepository
 from src.domain.referral.entities import Referral
 from src.domain.referral.repositories import IReferralRepository
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
+from src.domain.subscription.entities import Subscription
 from src.domain.subscription.repositories import ISubscriptionRepository
 
 # +1 day of premium per side per qualifying referral.
@@ -28,7 +28,7 @@ class ReferralRewardService:
 
     Reward semantics:
       - Both referrer and referee receive `PER_REFERRAL_REWARD_DAYS` as a
-        BONUS SubscriptionGrant.
+        BONUS Subscription.
       - Once the referrer's running count hits a multiple of
         `MILESTONE_INTERVAL`, they get an additional `MILESTONE_BONUS_DAYS`
         on top — a second grant marking the milestone.
@@ -54,7 +54,7 @@ class ReferralRewardService:
 
         # Referee always receives their bonus — they did the work.
         await self.subscription_repo.add(
-            SubscriptionGrant.create_bonus(
+            Subscription.create_bonus(
                 owner_id=referee_id,
                 duration_days=PER_REFERRAL_REWARD_DAYS,
                 now=now,
@@ -66,7 +66,7 @@ class ReferralRewardService:
         if referrer is None or referrer.is_banned:
             return
         await self.subscription_repo.add(
-            SubscriptionGrant.create_bonus(
+            Subscription.create_bonus(
                 owner_id=referrer_id,
                 duration_days=PER_REFERRAL_REWARD_DAYS,
                 now=now,
@@ -78,7 +78,7 @@ class ReferralRewardService:
         count = await self.referral_repo.count_for_referrer(referrer_id)
         if count > 0 and count % MILESTONE_INTERVAL == 0:
             await self.subscription_repo.add(
-                SubscriptionGrant.create_bonus(
+                Subscription.create_bonus(
                     owner_id=referrer_id,
                     duration_days=MILESTONE_BONUS_DAYS,
                     now=now,

@@ -11,8 +11,8 @@ from src.domain.referral.services import (
     ReferralRewardService,
 )
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
-from src.domain.subscription.value_objects import GrantSource, Tier
+from src.domain.subscription.entities import Subscription
+from src.domain.subscription.value_objects import SubscriptionSource, Tier
 
 
 @dataclass
@@ -55,23 +55,23 @@ class FakeUserRepo:
 
 @dataclass
 class FakeSubscriptionRepo:
-    grants: list[SubscriptionGrant] = field(default_factory=list)
+    grants: list[Subscription] = field(default_factory=list)
 
-    async def add(self, g: SubscriptionGrant) -> None:
+    async def add(self, g: Subscription) -> None:
         self.grants.append(g)
 
-    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
         return [g for g in self.grants if g.owner_id == owner_id]
 
     async def list_active_purchases_for(
         self, owner_id: UserId, now: datetime
-    ) -> list[SubscriptionGrant]:
+    ) -> list[Subscription]:
         return []
 
-    async def find_by_transaction(self, transaction_id) -> SubscriptionGrant | None:  # type: ignore[no-untyped-def]
+    async def find_by_transaction(self, transaction_id) -> Subscription | None:  # type: ignore[no-untyped-def]
         return None
 
-    async def update(self, g: SubscriptionGrant) -> None:
+    async def update(self, g: Subscription) -> None:
         for idx, existing in enumerate(self.grants):
             if existing.id == g.id:
                 self.grants[idx] = g
@@ -152,7 +152,7 @@ async def test_first_referral_grants_one_day_to_each_side() -> None:
     assert len(referrals.referrals) == 1
     owners = {g.owner_id for g in subs.grants}
     assert owners == {referrer.id, referee.id}
-    assert all(g.source == GrantSource.BONUS for g in subs.grants)
+    assert all(g.source == SubscriptionSource.BONUS for g in subs.grants)
     assert all(g.tier == Tier.BONUS for g in subs.grants)
     assert all(
         (g.expires_at - g.starts_at).days == PER_REFERRAL_REWARD_DAYS

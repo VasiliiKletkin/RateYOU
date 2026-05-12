@@ -1,7 +1,7 @@
 """rewrite subscriptions as a grant ledger
 
 Drops the single-row-per-user `subscriptions` table and replaces it with
-`subscription_grants`, where each granted period of premium days (purchase,
+`subscriptions`, where each granted period of premium days (purchase,
 bonus, ...) is its own row. The user's current premium state is derived by
 projecting their grants — there is no UNIQUE on `owner_id` anymore.
 
@@ -27,7 +27,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.drop_table('subscriptions')
     op.create_table(
-        'subscription_grants',
+        'subscriptions',
         sa.Column('id', sa.Uuid(), nullable=False),
         sa.Column('owner_id', sa.Uuid(), nullable=False),
         sa.Column('tier', sa.String(length=16), nullable=False),
@@ -49,13 +49,13 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint('id'),
     )
     op.create_index(
-        'ix_subscription_grants_owner_expires',
-        'subscription_grants',
+        'ix_subscriptions_owner_expires',
+        'subscriptions',
         ['owner_id', 'expires_at'],
     )
     op.create_index(
-        'ix_subscription_grants_transaction',
-        'subscription_grants',
+        'ix_subscriptions_transaction',
+        'subscriptions',
         ['transaction_id'],
         unique=True,
         postgresql_where=sa.text('transaction_id IS NOT NULL'),
@@ -64,12 +64,12 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_index(
-        'ix_subscription_grants_transaction', table_name='subscription_grants'
+        'ix_subscriptions_transaction', table_name='subscriptions'
     )
     op.drop_index(
-        'ix_subscription_grants_owner_expires', table_name='subscription_grants'
+        'ix_subscriptions_owner_expires', table_name='subscriptions'
     )
-    op.drop_table('subscription_grants')
+    op.drop_table('subscriptions')
     op.create_table(
         'subscriptions',
         sa.Column('owner_id', sa.Uuid(), nullable=False),

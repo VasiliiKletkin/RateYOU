@@ -18,10 +18,10 @@ from src.domain.profile.value_objects import (
 )
 from src.domain.rating.entities import Rating
 from src.domain.rating.value_objects import RatingId, Score
+from src.domain.shared.exceptions import PremiumRequired
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
-from src.domain.subscription.exceptions import PremiumRequired
-from src.domain.subscription.value_objects import GrantSource, Tier
+from src.domain.subscription.entities import Subscription
+from src.domain.subscription.value_objects import SubscriptionSource, Tier
 
 
 @dataclass
@@ -62,31 +62,31 @@ class FakeProfileRepo:
 
 @dataclass
 class FakeSubscriptionRepo:
-    grants: list[SubscriptionGrant] = field(default_factory=list)
+    grants: list[Subscription] = field(default_factory=list)
 
-    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
         return [g for g in self.grants if g.owner_id == owner_id]
 
-    async def add(self, grant: SubscriptionGrant) -> None:
+    async def add(self, grant: Subscription) -> None:
         self.grants.append(grant)
 
     async def list_active_purchases_for(
         self, owner_id: UserId, now: datetime
-    ) -> list[SubscriptionGrant]:
+    ) -> list[Subscription]:
         return [
             g
             for g in self.grants
             if g.owner_id == owner_id
-            and g.source == GrantSource.PURCHASE
+            and g.source == SubscriptionSource.PURCHASE
             and g.is_active_at(now)
         ]
 
     async def find_by_transaction(
         self, transaction_id: TransactionId
-    ) -> SubscriptionGrant | None:
+    ) -> Subscription | None:
         return None
 
-    async def update(self, grant: SubscriptionGrant) -> None:
+    async def update(self, grant: Subscription) -> None:
         for idx, existing in enumerate(self.grants):
             if existing.id == grant.id:
                 self.grants[idx] = grant
@@ -118,8 +118,8 @@ def _make_rating(rater: UserId, rated: UserId, score: int, at: datetime) -> Rati
     )
 
 
-def _active_sub(owner: UserId) -> SubscriptionGrant:
-    return SubscriptionGrant.create_purchase(
+def _active_sub(owner: UserId) -> Subscription:
+    return Subscription.create_purchase(
         owner_id=owner,
         tier=Tier.BRONZE,
         duration_days=7,
@@ -142,7 +142,7 @@ async def test_premium_required_when_subscription_expired() -> None:
     viewer_uuid = uuid4()
     viewer = UserId(viewer_uuid)
     subs = FakeSubscriptionRepo()
-    expired = SubscriptionGrant.create_purchase(
+    expired = Subscription.create_purchase(
         owner_id=viewer,
         tier=Tier.BRONZE,
         duration_days=7,

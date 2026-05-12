@@ -1,4 +1,3 @@
-from starlette.requests import Request
 from starlette_admin import StringField
 from starlette_admin.contrib.sqla import ModelView
 
@@ -19,10 +18,6 @@ class UserAdmin(ModelView):
     ]
     searchable_fields = ["telegram_id"]
     sortable_fields = ["created_at", "telegram_id"]
-
-    # Users are created via the bot's RegisterUserUseCase, not from admin.
-    def can_create(self, request: Request) -> bool:
-        return False
 
 
 class ProfileAdmin(ModelView):
@@ -61,9 +56,6 @@ class ProfileAdmin(ModelView):
     searchable_fields = ["name"]
     sortable_fields = ["created_at", "age"]
 
-    def can_create(self, request: Request) -> bool:
-        return False
-
 
 class ProfilePhotoAdmin(ModelView):
     label = "Profile Photos"
@@ -71,14 +63,6 @@ class ProfilePhotoAdmin(ModelView):
     fields = ["id", "profile_id", "file_id", "position"]
     sortable_fields = ["profile_id", "position"]
     searchable_fields = ["file_id"]
-
-    # Photos are managed via bot /create and /edit — admin is read-only to
-    # avoid orphaning rows or violating the (profile_id, position) constraint.
-    def can_create(self, request: Request) -> bool:
-        return False
-
-    def can_edit(self, request: Request) -> bool:
-        return False
 
 
 class RatingAdmin(ModelView):
@@ -94,13 +78,6 @@ class RatingAdmin(ModelView):
     ]
     sortable_fields = ["created_at", "score"]
 
-    def can_create(self, request: Request) -> bool:
-        return False
-
-    # Ratings are owned by domain logic — no manual tweaks from admin.
-    def can_edit(self, request: Request) -> bool:
-        return False
-
 
 class ProfileScoreSummaryAdmin(ModelView):
     label = "Score Summaries"
@@ -112,14 +89,6 @@ class ProfileScoreSummaryAdmin(ModelView):
         "updated_at",
     ]
     sortable_fields = ["average_score", "rating_count"]
-
-    # Projection — recomputed by RateUserUseCase; any manual edit would
-    # diverge from the underlying ratings.
-    def can_create(self, request: Request) -> bool:
-        return False
-
-    def can_edit(self, request: Request) -> bool:
-        return False
 
 
 class SearchPreferencesAdmin(ModelView):
@@ -134,14 +103,9 @@ class SearchPreferencesAdmin(ModelView):
     ]
     sortable_fields = ["updated_at"]
 
-    # Rows are created lazily by the bot (/create or first /settings access);
-    # admin shouldn't manufacture orphaned rows.
-    def can_create(self, request: Request) -> bool:
-        return False
 
-
-class SubscriptionGrantAdmin(ModelView):
-    label = "Subscription grants"
+class SubscriptionAdmin(ModelView):
+    label = "Subscriptions"
     icon = "fa fa-crown"
     # Append-only ledger of granted premium periods. Each row = one grant
     # (purchase / bonus / ...). A user typically has many over time; current
@@ -159,12 +123,6 @@ class SubscriptionGrantAdmin(ModelView):
     ]
     sortable_fields = ["created_at", "expires_at"]
     fields_default_sort = [("created_at", True)]  # DESC
-
-    def can_create(self, request: Request) -> bool:
-        return False
-
-    def can_edit(self, request: Request) -> bool:
-        return False
 
 
 class TransactionAdmin(ModelView):
@@ -185,19 +143,12 @@ class TransactionAdmin(ModelView):
     searchable_fields = ["status", "purpose"]
     sortable_fields = ["created_at", "amount"]
 
-    # State transitions only via Payment use cases.
-    def can_create(self, request: Request) -> bool:
-        return False
-
-    def can_edit(self, request: Request) -> bool:
-        return False
-
 
 class ReferralAdmin(ModelView):
     label = "Referrals"
     icon = "fa fa-user-plus"
     # Append-only: each row marks one paid-out referral (referee created
-    # their profile and BONUS SubscriptionGrants were issued to both sides).
+    # their profile and BONUS Subscriptions were issued to both sides).
     # The row's existence is the «rewarded» state — no status column.
     fields = [
         "id",
@@ -207,9 +158,3 @@ class ReferralAdmin(ModelView):
     ]
     sortable_fields = ["created_at"]
     fields_default_sort = [("created_at", True)]  # DESC
-
-    def can_create(self, request: Request) -> bool:
-        return False
-
-    def can_edit(self, request: Request) -> bool:
-        return False

@@ -2,8 +2,8 @@ from datetime import UTC, datetime, timedelta
 
 from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant, SubscriptionStatus
-from src.domain.subscription.value_objects import GrantSource, Tier
+from src.domain.subscription.entities import Subscription, SubscriptionStatus
+from src.domain.subscription.value_objects import SubscriptionSource, Tier
 
 
 def test_create_purchase_sets_fields_and_expiry() -> None:
@@ -11,7 +11,7 @@ def test_create_purchase_sets_fields_and_expiry() -> None:
     owner = UserId.new()
     tx = TransactionId.new()
 
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         owner_id=owner,
         tier=Tier.BRONZE,
         duration_days=7,
@@ -21,7 +21,7 @@ def test_create_purchase_sets_fields_and_expiry() -> None:
 
     assert grant.owner_id == owner
     assert grant.tier == Tier.BRONZE
-    assert grant.source == GrantSource.PURCHASE
+    assert grant.source == SubscriptionSource.PURCHASE
     assert grant.transaction_id == tx
     assert grant.starts_at == now
     assert grant.expires_at == now + timedelta(days=7)
@@ -31,19 +31,19 @@ def test_create_purchase_sets_fields_and_expiry() -> None:
 
 def test_create_bonus_uses_bonus_tier_and_no_transaction() -> None:
     now = datetime.now(UTC)
-    grant = SubscriptionGrant.create_bonus(
+    grant = Subscription.create_bonus(
         owner_id=UserId.new(), duration_days=3, now=now
     )
 
     assert grant.tier == Tier.BONUS
-    assert grant.source == GrantSource.BONUS
+    assert grant.source == SubscriptionSource.BONUS
     assert grant.transaction_id is None
     assert grant.expires_at == now + timedelta(days=3)
 
 
 def test_is_active_at_returns_false_when_expired() -> None:
     now = datetime.now(UTC)
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         UserId.new(), Tier.BRONZE, duration_days=7,
         transaction_id=None, now=now,
     )
@@ -53,7 +53,7 @@ def test_is_active_at_returns_false_when_expired() -> None:
 
 def test_is_active_at_returns_false_when_revoked() -> None:
     now = datetime.now(UTC)
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         UserId.new(), Tier.GOLD, duration_days=30,
         transaction_id=None, now=now,
     )
@@ -75,10 +75,10 @@ def test_status_from_no_grants_is_inactive() -> None:
 def test_status_picks_highest_priority_tier_among_active() -> None:
     now = datetime.now(UTC)
     owner = UserId.new()
-    bronze = SubscriptionGrant.create_purchase(
+    bronze = Subscription.create_purchase(
         owner, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
     )
-    bonus = SubscriptionGrant.create_bonus(owner, duration_days=3, now=now)
+    bonus = Subscription.create_bonus(owner, duration_days=3, now=now)
 
     status = SubscriptionStatus.from_grants([bronze, bonus], now)
 
@@ -92,11 +92,11 @@ def test_status_picks_highest_priority_tier_among_active() -> None:
 def test_status_ignores_revoked_grants() -> None:
     now = datetime.now(UTC)
     owner = UserId.new()
-    revoked_gold = SubscriptionGrant.create_purchase(
+    revoked_gold = Subscription.create_purchase(
         owner, Tier.GOLD, duration_days=30, transaction_id=None, now=now,
     )
     revoked_gold.revoke(now=now)
-    live_bronze = SubscriptionGrant.create_purchase(
+    live_bronze = Subscription.create_purchase(
         owner, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
     )
 
@@ -110,11 +110,11 @@ def test_status_ignores_expired_grants() -> None:
     now = datetime.now(UTC)
     long_ago = now - timedelta(days=60)
     owner = UserId.new()
-    expired = SubscriptionGrant.create_purchase(
+    expired = Subscription.create_purchase(
         owner, Tier.GOLD, duration_days=30,
         transaction_id=None, now=long_ago,
     )
-    fresh_bonus = SubscriptionGrant.create_bonus(owner, duration_days=3, now=now)
+    fresh_bonus = Subscription.create_bonus(owner, duration_days=3, now=now)
 
     status = SubscriptionStatus.from_grants([expired, fresh_bonus], now)
 

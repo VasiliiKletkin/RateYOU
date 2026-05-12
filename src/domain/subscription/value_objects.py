@@ -10,7 +10,7 @@ class Tier(StrEnum):
     BONUS = "bonus"
 
 
-class GrantSource(StrEnum):
+class SubscriptionSource(StrEnum):
     PURCHASE = "purchase"
     BONUS = "bonus"
 
@@ -31,9 +31,9 @@ def tier_priority(tier: Tier) -> int:
 
 
 @dataclass(frozen=True, slots=True)
-class GrantId:
+class SubscriptionId:
     value: UUID
 
     @classmethod
-    def new(cls) -> "GrantId":
+    def new(cls) -> "SubscriptionId":
         return cls(uuid4())

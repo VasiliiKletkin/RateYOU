@@ -10,7 +10,7 @@ from dishka import FromDishka
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.rating.list_incoming_ratings import ListIncomingRatingsUseCase
-from src.domain.subscription.exceptions import PremiumRequired
+from src.domain.shared.exceptions import PremiumRequired
 from src.presentation.bot.i18n import normalize_language
 
 router = Router(name="my_ratings")

@@ -6,61 +6,61 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
-from src.domain.subscription.value_objects import GrantSource
+from src.domain.subscription.entities import Subscription
+from src.domain.subscription.value_objects import SubscriptionSource
 from src.infrastructure.db.mappers.subscription import (
-    grant_to_orm,
-    orm_to_grant,
+    orm_to_subscription,
+    subscription_to_orm,
 )
-from src.infrastructure.db.models.subscription import SubscriptionGrantORM
+from src.infrastructure.db.models.subscription import SubscriptionORM
 
 
 @dataclass
 class SubscriptionRepository:
     session: AsyncSession
 
-    async def add(self, grant: SubscriptionGrant) -> None:
-        self.session.add(grant_to_orm(grant))
+    async def add(self, grant: Subscription) -> None:
+        self.session.add(subscription_to_orm(grant))
         await self.session.flush()
 
-    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
         stmt = (
-            select(SubscriptionGrantORM)
-            .where(SubscriptionGrantORM.owner_id == owner_id.value)
-            .order_by(SubscriptionGrantORM.created_at.asc())
+            select(SubscriptionORM)
+            .where(SubscriptionORM.owner_id == owner_id.value)
+            .order_by(SubscriptionORM.created_at.asc())
         )
         rows = (await self.session.execute(stmt)).scalars().all()
-        return [orm_to_grant(r) for r in rows]
+        return [orm_to_subscription(r) for r in rows]
 
     async def list_active_purchases_for(
         self,
         owner_id: UserId,
         now: datetime,
-    ) -> list[SubscriptionGrant]:
-        stmt = select(SubscriptionGrantORM).where(
-            SubscriptionGrantORM.owner_id == owner_id.value,
-            SubscriptionGrantORM.source == GrantSource.PURCHASE.value,
-            SubscriptionGrantORM.is_revoked.is_(False),
-            SubscriptionGrantORM.expires_at > now,
+    ) -> list[Subscription]:
+        stmt = select(SubscriptionORM).where(
+            SubscriptionORM.owner_id == owner_id.value,
+            SubscriptionORM.source == SubscriptionSource.PURCHASE.value,
+            SubscriptionORM.is_revoked.is_(False),
+            SubscriptionORM.expires_at > now,
         )
         rows = (await self.session.execute(stmt)).scalars().all()
-        return [orm_to_grant(r) for r in rows]
+        return [orm_to_subscription(r) for r in rows]
 
     async def find_by_transaction(
         self,
         transaction_id: TransactionId,
-    ) -> SubscriptionGrant | None:
-        stmt = select(SubscriptionGrantORM).where(
-            SubscriptionGrantORM.transaction_id == transaction_id.value
+    ) -> Subscription | None:
+        stmt = select(SubscriptionORM).where(
+            SubscriptionORM.transaction_id == transaction_id.value
         )
         orm = (await self.session.execute(stmt)).scalar_one_or_none()
-        return orm_to_grant(orm) if orm is not None else None
+        return orm_to_subscription(orm) if orm is not None else None
 
-    async def update(self, grant: SubscriptionGrant) -> None:
-        existing = await self.session.get(SubscriptionGrantORM, grant.id.value)
+    async def update(self, grant: Subscription) -> None:
+        existing = await self.session.get(SubscriptionORM, grant.id.value)
         if existing is None:
             raise ValueError(
-                f"SubscriptionGrant {grant.id.value} not found for update"
+                f"Subscription {grant.id.value} not found for update"
             )
         existing.tier = grant.tier.value
         existing.source = grant.source.value

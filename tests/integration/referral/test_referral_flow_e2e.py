@@ -1,6 +1,6 @@
 """End-to-end happy path:
 `/start <inviter_telegram_id>` -> create profile -> both parties get a
-BONUS SubscriptionGrant. Plus milestone: 3 successful referrals add an
+BONUS Subscription. Plus milestone: 3 successful referrals add an
 extra bonus grant for the referrer.
 """
 
@@ -21,7 +21,7 @@ from src.domain.referral.services import (
     PER_REFERRAL_REWARD_DAYS,
 )
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.value_objects import GrantSource
+from src.domain.subscription.value_objects import SubscriptionSource
 from src.infrastructure.db.repositories.profile import ProfileRepository
 from src.infrastructure.db.repositories.referral import ReferralRepository
 from src.infrastructure.db.repositories.subscription import SubscriptionRepository
@@ -103,7 +103,7 @@ async def test_referee_profile_creation_pays_both_sides(
     assert len(referee_grants) == 1
     assert len(referrer_grants) == 1
     for g in referee_grants + referrer_grants:
-        assert g.source == GrantSource.BONUS
+        assert g.source == SubscriptionSource.BONUS
         assert (g.expires_at - g.starts_at).days == PER_REFERRAL_REWARD_DAYS
 
 

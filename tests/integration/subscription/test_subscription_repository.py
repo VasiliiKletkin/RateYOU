@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.identity.entities import User
 from src.domain.identity.value_objects import TelegramId
-from src.domain.subscription.entities import SubscriptionGrant
-from src.domain.subscription.value_objects import GrantSource, Tier
+from src.domain.subscription.entities import Subscription
+from src.domain.subscription.value_objects import SubscriptionSource, Tier
 from src.infrastructure.db.repositories.subscription import SubscriptionRepository
 from src.infrastructure.db.repositories.user import UserRepository
 
@@ -20,7 +20,7 @@ async def test_add_and_list_for_roundtrip(session: AsyncSession) -> None:
     user = await _seed_user(session, 5001)
     repo = SubscriptionRepository(session=session)
     now = datetime.now(UTC)
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         owner_id=user.id,
         tier=Tier.BRONZE,
         duration_days=7,
@@ -35,7 +35,7 @@ async def test_add_and_list_for_roundtrip(session: AsyncSession) -> None:
     assert grants[0].id == grant.id
     assert grants[0].owner_id == user.id
     assert grants[0].tier == Tier.BRONZE
-    assert grants[0].source == GrantSource.PURCHASE
+    assert grants[0].source == SubscriptionSource.PURCHASE
     assert grants[0].is_revoked is False
 
 
@@ -53,21 +53,21 @@ async def test_list_active_purchases_for_excludes_revoked_expired_and_bonus(
     repo = SubscriptionRepository(session=session)
     now = datetime.now(UTC)
 
-    active_purchase = SubscriptionGrant.create_purchase(
+    active_purchase = Subscription.create_purchase(
         user.id, Tier.GOLD, duration_days=30, transaction_id=None, now=now,
     )
-    revoked_purchase = SubscriptionGrant.create_purchase(
+    revoked_purchase = Subscription.create_purchase(
         user.id, Tier.SILVER, duration_days=30, transaction_id=None, now=now,
     )
     revoked_purchase.revoke(now=now)
-    expired_purchase = SubscriptionGrant.create_purchase(
+    expired_purchase = Subscription.create_purchase(
         user.id,
         Tier.BRONZE,
         duration_days=7,
         transaction_id=None,
         now=now - timedelta(days=30),
     )
-    bonus = SubscriptionGrant.create_bonus(
+    bonus = Subscription.create_bonus(
         owner_id=user.id, duration_days=3, now=now,
     )
     for g in (active_purchase, revoked_purchase, expired_purchase, bonus):
@@ -83,7 +83,7 @@ async def test_update_persists_revoke(session: AsyncSession) -> None:
     user = await _seed_user(session, 5004)
     repo = SubscriptionRepository(session=session)
     now = datetime.now(UTC)
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         user.id, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
     )
     await repo.add(grant)

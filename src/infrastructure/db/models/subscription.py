@@ -9,7 +9,7 @@ from src.infrastructure.db.models.identity import UserORM
 from src.infrastructure.db.models.payment import TransactionORM
 
 
-class SubscriptionGrantORM(Base):
+class SubscriptionORM(Base):
     """One row per granted period of premium days (purchase, bonus, ...).
 
     The user's current premium state is derived from the set of their grants
@@ -21,7 +21,7 @@ class SubscriptionGrantORM(Base):
     refunds can revoke exactly that grant without touching others.
     """
 
-    __tablename__ = "subscription_grants"
+    __tablename__ = "subscriptions"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     owner_id: Mapped[UUID] = mapped_column(
@@ -47,12 +47,12 @@ class SubscriptionGrantORM(Base):
 
     __table_args__ = (
         Index(
-            "ix_subscription_grants_owner_expires",
+            "ix_subscriptions_owner_expires",
             "owner_id",
             "expires_at",
         ),
         Index(
-            "ix_subscription_grants_transaction",
+            "ix_subscriptions_transaction",
             "transaction_id",
             unique=True,
             postgresql_where="transaction_id IS NOT NULL",

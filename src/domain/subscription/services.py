@@ -3,7 +3,7 @@ from datetime import datetime
 
 from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
+from src.domain.subscription.entities import Subscription
 from src.domain.subscription.repositories import ISubscriptionRepository
 from src.domain.subscription.tier_catalog import get_tier_spec
 from src.domain.subscription.value_objects import Tier
@@ -33,14 +33,14 @@ class SubscriptionActivationService:
         tier: Tier,
         transaction_id: TransactionId | None,
         now: datetime,
-    ) -> SubscriptionGrant:
+    ) -> Subscription:
         spec = get_tier_spec(tier)
         for active in await self.subscription_repo.list_active_purchases_for(
             owner_id, now
         ):
             active.revoke(now)
             await self.subscription_repo.update(active)
-        grant = SubscriptionGrant.create_purchase(
+        grant = Subscription.create_purchase(
             owner_id=owner_id,
             tier=tier,
             duration_days=spec.duration_days,

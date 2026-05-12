@@ -5,7 +5,7 @@ from src.infrastructure.db.models.payment import TransactionORM
 from src.infrastructure.db.models.profile import ProfileORM, ProfilePhotoORM
 from src.infrastructure.db.models.rating import ProfileScoreSummaryORM, RatingORM
 from src.infrastructure.db.models.referral import ReferralORM
-from src.infrastructure.db.models.subscription import SubscriptionGrantORM
+from src.infrastructure.db.models.subscription import SubscriptionORM
 
 __all__ = [
     "Base",
@@ -15,7 +15,7 @@ __all__ = [
     "RatingORM",
     "ReferralORM",
     "SearchPreferencesORM",
-    "SubscriptionGrantORM",
+    "SubscriptionORM",
     "TransactionORM",
     "UserORM",
 ]

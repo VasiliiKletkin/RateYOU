@@ -15,7 +15,7 @@ from src.infrastructure.db.models import (
     RatingORM,
     ReferralORM,
     SearchPreferencesORM,
-    SubscriptionGrantORM,
+    SubscriptionORM,
     TransactionORM,
     UserORM,
 )
@@ -28,7 +28,7 @@ from src.presentation.admin.views import (
     RatingAdmin,
     ReferralAdmin,
     SearchPreferencesAdmin,
-    SubscriptionGrantAdmin,
+    SubscriptionAdmin,
     TransactionAdmin,
     UserAdmin,
 )
@@ -57,7 +57,7 @@ def create_app() -> FastAPI:
     admin.add_view(ProfilePhotoAdmin(ProfilePhotoORM))
     admin.add_view(RatingAdmin(RatingORM))
     admin.add_view(ProfileScoreSummaryAdmin(ProfileScoreSummaryORM))
-    admin.add_view(SubscriptionGrantAdmin(SubscriptionGrantORM))
+    admin.add_view(SubscriptionAdmin(SubscriptionORM))
     admin.add_view(SearchPreferencesAdmin(SearchPreferencesORM))
     admin.add_view(TransactionAdmin(TransactionORM))
     admin.add_view(ReferralAdmin(ReferralORM))

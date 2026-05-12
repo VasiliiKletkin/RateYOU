@@ -24,7 +24,7 @@ from src.domain.profile.value_objects import (
 )
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import AndSpec, Specification
-from src.domain.subscription.entities import SubscriptionGrant
+from src.domain.subscription.entities import Subscription
 from src.domain.subscription.value_objects import Tier
 
 
@@ -84,23 +84,23 @@ class FakeSearchPreferencesRepository:
 class FakeSubscriptionRepository:
     """Thin fake — Discovery only reads `list_for`; other methods are stubs."""
 
-    grants: list[SubscriptionGrant] = field(default_factory=list)
+    grants: list[Subscription] = field(default_factory=list)
 
-    async def add(self, grant: SubscriptionGrant) -> None:
+    async def add(self, grant: Subscription) -> None:
         self.grants.append(grant)
 
-    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
         return [g for g in self.grants if g.owner_id == owner_id]
 
     async def list_active_purchases_for(
         self, owner_id: UserId, now: datetime
-    ) -> list[SubscriptionGrant]:
+    ) -> list[Subscription]:
         return []
 
     async def find_by_transaction(self, transaction_id):  # type: ignore[no-untyped-def]
         return None
 
-    async def update(self, grant: SubscriptionGrant) -> None:
+    async def update(self, grant: Subscription) -> None:
         for idx, existing in enumerate(self.grants):
             if existing.id == grant.id:
                 self.grants[idx] = grant
@@ -220,7 +220,7 @@ async def test_premium_without_user_pref_adds_no_threshold() -> None:
     """Premium no longer baked in a tier-specific floor — without an
     explicit `min_rating` in the user's prefs, the feed stays unfiltered."""
     viewer_id = uuid4()
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         owner_id=UserId(viewer_id),
         tier=Tier.SILVER,
         duration_days=30,
@@ -295,7 +295,7 @@ async def test_user_min_rating_ignored_without_premium() -> None:
 
 async def test_user_min_rating_applied_when_premium() -> None:
     viewer_id = uuid4()
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         owner_id=UserId(viewer_id),
         tier=Tier.GOLD,
         duration_days=30,
@@ -322,7 +322,7 @@ async def test_user_min_rating_applied_when_premium() -> None:
 
 async def test_expired_subscription_omits_threshold_spec() -> None:
     viewer_id = uuid4()
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         owner_id=UserId(viewer_id),
         tier=Tier.SILVER,
         duration_days=30,
@@ -344,7 +344,7 @@ async def test_expired_subscription_omits_threshold_spec() -> None:
 
 async def test_revoked_subscription_omits_threshold_spec() -> None:
     viewer_id = uuid4()
-    grant = SubscriptionGrant.create_purchase(
+    grant = Subscription.create_purchase(
         owner_id=UserId(viewer_id),
         tier=Tier.GOLD,
         duration_days=30,

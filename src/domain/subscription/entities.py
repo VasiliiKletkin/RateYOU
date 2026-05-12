@@ -4,15 +4,15 @@ from datetime import datetime, timedelta
 from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
 from src.domain.subscription.value_objects import (
-    GrantId,
-    GrantSource,
+    SubscriptionId,
+    SubscriptionSource,
     Tier,
     tier_priority,
 )
 
 
 @dataclass
-class SubscriptionGrant:
+class Subscription:
     """Aggregate root: a single grant of premium days from one source.
 
     Replaces the older single-row-per-user `Subscription`. Each purchase,
@@ -23,10 +23,10 @@ class SubscriptionGrant:
     refunds can revoke exactly that grant without touching bonuses.
     """
 
-    id: GrantId
+    id: SubscriptionId
     owner_id: UserId
     tier: Tier
-    source: GrantSource
+    source: SubscriptionSource
     transaction_id: TransactionId | None
     starts_at: datetime
     expires_at: datetime
@@ -41,12 +41,12 @@ class SubscriptionGrant:
         duration_days: int,
         transaction_id: TransactionId | None,
         now: datetime,
-    ) -> "SubscriptionGrant":
+    ) -> "Subscription":
         return cls(
-            id=GrantId.new(),
+            id=SubscriptionId.new(),
             owner_id=owner_id,
             tier=tier,
-            source=GrantSource.PURCHASE,
+            source=SubscriptionSource.PURCHASE,
             transaction_id=transaction_id,
             starts_at=now,
             expires_at=now + timedelta(days=duration_days),
@@ -60,12 +60,12 @@ class SubscriptionGrant:
         owner_id: UserId,
         duration_days: int,
         now: datetime,
-    ) -> "SubscriptionGrant":
+    ) -> "Subscription":
         return cls(
-            id=GrantId.new(),
+            id=SubscriptionId.new(),
             owner_id=owner_id,
             tier=Tier.BONUS,
-            source=GrantSource.BONUS,
+            source=SubscriptionSource.BONUS,
             transaction_id=None,
             starts_at=now,
             expires_at=now + timedelta(days=duration_days),
@@ -103,7 +103,7 @@ class SubscriptionStatus:
     @classmethod
     def from_grants(
         cls,
-        grants: list[SubscriptionGrant],
+        grants: list[Subscription],
         now: datetime,
     ) -> "SubscriptionStatus":
         active = [g for g in grants if g.is_active_at(now)]

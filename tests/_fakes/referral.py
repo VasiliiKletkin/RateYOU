@@ -16,7 +16,7 @@ from src.domain.identity.value_objects import TelegramId
 from src.domain.referral.entities import Referral
 from src.domain.referral.services import ReferralRewardService
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
+from src.domain.subscription.entities import Subscription
 
 
 @dataclass
@@ -55,23 +55,23 @@ class EmptyUserRepo:
 
 @dataclass
 class EmptySubscriptionRepo:
-    grants: list[SubscriptionGrant] = field(default_factory=list)
+    grants: list[Subscription] = field(default_factory=list)
 
-    async def add(self, grant: SubscriptionGrant) -> None:
+    async def add(self, grant: Subscription) -> None:
         self.grants.append(grant)
 
-    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
         return []
 
     async def list_active_purchases_for(
         self, owner_id: UserId, now: datetime
-    ) -> list[SubscriptionGrant]:
+    ) -> list[Subscription]:
         return []
 
-    async def find_by_transaction(self, transaction_id) -> SubscriptionGrant | None:  # type: ignore[no-untyped-def]
+    async def find_by_transaction(self, transaction_id) -> Subscription | None:  # type: ignore[no-untyped-def]
         return None
 
-    async def update(self, grant: SubscriptionGrant) -> None:
+    async def update(self, grant: Subscription) -> None:
         for idx, existing in enumerate(self.grants):
             if existing.id == grant.id:
                 self.grants[idx] = grant

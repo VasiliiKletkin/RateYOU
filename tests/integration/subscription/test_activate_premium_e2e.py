@@ -10,7 +10,7 @@ from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.domain.identity.entities import User
 from src.domain.identity.value_objects import TelegramId
 from src.domain.subscription.services import SubscriptionActivationService
-from src.domain.subscription.value_objects import GrantSource
+from src.domain.subscription.value_objects import SubscriptionSource
 from src.infrastructure.db.repositories.subscription import SubscriptionRepository
 from src.infrastructure.db.repositories.user import UserRepository
 from src.infrastructure.db.uow import SqlAlchemyUnitOfWork
@@ -68,7 +68,7 @@ async def test_re_activation_revokes_old_purchase(session: AsyncSession) -> None
     assert by_tier_value["bronze"].is_revoked is True
     assert by_tier_value["gold"].is_revoked is False
     # Both grants are PURCHASE
-    assert all(g.source == GrantSource.PURCHASE for g in grants)
+    assert all(g.source == SubscriptionSource.PURCHASE for g in grants)
 
 
 async def test_get_premium_returns_none_for_user_without_grants(

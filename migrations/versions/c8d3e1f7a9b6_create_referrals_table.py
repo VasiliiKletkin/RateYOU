@@ -2,7 +2,7 @@
 
 Append-only ledger of paid-out referrals (one row per successful invite,
 i.e. when the referee created their profile and both parties received
-their BONUS SubscriptionGrant). UNIQUE on `referee_id` is the primary
+their BONUS Subscription). UNIQUE on `referee_id` is the primary
 anti-abuse fence: each user can be referred at most once.
 
 Revision ID: c8d3e1f7a9b6

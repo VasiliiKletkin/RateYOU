@@ -6,41 +6,41 @@ from src.application.subscription.activate_premium import ActivatePremiumUseCase
 from src.application.subscription.dto import ActivatePremiumRequest
 from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
-from src.domain.subscription.entities import SubscriptionGrant
+from src.domain.subscription.entities import Subscription
 from src.domain.subscription.services import SubscriptionActivationService
-from src.domain.subscription.value_objects import GrantSource
+from src.domain.subscription.value_objects import SubscriptionSource
 
 
 @dataclass
 class FakeSubscriptionRepository:
-    grants: list[SubscriptionGrant] = field(default_factory=list)
+    grants: list[Subscription] = field(default_factory=list)
 
-    async def add(self, grant: SubscriptionGrant) -> None:
+    async def add(self, grant: Subscription) -> None:
         self.grants.append(grant)
 
-    async def list_for(self, owner_id: UserId) -> list[SubscriptionGrant]:
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
         return [g for g in self.grants if g.owner_id == owner_id]
 
     async def list_active_purchases_for(
         self, owner_id: UserId, now: datetime
-    ) -> list[SubscriptionGrant]:
+    ) -> list[Subscription]:
         return [
             g
             for g in self.grants
             if g.owner_id == owner_id
-            and g.source == GrantSource.PURCHASE
+            and g.source == SubscriptionSource.PURCHASE
             and g.is_active_at(now)
         ]
 
     async def find_by_transaction(
         self, transaction_id: TransactionId
-    ) -> SubscriptionGrant | None:
+    ) -> Subscription | None:
         for g in self.grants:
             if g.transaction_id == transaction_id:
                 return g
         return None
 
-    async def update(self, grant: SubscriptionGrant) -> None:
+    async def update(self, grant: Subscription) -> None:
         for idx, existing in enumerate(self.grants):
             if existing.id == grant.id:
                 self.grants[idx] = grant
@@ -67,7 +67,7 @@ def _make_use_case(
     return ActivatePremiumUseCase(activation_service=service, uow=uow)
 
 
-def _active_for(repo: FakeSubscriptionRepository, owner: UUID) -> list[SubscriptionGrant]:
+def _active_for(repo: FakeSubscriptionRepository, owner: UUID) -> list[Subscription]:
     return [
         g
         for g in repo.grants
@@ -90,7 +90,7 @@ async def test_first_activation_creates_grant() -> None:
     assert response.days_remaining >= 6
     assert uow.committed is True
     assert len(repo.grants) == 1
-    assert repo.grants[0].source == GrantSource.PURCHASE
+    assert repo.grants[0].source == SubscriptionSource.PURCHASE
     assert repo.grants[0].transaction_id is None
 
 
@@ -120,7 +120,7 @@ async def test_re_activation_revokes_old_purchase_and_creates_new() -> None:
 async def test_bonus_grants_are_not_revoked_by_purchase() -> None:
     repo = FakeSubscriptionRepository()
     owner = UserId(uuid4())
-    bonus = SubscriptionGrant.create_bonus(
+    bonus = Subscription.create_bonus(
         owner_id=owner, duration_days=3, now=datetime(2026, 1, 1, tzinfo=UTC)
     )
     await repo.add(bonus)
@@ -132,6 +132,6 @@ async def test_bonus_grants_are_not_revoked_by_purchase() -> None:
 
     # Bonus survives; only purchase grant created
     assert any(
-        g.source == GrantSource.BONUS and not g.is_revoked for g in repo.grants
+        g.source == SubscriptionSource.BONUS and not g.is_revoked for g in repo.grants
     )
-    assert any(g.source == GrantSource.PURCHASE for g in repo.grants)
+    assert any(g.source == SubscriptionSource.PURCHASE for g in repo.grants)

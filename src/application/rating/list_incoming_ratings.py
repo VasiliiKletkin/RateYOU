@@ -5,9 +5,9 @@ from uuid import UUID
 from src.application.rating.dto import IncomingRatingItem, IncomingRatingsResponse
 from src.domain.profile.repositories import IProfileRepository
 from src.domain.rating.repositories import IRatingRepository
+from src.domain.shared.exceptions import PremiumRequired
 from src.domain.shared.identifiers import UserId
 from src.domain.subscription.entities import SubscriptionStatus
-from src.domain.subscription.exceptions import PremiumRequired
 from src.domain.subscription.repositories import ISubscriptionRepository
 
 DEFAULT_LIMIT = 10
