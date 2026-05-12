@@ -1,5 +1,4 @@
 import asyncio
-from uuid import UUID
 
 from aiogram import F, Router
 from aiogram.filters import Command, StateFilter
@@ -199,17 +198,25 @@ async def process_bio(message: Message, state: FSMContext) -> None:
 async def _finalize_create(
     message: Message,
     state: FSMContext,
+    register_user: RegisterUserUseCase,
     create_profile: CreateProfileUseCase,
 ) -> None:
     data = await state.get_data()
     photos: list[str] = data.get("photos", [])
-    if "user_id" not in data:
+    if "user_id" not in data or message.from_user is None:
         # State was cleared between buffering and flushing (e.g. /cancel).
         return
+    # Re-resolve the user via the idempotent register use case instead of
+    # trusting the FSM-stored UUID. Stale state (e.g. the user row was wiped
+    # between /create and the photos step) would otherwise raise a FK
+    # violation on the profiles INSERT.
+    user = await register_user.execute(
+        RegisterUserRequest(telegram_id=message.from_user.id)
+    )
     try:
         profile = await create_profile.execute(
             CreateProfileRequest(
-                owner_id=UUID(data["user_id"]),
+                owner_id=user.id,
                 name=data["name"],
                 age=data["age"],
                 gender=data["gender"],
@@ -239,6 +246,7 @@ async def _finalize_create(
 async def collect_photo(
     message: Message,
     state: FSMContext,
+    register_user: FromDishka[RegisterUserUseCase],
     create_profile: FromDishka[CreateProfileUseCase],
 ) -> None:
     if not message.photo:
@@ -259,7 +267,7 @@ async def collect_photo(
     if not photos:
         return
     await state.update_data(photos=photos)
-    await _finalize_create(message, state, create_profile)
+    await _finalize_create(message, state, register_user, create_profile)
 
 
 @router.message(CreateProfile.waiting_for_photo)
