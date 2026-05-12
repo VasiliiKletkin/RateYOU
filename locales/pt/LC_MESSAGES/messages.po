@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:03+0300\n"
+"POT-Creation-Date: 2026-05-12 15:14+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt\n"
@@ -242,46 +242,51 @@ msgstr "Por favor envie uma foto."
 msgid "Please share a location."
 msgstr "Por favor compartilhe uma localização."
 
-#: src/presentation/bot/handlers/feed.py:52
+#: src/presentation/bot/handlers/feed.py:55
 msgid "No more profiles to rate. Come back later!"
 msgstr "Não há mais perfis para avaliar. Volte mais tarde!"
 
-#: src/presentation/bot/handlers/feed.py:79
+#: src/presentation/bot/handlers/feed.py:82
 msgid "Rate this profile:"
 msgstr "Avalie este perfil:"
 
-#: src/presentation/bot/handlers/feed.py:103
+#: src/presentation/bot/handlers/feed.py:104
+#, python-brace-format
+msgid "⭐ Someone just rated you: {score}/10"
+msgstr ""
+
+#: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr ""
 "Primeiro você precisa ter o seu próprio perfil. Envie /create para criar "
 "um."
 
-#: src/presentation/bot/handlers/feed.py:122
-#: src/presentation/bot/handlers/feed.py:128
+#: src/presentation/bot/handlers/feed.py:144
+#: src/presentation/bot/handlers/feed.py:150
 msgid "Bad payload"
 msgstr "Dados inválidos"
 
-#: src/presentation/bot/handlers/feed.py:142
+#: src/presentation/bot/handlers/feed.py:164
 msgid "Can't rate yourself"
 msgstr "Você não pode avaliar a si mesmo"
 
-#: src/presentation/bot/handlers/feed.py:145
+#: src/presentation/bot/handlers/feed.py:167
 msgid "Bad score"
 msgstr "Pontuação inválida"
 
-#: src/presentation/bot/handlers/feed.py:148
+#: src/presentation/bot/handlers/feed.py:170
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "Avaliado {score}/10 ✓"
 
-#: src/presentation/bot/handlers/feed.py:157
+#: src/presentation/bot/handlers/feed.py:180
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 Média dele(a): {avg}/10 (de {count} avaliação)"
 msgstr[1] "📊 Média dele(a): {avg}/10 (de {count} avaliações)"
 
-#: src/presentation/bot/handlers/feed.py:193
+#: src/presentation/bot/handlers/feed.py:216
 msgid "Skipped"
 msgstr "Pulado"
 

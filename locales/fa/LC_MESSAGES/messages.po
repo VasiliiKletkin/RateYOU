@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:03+0300\n"
+"POT-Creation-Date: 2026-05-12 15:14+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fa\n"
@@ -243,43 +243,48 @@ msgstr "لطفاً یک عکس ارسال کنید."
 msgid "Please share a location."
 msgstr "لطفاً یک موقعیت به اشتراک بذارید."
 
-#: src/presentation/bot/handlers/feed.py:52
+#: src/presentation/bot/handlers/feed.py:55
 msgid "No more profiles to rate. Come back later!"
 msgstr "پروفایل دیگری برای امتیازدهی نیست. بعداً برگرد!"
 
-#: src/presentation/bot/handlers/feed.py:79
+#: src/presentation/bot/handlers/feed.py:82
 msgid "Rate this profile:"
 msgstr "به این پروفایل امتیاز بده:"
 
-#: src/presentation/bot/handlers/feed.py:103
+#: src/presentation/bot/handlers/feed.py:104
+#, python-brace-format
+msgid "⭐ Someone just rated you: {score}/10"
+msgstr ""
+
+#: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr "اول باید پروفایل خودت رو داشته باشی. برای ساختن /create رو بفرست."
 
-#: src/presentation/bot/handlers/feed.py:122
-#: src/presentation/bot/handlers/feed.py:128
+#: src/presentation/bot/handlers/feed.py:144
+#: src/presentation/bot/handlers/feed.py:150
 msgid "Bad payload"
 msgstr "داده نامعتبر"
 
-#: src/presentation/bot/handlers/feed.py:142
+#: src/presentation/bot/handlers/feed.py:164
 msgid "Can't rate yourself"
 msgstr "نمی‌تونی به خودت امتیاز بدی"
 
-#: src/presentation/bot/handlers/feed.py:145
+#: src/presentation/bot/handlers/feed.py:167
 msgid "Bad score"
 msgstr "امتیاز نامعتبر"
 
-#: src/presentation/bot/handlers/feed.py:148
+#: src/presentation/bot/handlers/feed.py:170
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "امتیاز {score}/10 داده شد ✓"
 
-#: src/presentation/bot/handlers/feed.py:157
+#: src/presentation/bot/handlers/feed.py:180
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 میانگین آن‌ها: {avg}/10 (از {count} امتیاز)"
 
-#: src/presentation/bot/handlers/feed.py:193
+#: src/presentation/bot/handlers/feed.py:216
 msgid "Skipped"
 msgstr "رد شد"
 

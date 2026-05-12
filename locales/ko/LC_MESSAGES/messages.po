@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:03+0300\n"
+"POT-Creation-Date: 2026-05-12 15:14+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -241,43 +241,48 @@ msgstr "사진을 보내주세요."
 msgid "Please share a location."
 msgstr "위치를 공유해 주세요."
 
-#: src/presentation/bot/handlers/feed.py:52
+#: src/presentation/bot/handlers/feed.py:55
 msgid "No more profiles to rate. Come back later!"
 msgstr "더 이상 평가할 프로필이 없어요. 나중에 다시 와주세요!"
 
-#: src/presentation/bot/handlers/feed.py:79
+#: src/presentation/bot/handlers/feed.py:82
 msgid "Rate this profile:"
 msgstr "이 프로필을 평가해 주세요:"
 
-#: src/presentation/bot/handlers/feed.py:103
+#: src/presentation/bot/handlers/feed.py:104
+#, python-brace-format
+msgid "⭐ Someone just rated you: {score}/10"
+msgstr ""
+
+#: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr "먼저 본인의 프로필이 필요해요. /create 를 보내서 만들어 주세요."
 
-#: src/presentation/bot/handlers/feed.py:122
-#: src/presentation/bot/handlers/feed.py:128
+#: src/presentation/bot/handlers/feed.py:144
+#: src/presentation/bot/handlers/feed.py:150
 msgid "Bad payload"
 msgstr "잘못된 데이터예요"
 
-#: src/presentation/bot/handlers/feed.py:142
+#: src/presentation/bot/handlers/feed.py:164
 msgid "Can't rate yourself"
 msgstr "자기 자신은 평가할 수 없어요"
 
-#: src/presentation/bot/handlers/feed.py:145
+#: src/presentation/bot/handlers/feed.py:167
 msgid "Bad score"
 msgstr "잘못된 점수예요"
 
-#: src/presentation/bot/handlers/feed.py:148
+#: src/presentation/bot/handlers/feed.py:170
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "{score}/10 평가 완료 ✓"
 
-#: src/presentation/bot/handlers/feed.py:157
+#: src/presentation/bot/handlers/feed.py:180
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 평균: {avg}/10 (평가 {count}개 기준)"
 
-#: src/presentation/bot/handlers/feed.py:193
+#: src/presentation/bot/handlers/feed.py:216
 msgid "Skipped"
 msgstr "건너뛰었어요"
 

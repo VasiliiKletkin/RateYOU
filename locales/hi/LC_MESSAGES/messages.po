@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:03+0300\n"
+"POT-Creation-Date: 2026-05-12 15:14+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: hi\n"
@@ -241,44 +241,49 @@ msgstr "कृपया फ़ोटो भेजो।"
 msgid "Please share a location."
 msgstr "कृपया स्थान साझा करो।"
 
-#: src/presentation/bot/handlers/feed.py:52
+#: src/presentation/bot/handlers/feed.py:55
 msgid "No more profiles to rate. Come back later!"
 msgstr "रेट करने के लिए और प्रोफ़ाइल नहीं हैं। बाद में आना!"
 
-#: src/presentation/bot/handlers/feed.py:79
+#: src/presentation/bot/handlers/feed.py:82
 msgid "Rate this profile:"
 msgstr "इस प्रोफ़ाइल को रेट करो:"
 
-#: src/presentation/bot/handlers/feed.py:103
+#: src/presentation/bot/handlers/feed.py:104
+#, python-brace-format
+msgid "⭐ Someone just rated you: {score}/10"
+msgstr ""
+
+#: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr "पहले तुम्हें अपनी एक प्रोफ़ाइल चाहिए। बनाने के लिए /create भेजो।"
 
-#: src/presentation/bot/handlers/feed.py:122
-#: src/presentation/bot/handlers/feed.py:128
+#: src/presentation/bot/handlers/feed.py:144
+#: src/presentation/bot/handlers/feed.py:150
 msgid "Bad payload"
 msgstr "गलत डेटा"
 
-#: src/presentation/bot/handlers/feed.py:142
+#: src/presentation/bot/handlers/feed.py:164
 msgid "Can't rate yourself"
 msgstr "खुद को रेट नहीं कर सकते"
 
-#: src/presentation/bot/handlers/feed.py:145
+#: src/presentation/bot/handlers/feed.py:167
 msgid "Bad score"
 msgstr "गलत स्कोर"
 
-#: src/presentation/bot/handlers/feed.py:148
+#: src/presentation/bot/handlers/feed.py:170
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "{score}/10 रेट किया गया ✓"
 
-#: src/presentation/bot/handlers/feed.py:157
+#: src/presentation/bot/handlers/feed.py:180
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 उनका औसत: {avg}/10 ({count} रेटिंग से)"
 msgstr[1] "📊 उनका औसत: {avg}/10 ({count} रेटिंग से)"
 
-#: src/presentation/bot/handlers/feed.py:193
+#: src/presentation/bot/handlers/feed.py:216
 msgid "Skipped"
 msgstr "छोड़ दिया"
 

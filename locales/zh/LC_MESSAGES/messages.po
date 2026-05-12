@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:03+0300\n"
+"POT-Creation-Date: 2026-05-12 15:14+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -241,43 +241,48 @@ msgstr "请发送照片。"
 msgid "Please share a location."
 msgstr "请分享位置。"
 
-#: src/presentation/bot/handlers/feed.py:52
+#: src/presentation/bot/handlers/feed.py:55
 msgid "No more profiles to rate. Come back later!"
 msgstr "没有更多的个人资料可评分了。稍后再来吧!"
 
-#: src/presentation/bot/handlers/feed.py:79
+#: src/presentation/bot/handlers/feed.py:82
 msgid "Rate this profile:"
 msgstr "为这个个人资料评分:"
 
-#: src/presentation/bot/handlers/feed.py:103
+#: src/presentation/bot/handlers/feed.py:104
+#, python-brace-format
+msgid "⭐ Someone just rated you: {score}/10"
+msgstr ""
+
+#: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr "你需要先有自己的个人资料。发送 /create 来创建。"
 
-#: src/presentation/bot/handlers/feed.py:122
-#: src/presentation/bot/handlers/feed.py:128
+#: src/presentation/bot/handlers/feed.py:144
+#: src/presentation/bot/handlers/feed.py:150
 msgid "Bad payload"
 msgstr "数据无效"
 
-#: src/presentation/bot/handlers/feed.py:142
+#: src/presentation/bot/handlers/feed.py:164
 msgid "Can't rate yourself"
 msgstr "不能给自己评分"
 
-#: src/presentation/bot/handlers/feed.py:145
+#: src/presentation/bot/handlers/feed.py:167
 msgid "Bad score"
 msgstr "分数无效"
 
-#: src/presentation/bot/handlers/feed.py:148
+#: src/presentation/bot/handlers/feed.py:170
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "已评分 {score}/10 ✓"
 
-#: src/presentation/bot/handlers/feed.py:157
+#: src/presentation/bot/handlers/feed.py:180
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 他们的平均分: {avg}/10 (来自 {count} 次评分)"
 
-#: src/presentation/bot/handlers/feed.py:193
+#: src/presentation/bot/handlers/feed.py:216
 msgid "Skipped"
 msgstr "已跳过"
 

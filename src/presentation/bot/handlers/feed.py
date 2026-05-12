@@ -1,7 +1,7 @@
 from contextlib import suppress
 from uuid import UUID
 
-from aiogram import F, Router
+from aiogram import Bot, F, Router
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, InputMediaPhoto, Message
@@ -18,7 +18,10 @@ from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.rating.dto import RateUserRequest
 from src.application.rating.get_profile_score import GetProfileScoreUseCase
 from src.application.rating.rate_user import RateUserUseCase
+from src.domain.identity.repositories import IUserRepository
 from src.domain.rating.exceptions import CannotRateSelf, InvalidScore
+from src.domain.shared.identifiers import UserId
+from src.presentation.bot.i18n import DEFAULT_LANGUAGE, i18n
 from src.presentation.bot.keyboards import rating_keyboard
 
 router = Router(name="feed")
@@ -86,6 +89,23 @@ async def _strip_keyboard(message: Message) -> None:
         await message.edit_reply_markup(reply_markup=None)
 
 
+async def _notify_rated_user(
+    bot: Bot,
+    user_repo: IUserRepository,
+    rated_user_id: UUID,
+    score: int,
+) -> None:
+    rated_user = await user_repo.get_by_id(UserId(rated_user_id))
+    if rated_user is None or rated_user.is_banned:
+        return
+    # Recipient's preferred language isn't stored on User yet, so force the
+    # default locale instead of leaking the rater's locale into the message.
+    with i18n.use_locale(DEFAULT_LANGUAGE):
+        text = _("⭐ Someone just rated you: {score}/10").format(score=score)
+    with suppress(TelegramAPIError):
+        await bot.send_message(rated_user.telegram_id.value, text)
+
+
 @router.message(Command("feed"))
 async def cmd_feed(
     message: Message,
@@ -113,6 +133,8 @@ async def on_rate(
     rate_user: FromDishka[RateUserUseCase],
     get_profile_score: FromDishka[GetProfileScoreUseCase],
     get_next: FromDishka[GetNextProfileForRatingUseCase],
+    user_repo: FromDishka[IUserRepository],
+    bot: FromDishka[Bot],
 ) -> None:
     if callback.from_user is None or callback.data is None:
         await callback.answer()
@@ -146,6 +168,7 @@ async def on_rate(
         return
 
     await callback.answer(_("Rated {score}/10 ✓").format(score=score))
+    await _notify_rated_user(bot, user_repo, rated_user_id, score)
 
     if isinstance(callback.message, Message):
         await _strip_keyboard(callback.message)
