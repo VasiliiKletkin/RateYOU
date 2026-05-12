@@ -12,17 +12,17 @@ log = logging.getLogger(__name__)
 
 
 def init_sentry(settings: Settings, component: str) -> None:
-    """Initialize Sentry SDK. No-op if SENTRY_DSN is not set."""
-    if settings.sentry.dsn is None:
-        log.info("Sentry DSN not set, skipping init (component=%s)", component)
+    """Initialize Sentry SDK. No-op in dev, or if SENTRY_DSN is not set."""
+    if settings.environment is Environment.DEV or settings.sentry.dsn is None:
+        log.info(
+            "Sentry disabled (component=%s, env=%s)", component, settings.environment.value
+        )
         return
 
     sentry_sdk.init(
         dsn=settings.sentry.dsn.get_secret_value(),
         environment=settings.environment.value,
-        traces_sample_rate=(
-            1.0 if settings.environment is Environment.DEV else settings.sentry.traces_sample_rate
-        ),
+        traces_sample_rate=settings.sentry.traces_sample_rate,
         send_default_pii=False,
         integrations=[
             AsyncioIntegration(),
