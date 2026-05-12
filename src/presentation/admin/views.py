@@ -3,7 +3,6 @@ from starlette_admin.contrib.sqla import ModelView
 
 
 class UserAdmin(ModelView):
-    identity = "users"
     label = "Users"
     icon = "fa fa-user"
     fields = [
@@ -22,7 +21,6 @@ class UserAdmin(ModelView):
 
 
 class ProfileAdmin(ModelView):
-    identity = "profiles"
     label = "Profiles"
     icon = "fa fa-id-card"
     fields = [
@@ -60,7 +58,6 @@ class ProfileAdmin(ModelView):
 
 
 class ProfilePhotoAdmin(ModelView):
-    identity = "profile_photos"
     label = "Profile Photos"
     icon = "fa fa-image"
     fields = ["id", "profile_id", "file_id", "position"]
@@ -69,7 +66,6 @@ class ProfilePhotoAdmin(ModelView):
 
 
 class RatingAdmin(ModelView):
-    identity = "ratings"
     label = "Ratings"
     icon = "fa fa-star"
     fields = [
@@ -84,7 +80,6 @@ class RatingAdmin(ModelView):
 
 
 class ProfileScoreSummaryAdmin(ModelView):
-    identity = "profile_score_summaries"
     label = "Score Summaries"
     icon = "fa fa-chart-line"
     fields = [
@@ -97,7 +92,6 @@ class ProfileScoreSummaryAdmin(ModelView):
 
 
 class SearchPreferencesAdmin(ModelView):
-    identity = "search_preferences"
     label = "Search Preferences"
     icon = "fa fa-sliders"
     fields = [
@@ -111,7 +105,6 @@ class SearchPreferencesAdmin(ModelView):
 
 
 class SubscriptionAdmin(ModelView):
-    identity = "subscriptions"
     label = "Subscriptions"
     icon = "fa fa-crown"
     # Append-only ledger of granted premium periods. Each row = one grant
@@ -133,7 +126,6 @@ class SubscriptionAdmin(ModelView):
 
 
 class TransactionAdmin(ModelView):
-    identity = "transactions"
     label = "Transactions"
     icon = "fa fa-money-bill"
     fields = [
@@ -153,7 +145,6 @@ class TransactionAdmin(ModelView):
 
 
 class ReferralAdmin(ModelView):
-    identity = "referrals"
     label = "Referrals"
     icon = "fa fa-user-plus"
     # Append-only: each row marks one paid-out referral (referee created
