@@ -51,7 +51,6 @@ msgid "Any"
 msgstr ""
 
 #: src/presentation/bot/keyboards.py:136
-#, fuzzy
 msgid "⏭ Skip"
 msgstr "Skipped"
 
@@ -64,7 +63,6 @@ msgid "Age"
 msgstr ""
 
 #: src/presentation/bot/keyboards.py:150
-#, fuzzy
 msgid "Gender"
 msgstr "Pick gender:"
 
@@ -198,7 +196,6 @@ msgid ""
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:292
-#, fuzzy
 msgid "Please send a photo (not text)."
 msgstr "Please send a photo (not text)."
 
@@ -264,12 +261,10 @@ msgid "Please send text or /skip to clear."
 msgstr "Please send text or /skip to clear."
 
 #: src/presentation/bot/handlers/edit_profile.py:264
-#, fuzzy
 msgid "Please send a photo."
 msgstr "Please send text."
 
 #: src/presentation/bot/handlers/edit_profile.py:285
-#, fuzzy
 msgid "Please share a location."
 msgstr "Please send a photo."
 
@@ -327,7 +322,7 @@ msgstr[0] "Expires in {days} day."
 msgstr[1] "Expires in {days} days."
 
 #: src/presentation/bot/handlers/premium.py:57
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -372,7 +367,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ Payment confirmed."
 
 #: src/presentation/bot/handlers/premium.py:151
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -403,7 +398,6 @@ msgid "Min rating: premium only (use /premium)"
 msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:101
-#, fuzzy
 msgid "No profile yet. Use /create first."
 msgstr "No profile to edit. Use /create first."
 

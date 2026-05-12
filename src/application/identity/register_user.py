@@ -24,9 +24,20 @@ class RegisterUserUseCase:
 
         existing = await self.user_repo.get_by_telegram_id(telegram_id)
         if existing is not None:
+            # Refresh the stored language if Telegram now reports a different
+            # one — users sometimes switch their client locale and we want
+            # outgoing notifications to follow.
+            if request.language and existing.language != request.language:
+                existing.change_language(request.language)
+                await self.user_repo.update(existing)
+                await self.uow.commit()
             return _to_response(existing)
 
-        user = User.register(telegram_id=telegram_id, now=datetime.now(UTC))
+        user = User.register(
+            telegram_id=telegram_id,
+            now=datetime.now(UTC),
+            language=request.language or "en",
+        )
         await self.user_repo.add(user)
         await self.uow.commit()
         return _to_response(user)
@@ -38,4 +49,5 @@ def _to_response(user: User) -> UserResponse:
         telegram_id=user.telegram_id.value,
         is_banned=user.is_banned,
         is_admin=user.is_admin,
+        language=user.language,
     )

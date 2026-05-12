@@ -43,12 +43,23 @@ i18n = I18n(
 )
 
 
+def normalize_language(raw: str | None) -> str:
+    """Map a Telegram `language_code` (e.g. 'ru', 'ru-RU') to a supported one.
+
+    Strips the region suffix and lowercases. Unsupported codes (or None) fall
+    back to DEFAULT_LANGUAGE so callers always get a valid locale string.
+    """
+    if not raw:
+        return DEFAULT_LANGUAGE
+    primary = raw.split("-")[0].lower()
+    return primary if primary in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
+
+
 class UserLanguageI18nMiddleware(I18nMiddleware):
     """Picks the locale from Telegram's `from_user.language_code`.
 
-    Telegram sends ISO codes like 'en', 'ru', 'ru-RU'. We strip the region
-    suffix and fall back to DEFAULT_LANGUAGE if the language isn't
-    supported. Later, a User-stored preference can override this.
+    Delegates the actual normalisation to `normalize_language` so the
+    register-user flow can store the same canonical code on `User.language`.
     """
 
     async def get_locale(
@@ -58,12 +69,13 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
     ) -> str:
         tg_user = getattr(event, "from_user", None)
         raw = getattr(tg_user, "language_code", None) if tg_user else None
-        if tg_user is None or raw is None:
-            log.info("i18n: no language_code, using default=%s", DEFAULT_LANGUAGE)
-            return DEFAULT_LANGUAGE
-        primary = raw.split("-")[0].lower()
-        chosen = primary if primary in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
-        log.info("i18n: tg_user=%s raw=%r → %s", tg_user.id, raw, chosen)
+        chosen = normalize_language(raw)
+        log.info(
+            "i18n: tg_user=%s raw=%r → %s",
+            getattr(tg_user, "id", None),
+            raw,
+            chosen,
+        )
         return chosen
 
     async def __call__(

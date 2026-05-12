@@ -7,6 +7,7 @@ from dishka import FromDishka
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.profile.get_profile import GetMyProfileUseCase
+from src.presentation.bot.i18n import normalize_language
 
 router = Router(name="start")
 
@@ -20,7 +21,10 @@ async def on_start(
     if message.from_user is None:
         return
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     profile = await get_my_profile.execute(user.id)
 

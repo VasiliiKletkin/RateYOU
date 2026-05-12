@@ -22,6 +22,7 @@ from src.domain.payment.exceptions import (
     TransactionNotFound,
 )
 from src.domain.subscription.exceptions import InvalidTier
+from src.presentation.bot.i18n import normalize_language
 from src.presentation.bot.keyboards import tiers_keyboard
 
 router = Router(name="premium")
@@ -46,7 +47,10 @@ async def cmd_premium(
     if message.from_user is None:
         return
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
 
     current = await get_my_premium.execute(user.id)
@@ -84,7 +88,10 @@ async def on_buy(
     tier = callback.data.removeprefix("buy:")
 
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=callback.from_user.id)
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            language=normalize_language(callback.from_user.language_code),
+        )
     )
 
     try:
@@ -138,7 +145,10 @@ async def on_successful_payment(
         pass
 
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     premium = await get_my_premium.execute(user.id)
 

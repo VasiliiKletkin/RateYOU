@@ -19,4 +19,5 @@ class GetUserByTelegramIdUseCase:
             telegram_id=user.telegram_id.value,
             is_banned=user.is_banned,
             is_admin=user.is_admin,
+            language=user.language,
         )

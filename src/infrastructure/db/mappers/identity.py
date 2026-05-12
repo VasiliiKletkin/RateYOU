@@ -12,6 +12,7 @@ def user_to_orm(user: User) -> UserORM:
         is_banned=user.is_banned,
         ban_reason=user.ban_reason,
         banned_at=user.banned_at,
+        language=user.language,
         created_at=user.created_at,
     )
 
@@ -24,5 +25,6 @@ def orm_to_user(orm: UserORM) -> User:
         is_banned=orm.is_banned,
         ban_reason=orm.ban_reason,
         banned_at=orm.banned_at,
+        language=orm.language,
         created_at=orm.created_at,
     )

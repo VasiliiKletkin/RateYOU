@@ -20,6 +20,7 @@ from src.domain.profile.exceptions import (
     ProfileNotFound,
 )
 from src.domain.profile.value_objects import Age, Bio, Name, Photos
+from src.presentation.bot.i18n import normalize_language
 from src.presentation.bot.keyboards import (
     edit_menu_keyboard,
     gender_keyboard,
@@ -92,7 +93,10 @@ async def cmd_edit(
     if message.from_user is None:
         return
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     profile = await get_my_profile.execute(user.id)
     if profile is None:

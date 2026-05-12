@@ -21,14 +21,28 @@ class User:
     is_banned: bool = False
     ban_reason: str | None = None
     banned_at: datetime | None = None
+    # ISO 639-1 short code. Normalised by the presentation layer to one of
+    # the bot's supported locales; kept on the entity so we can localise
+    # outgoing notifications (rating notifications, etc.) without an active
+    # i18n context from a Telegram update.
+    language: str = "en"
 
     @classmethod
-    def register(cls, telegram_id: TelegramId, now: datetime) -> "User":
+    def register(
+        cls,
+        telegram_id: TelegramId,
+        now: datetime,
+        language: str = "en",
+    ) -> "User":
         return cls(
             id=UserId.new(),
             telegram_id=telegram_id,
+            language=language,
             created_at=now,
         )
+
+    def change_language(self, language: str) -> None:
+        self.language = language
 
     def ban(self, reason: str, now: datetime) -> None:
         if not reason.strip():

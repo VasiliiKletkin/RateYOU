@@ -12,8 +12,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ar\n"
 "Language-Team: ar <LL@li.org>\n"
-"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : "
-"n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,7 +30,6 @@ msgstr "♀️ أنثى"
 # WARNING: Machine translation — review by a native speaker before production.
 #: src/presentation/bot/handlers/settings.py:33
 #: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:81
-#, fuzzy
 msgid "♂️ Men"
 msgstr "♂️ ذكر"
 
@@ -358,8 +356,7 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
-"<b>الاشتراك المميز</b> يصفّي /feed لعرض الملفات الشخصية ذات التقييم "
-"العالي.\n"
+"<b>الاشتراك المميز</b> يصفّي /feed لعرض الملفات الشخصية ذات التقييم العالي.\n"
 "\n"
 "اختر باقة:"
 
@@ -415,7 +412,6 @@ msgid "Min rating: premium only (use /premium)"
 msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:101
-#, fuzzy
 msgid "No profile yet. Use /create first."
 msgstr "لا يوجد ملف شخصي للتعديل. استخدم /create أولًا."
 

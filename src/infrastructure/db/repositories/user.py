@@ -42,4 +42,5 @@ class UserRepository:
         existing.is_banned = user.is_banned
         existing.ban_reason = user.ban_reason
         existing.banned_at = user.banned_at
+        existing.language = user.language
         await self.session.flush()

@@ -18,6 +18,7 @@ from src.application.identity.register_user import RegisterUserUseCase
 from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.domain.discovery.exceptions import InvalidMinRating
+from src.presentation.bot.i18n import normalize_language
 from src.presentation.bot.keyboards import settings_keyboard
 
 _GENDER_PREFIX = "setpref"
@@ -95,7 +96,10 @@ async def cmd_settings(
     if message.from_user is None:
         return
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     if (await get_my_profile.execute(user.id)) is None:
         await message.answer(_("No profile yet. Use /create first."))
@@ -125,7 +129,10 @@ async def on_set_gender(
         return
 
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=callback.from_user.id)
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            language=normalize_language(callback.from_user.language_code),
+        )
     )
     prefs = await update_gender.execute(user.id, preference)
     is_premium = (await get_my_premium.execute(user.id)) is not None
@@ -152,7 +159,10 @@ async def on_set_min_rating(
         return
 
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=callback.from_user.id)
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            language=normalize_language(callback.from_user.language_code),
+        )
     )
     is_premium = (await get_my_premium.execute(user.id)) is not None
     if not is_premium:

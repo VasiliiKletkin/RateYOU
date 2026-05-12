@@ -30,7 +30,6 @@ msgstr "♀️ মহিলা"
 # WARNING: Machine translation — review by a native speaker before production.
 #: src/presentation/bot/handlers/settings.py:33
 #: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:81
-#, fuzzy
 msgid "♂️ Men"
 msgstr "♂️ পুরুষ"
 
@@ -405,7 +404,6 @@ msgid "Min rating: premium only (use /premium)"
 msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:101
-#, fuzzy
 msgid "No profile yet. Use /create first."
 msgstr "এডিট করার মতো প্রোফাইল নেই। আগে /create ব্যবহার করো।"
 

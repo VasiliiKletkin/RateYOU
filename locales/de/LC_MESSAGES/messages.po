@@ -28,7 +28,6 @@ msgstr "♀️ Weiblich"
 
 #: src/presentation/bot/handlers/settings.py:33
 #: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:81
-#, fuzzy
 msgid "♂️ Men"
 msgstr "♂️ Männlich"
 
@@ -288,9 +287,7 @@ msgstr ""
 
 #: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
-msgstr ""
-"Du brauchst zuerst ein eigenes Profil. Sende /create, um eines zu "
-"erstellen."
+msgstr "Du brauchst zuerst ein eigenes Profil. Sende /create, um eines zu erstellen."
 
 #: src/presentation/bot/handlers/feed.py:144
 #: src/presentation/bot/handlers/feed.py:150
@@ -405,7 +402,6 @@ msgid "Min rating: premium only (use /premium)"
 msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:101
-#, fuzzy
 msgid "No profile yet. Use /create first."
 msgstr "Kein Profil zum Bearbeiten. Nutze zuerst /create."
 

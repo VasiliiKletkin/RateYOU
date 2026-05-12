@@ -28,7 +28,6 @@ msgstr "♀️ Mulher"
 
 #: src/presentation/bot/handlers/settings.py:33
 #: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:81
-#, fuzzy
 msgid "♂️ Men"
 msgstr "♂️ Homem"
 
@@ -157,9 +156,7 @@ msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:149
 msgid "Share your location — it's used to find nearby profiles:"
-msgstr ""
-"Compartilhe a sua localização — ela é usada para encontrar perfis "
-"próximos:"
+msgstr "Compartilhe a sua localização — ela é usada para encontrar perfis próximos:"
 
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/edit_profile.py:144
@@ -290,9 +287,7 @@ msgstr ""
 
 #: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
-msgstr ""
-"Primeiro você precisa ter o seu próprio perfil. Envie /create para criar "
-"um."
+msgstr "Primeiro você precisa ter o seu próprio perfil. Envie /create para criar um."
 
 #: src/presentation/bot/handlers/feed.py:144
 #: src/presentation/bot/handlers/feed.py:150
@@ -407,7 +402,6 @@ msgid "Min rating: premium only (use /premium)"
 msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:101
-#, fuzzy
 msgid "No profile yet. Use /create first."
 msgstr "Nenhum perfil para editar. Use /create primeiro."
 

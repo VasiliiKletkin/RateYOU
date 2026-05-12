@@ -21,7 +21,7 @@ from src.application.rating.rate_user import RateUserUseCase
 from src.domain.identity.repositories import IUserRepository
 from src.domain.rating.exceptions import CannotRateSelf, InvalidScore
 from src.domain.shared.identifiers import UserId
-from src.presentation.bot.i18n import DEFAULT_LANGUAGE, i18n
+from src.presentation.bot.i18n import i18n, normalize_language
 from src.presentation.bot.keyboards import rating_keyboard
 
 router = Router(name="feed")
@@ -98,9 +98,9 @@ async def _notify_rated_user(
     rated_user = await user_repo.get_by_id(UserId(rated_user_id))
     if rated_user is None or rated_user.is_banned:
         return
-    # Recipient's preferred language isn't stored on User yet, so force the
-    # default locale instead of leaking the rater's locale into the message.
-    with i18n.use_locale(DEFAULT_LANGUAGE):
+    # Switch the i18n contextvar to the recipient's stored language so the
+    # notification reads in their locale, not the rater's.
+    with i18n.use_locale(rated_user.language):
         text = _("⭐ Someone just rated you: {score}/10").format(score=score)
     with suppress(TelegramAPIError):
         await bot.send_message(rated_user.telegram_id.value, text)
@@ -116,7 +116,10 @@ async def cmd_feed(
     if message.from_user is None:
         return
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     if (await get_my_profile.execute(user.id)) is None:
         await message.answer(
@@ -151,7 +154,10 @@ async def on_rate(
         return
 
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=callback.from_user.id)
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            language=normalize_language(callback.from_user.language_code),
+        )
     )
 
     try:
@@ -210,7 +216,10 @@ async def on_skip(
         return
 
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=callback.from_user.id)
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            language=normalize_language(callback.from_user.language_code),
+        )
     )
     await skip_profile.execute(viewer_id=user.id, skipped_owner_id=skipped_owner_id)
     await callback.answer(_("Skipped"))

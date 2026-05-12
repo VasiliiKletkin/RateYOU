@@ -22,6 +22,7 @@ from src.domain.profile.exceptions import (
     ProfileAlreadyExists,
 )
 from src.domain.profile.value_objects import Age, Bio, Name, Photos
+from src.presentation.bot.i18n import normalize_language
 from src.presentation.bot.keyboards import (
     gender_keyboard,
     gender_preference_keyboard,
@@ -62,7 +63,10 @@ async def cmd_create(
     if message.from_user is None:
         return
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     if (await get_my_profile.execute(user.id)) is not None:
         await message.answer(_("You already have a profile."))
@@ -215,7 +219,10 @@ async def _finalize_create(
     # between /create and the photos step) would otherwise raise a FK
     # violation on the profiles INSERT.
     user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
+        RegisterUserRequest(
+            telegram_id=message.from_user.id,
+            language=normalize_language(message.from_user.language_code),
+        )
     )
     try:
         profile = await create_profile.execute(

@@ -12,8 +12,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,28 +28,27 @@ msgstr "♀️ Девушка"
 
 #: src/presentation/bot/handlers/settings.py:33
 #: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:81
-#, fuzzy
 msgid "♂️ Men"
-msgstr "♂️ Парень"
+msgstr "♂️ Парни"
 
 #: src/presentation/bot/handlers/settings.py:35
 #: src/presentation/bot/keyboards.py:55 src/presentation/bot/keyboards.py:84
 msgid "♀️ Women"
-msgstr ""
+msgstr "♀️ Девушки"
 
 #: src/presentation/bot/handlers/settings.py:36
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
-msgstr ""
+msgstr "👥 Все"
 
 #: src/presentation/bot/keyboards.py:87
 msgid "👥 All"
-msgstr ""
+msgstr "👥 Все"
 
 #: src/presentation/bot/handlers/settings.py:41
 #: src/presentation/bot/keyboards.py:95
 msgid "Any"
-msgstr ""
+msgstr "Любой"
 
 #: src/presentation/bot/keyboards.py:136
 msgid "⏭ Skip"
@@ -154,7 +152,7 @@ msgstr "Неверный выбор"
 
 #: src/presentation/bot/handlers/create_profile.py:125
 msgid "Who would you like to rate?"
-msgstr ""
+msgstr "Кого хочешь оценивать?"
 
 #: src/presentation/bot/handlers/create_profile.py:149
 msgid "Share your location — it's used to find nearby profiles:"
@@ -285,7 +283,7 @@ msgstr "Оцени анкету:"
 #: src/presentation/bot/handlers/feed.py:104
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
-msgstr ""
+msgstr "⭐ Тебя только что оценили: {score}/10"
 
 #: src/presentation/bot/handlers/feed.py:123
 msgid "You need a profile of your own first. Send /create to make one."
@@ -389,35 +387,34 @@ msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:49
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>Настройки</b>"
 
 #: src/presentation/bot/handlers/settings.py:50
 #, python-brace-format
 msgid "Show me: {current}"
-msgstr ""
+msgstr "Показывать: {current}"
 
 #: src/presentation/bot/handlers/settings.py:56
 #, python-brace-format
 msgid "Min rating: {current}"
-msgstr ""
+msgstr "Минимальный рейтинг: {current}"
 
 #: src/presentation/bot/handlers/settings.py:62
 msgid "Min rating: premium only (use /premium)"
-msgstr ""
+msgstr "Минимальный рейтинг: только для премиума (см. /premium)"
 
 #: src/presentation/bot/handlers/settings.py:101
-#, fuzzy
 msgid "No profile yet. Use /create first."
 msgstr "Нет анкеты для редактирования. Сначала /create."
 
 #: src/presentation/bot/handlers/settings.py:132
 #: src/presentation/bot/handlers/settings.py:171
 msgid "Updated"
-msgstr ""
+msgstr "Сохранено"
 
 #: src/presentation/bot/handlers/settings.py:162
 msgid "Premium only"
-msgstr ""
+msgstr "Только для премиума"
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""
