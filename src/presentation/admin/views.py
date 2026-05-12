@@ -123,6 +123,24 @@ class ProfileScoreSummaryAdmin(ModelView):
         return False
 
 
+class SearchPreferencesAdmin(ModelView):
+    label = "Search Preferences"
+    icon = "fa fa-sliders"
+    fields = [
+        "user_id",
+        "gender_preference",
+        "min_rating",
+        "created_at",
+        "updated_at",
+    ]
+    sortable_fields = ["updated_at"]
+
+    # Rows are created lazily by the bot (/create or first /settings access);
+    # admin shouldn't manufacture orphaned rows.
+    def can_create(self, request: Request) -> bool:
+        return False
+
+
 class SubscriptionAdmin(ModelView):
     label = "Subscriptions"
     icon = "fa fa-crown"

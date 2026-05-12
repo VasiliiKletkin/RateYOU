@@ -13,6 +13,7 @@ from src.infrastructure.db.models import (
     ProfilePhotoORM,
     ProfileScoreSummaryORM,
     RatingORM,
+    SearchPreferencesORM,
     SubscriptionORM,
     TransactionORM,
     UserORM,
@@ -24,6 +25,7 @@ from src.presentation.admin.views import (
     ProfilePhotoAdmin,
     ProfileScoreSummaryAdmin,
     RatingAdmin,
+    SearchPreferencesAdmin,
     SubscriptionAdmin,
     TransactionAdmin,
     UserAdmin,
@@ -54,6 +56,7 @@ def create_app() -> FastAPI:
     admin.add_view(RatingAdmin(RatingORM))
     admin.add_view(ProfileScoreSummaryAdmin(ProfileScoreSummaryORM))
     admin.add_view(SubscriptionAdmin(SubscriptionORM))
+    admin.add_view(SearchPreferencesAdmin(SearchPreferencesORM))
     admin.add_view(TransactionAdmin(TransactionORM))
 
     admin.mount_to(app)
