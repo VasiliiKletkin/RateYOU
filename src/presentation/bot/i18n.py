@@ -114,7 +114,7 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
             if user is not None:
                 stored = user.language
                 log.info("i18n: tg_user=%s → stored %s", tg_user.id, stored.value)
-                return stored.value
+                return str(stored.value)
 
         raw = getattr(tg_user, "language_code", None)
         chosen = normalize_language(raw)

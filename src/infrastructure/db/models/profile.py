@@ -3,11 +3,11 @@ from uuid import UUID, uuid4
 
 from geoalchemy2 import Geography, WKBElement
 from geoalchemy2.shape import to_shape
-from sqlalchemy import DateTime, ForeignKey, String, UniqueConstraint, func
+from sqlalchemy import DateTime, Enum, ForeignKey, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.domain.profile.value_objects import Gender
-from src.infrastructure.db.models.base import Base, str_enum
+from src.infrastructure.db.models.base import Base
 
 
 class ProfileORM(Base):
@@ -19,7 +19,7 @@ class ProfileORM(Base):
     )
     name: Mapped[str] = mapped_column(String(50))
     age: Mapped[int]
-    gender: Mapped[Gender] = mapped_column(str_enum(Gender, "gender"))
+    gender: Mapped[Gender] = mapped_column(Enum(Gender))
     bio: Mapped[str] = mapped_column(String(500), server_default="")
     is_visible: Mapped[bool] = mapped_column(server_default="true")
     # PostGIS geography (Point, SRID 4326). NOT NULL — every profile must
