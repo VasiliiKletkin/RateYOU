@@ -13,7 +13,6 @@ class UserAdmin(ModelView):
         "ban_reason",
         "banned_at",
         "language",
-        "referred_by_user_id",
         "created_at",
     ]
     searchable_fields = ["telegram_id"]
@@ -147,14 +146,14 @@ class TransactionAdmin(ModelView):
 class ReferralAdmin(ModelView):
     label = "Referrals"
     icon = "fa fa-user-plus"
-    # Append-only: each row marks one paid-out referral (referee created
-    # their profile and BONUS Subscriptions were issued to both sides).
-    # The row's existence is the «rewarded» state — no status column.
+    # One row per referrer→referee invite. `rewarded_at` distinguishes
+    # pending (NULL) from paid-out (set).
     fields = [
         "id",
         "referrer",
         "referee",
         "created_at",
+        "rewarded_at",
     ]
-    sortable_fields = ["created_at"]
+    sortable_fields = ["created_at", "rewarded_at"]
     fields_default_sort = [("created_at", True)]  # DESC

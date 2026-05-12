@@ -1,5 +1,6 @@
 """End-to-end happy path:
-`/start <inviter_telegram_id>` -> create profile -> both parties get a
+`/start <inviter_telegram_id>` -> Referral created PENDING -> referee
+creates profile -> Referral promoted to REWARDED + both parties get a
 BONUS Subscription. Plus milestone: 3 successful referrals add an
 extra bonus grant for the referrer.
 """
@@ -39,6 +40,7 @@ async def _seed_inviter(session: AsyncSession, tg_id: int) -> User:
 def _register_uc(session: AsyncSession) -> RegisterUserUseCase:
     return RegisterUserUseCase(
         user_repo=UserRepository(session=session),
+        referral_repo=ReferralRepository(session=session),
         uow=SqlAlchemyUnitOfWork(session=session),
     )
 
@@ -58,7 +60,6 @@ def _create_profile_uc(session: AsyncSession) -> CreateProfileUseCase:
 
 
 def _make_profile_request(owner_id, name: str, tg_id: int) -> CreateProfileRequest:  # type: ignore[no-untyped-def]
-    # tg_id is just used to vary the photo file_id so a second seeding works.
     return CreateProfileRequest(
         owner_id=owner_id,
         name=name,
@@ -82,20 +83,23 @@ async def test_referee_profile_creation_pays_both_sides(
         )
     )
 
-    # Before profile: link is set on the User row, but no Referral entry yet.
     referee_id = UserId(response.id)
-    referee = await UserRepository(session=session).get_by_id(referee_id)
-    assert referee is not None
-    assert referee.referred_by_user_id == inviter.id
     referral_repo = ReferralRepository(session=session)
-    assert await referral_repo.exists_for_referee(referee_id) is False
+
+    # Right after /start: pending Referral exists, not yet rewarded.
+    pending = await referral_repo.get_by_referee(referee_id)
+    assert pending is not None
+    assert pending.referrer_id == inviter.id
+    assert pending.is_rewarded is False
 
     # Create profile -> reward fires.
     await _create_profile_uc(session).execute(
         _make_profile_request(response.id, "Petya", 4002)
     )
 
-    assert await referral_repo.exists_for_referee(referee_id) is True
+    after = await referral_repo.get_by_referee(referee_id)
+    assert after is not None
+    assert after.is_rewarded is True
 
     subs = SubscriptionRepository(session=session)
     referee_grants = await subs.list_for(referee_id)
@@ -125,7 +129,6 @@ async def test_third_referral_grants_milestone_bonus(
 
     subs = SubscriptionRepository(session=session)
     referrer_grants = await subs.list_for(inviter.id)
-    # 3 base grants + 1 milestone grant
     assert len(referrer_grants) == MILESTONE_INTERVAL + 1
     milestones = [
         g
@@ -140,7 +143,6 @@ async def test_referral_stats_reflects_invitations_and_registrations(
 ) -> None:
     inviter = await _seed_inviter(session, tg_id=4200)
     stats_uc = GetReferralStatsUseCase(
-        user_repo=UserRepository(session=session),
         referral_repo=ReferralRepository(session=session),
     )
 

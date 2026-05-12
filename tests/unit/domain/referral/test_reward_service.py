@@ -22,11 +22,27 @@ class FakeReferralRepo:
     async def add(self, r: Referral) -> None:
         self.referrals.append(r)
 
-    async def exists_for_referee(self, referee_id: UserId) -> bool:
-        return any(r.referee_id == referee_id for r in self.referrals)
+    async def get_by_referee(self, referee_id: UserId) -> Referral | None:
+        for r in self.referrals:
+            if r.referee_id == referee_id:
+                return r
+        return None
 
-    async def count_for_referrer(self, referrer_id: UserId) -> int:
+    async def update(self, r: Referral) -> None:
+        for idx, existing in enumerate(self.referrals):
+            if existing.id == r.id:
+                self.referrals[idx] = r
+                return
+
+    async def count_total_for_referrer(self, referrer_id: UserId) -> int:
         return sum(1 for r in self.referrals if r.referrer_id == referrer_id)
+
+    async def count_rewarded_for_referrer(self, referrer_id: UserId) -> int:
+        return sum(
+            1
+            for r in self.referrals
+            if r.referrer_id == referrer_id and r.is_rewarded
+        )
 
 
 @dataclass
@@ -41,13 +57,6 @@ class FakeUserRepo:
 
     async def get_by_telegram_id(self, telegram_id: TelegramId) -> User | None:
         return None
-
-    async def count_referees_for(self, referrer_id: UserId) -> int:
-        return sum(
-            1
-            for u in self.users.values()
-            if u.referred_by_user_id == referrer_id
-        )
 
     async def update(self, user: User) -> None:
         self.users[user.id] = user
@@ -78,16 +87,21 @@ class FakeSubscriptionRepo:
                 return
 
 
-def _seed_user(
-    repo: FakeUserRepo, tg_id: int, referred_by: User | None = None
-) -> User:
-    user = User.register(
-        TelegramId(tg_id),
-        datetime.now(UTC),
-        referred_by=referred_by.id if referred_by is not None else None,
-    )
+def _seed_user(repo: FakeUserRepo, tg_id: int) -> User:
+    user = User.register(TelegramId(tg_id), datetime.now(UTC))
     repo.users[user.id] = user
     return user
+
+
+async def _seed_pending(
+    referrals: FakeReferralRepo,
+    referrer: User,
+    referee: User,
+    now: datetime,
+) -> Referral:
+    pending = Referral.create_pending(referrer.id, referee.id, now)
+    await referrals.add(pending)
+    return pending
 
 
 def _make_service(
@@ -102,7 +116,7 @@ def _make_service(
     )
 
 
-async def test_no_op_when_user_not_referred() -> None:
+async def test_no_op_when_no_pending_referral_exists() -> None:
     referrals, users, subs = (
         FakeReferralRepo(),
         FakeUserRepo(),
@@ -117,22 +131,23 @@ async def test_no_op_when_user_not_referred() -> None:
     assert subs.grants == []
 
 
-async def test_idempotent_when_referral_already_paid() -> None:
+async def test_idempotent_when_referral_already_rewarded() -> None:
     referrals, users, subs = (
         FakeReferralRepo(),
         FakeUserRepo(),
         FakeSubscriptionRepo(),
     )
     referrer = _seed_user(users, 100)
-    referee = _seed_user(users, 200, referred_by=referrer)
+    referee = _seed_user(users, 200)
     now = datetime.now(UTC)
-    await referrals.add(Referral.reward(referrer.id, referee.id, now))
+    pending = await _seed_pending(referrals, referrer, referee, now)
+    pending.mark_rewarded(now)
     service = _make_service(referrals, users, subs)
 
     await service.mark_profile_created(referee.id, now)
 
-    # Still exactly one Referral row, no extra grants issued.
-    assert len(referrals.referrals) == 1
+    # Still rewarded, no extra grants issued.
+    assert referrals.referrals[0].is_rewarded
     assert subs.grants == []
 
 
@@ -143,13 +158,14 @@ async def test_first_referral_grants_one_day_to_each_side() -> None:
         FakeSubscriptionRepo(),
     )
     referrer = _seed_user(users, 100)
-    referee = _seed_user(users, 200, referred_by=referrer)
-    service = _make_service(referrals, users, subs)
+    referee = _seed_user(users, 200)
     now = datetime.now(UTC)
+    await _seed_pending(referrals, referrer, referee, now)
+    service = _make_service(referrals, users, subs)
 
     await service.mark_profile_created(referee.id, now)
 
-    assert len(referrals.referrals) == 1
+    assert referrals.referrals[0].is_rewarded
     owners = {g.owner_id for g in subs.grants}
     assert owners == {referrer.id, referee.id}
     assert all(g.source == SubscriptionSource.BONUS for g in subs.grants)
@@ -168,13 +184,15 @@ async def test_banned_referrer_only_referee_paid() -> None:
     )
     referrer = _seed_user(users, 100)
     referrer.ban("spam", now=datetime.now(UTC))
-    referee = _seed_user(users, 200, referred_by=referrer)
+    referee = _seed_user(users, 200)
+    now = datetime.now(UTC)
+    await _seed_pending(referrals, referrer, referee, now)
     service = _make_service(referrals, users, subs)
 
-    await service.mark_profile_created(referee.id, datetime.now(UTC))
+    await service.mark_profile_created(referee.id, now)
 
-    # Referral row still created (audit), referee gets paid, referrer skipped.
-    assert len(referrals.referrals) == 1
+    # Referral promoted to rewarded (audit), referee gets paid, referrer skipped.
+    assert referrals.referrals[0].is_rewarded
     owners = {g.owner_id for g in subs.grants}
     assert owners == {referee.id}
 
@@ -189,12 +207,11 @@ async def test_third_referral_fires_milestone_bonus() -> None:
     service = _make_service(referrals, users, subs)
     now = datetime.now(UTC)
 
-    # Three referees, each completing their profile.
     for tg_id in (200, 201, 202):
-        ref = _seed_user(users, tg_id, referred_by=referrer)
+        ref = _seed_user(users, tg_id)
+        await _seed_pending(referrals, referrer, ref, now)
         await service.mark_profile_created(ref.id, now)
 
-    # 3 base grants for the referrer (one per registration) + 1 milestone bonus.
     referrer_grants = [g for g in subs.grants if g.owner_id == referrer.id]
     assert len(referrer_grants) == MILESTONE_INTERVAL + 1
     days = sorted((g.expires_at - g.starts_at).days for g in referrer_grants)
@@ -215,7 +232,8 @@ async def test_no_milestone_before_threshold() -> None:
     now = datetime.now(UTC)
 
     for tg_id in (200, 201):  # 2 < MILESTONE_INTERVAL (3)
-        ref = _seed_user(users, tg_id, referred_by=referrer)
+        ref = _seed_user(users, tg_id)
+        await _seed_pending(referrals, referrer, ref, now)
         await service.mark_profile_created(ref.id, now)
 
     referrer_grants = [g for g in subs.grants if g.owner_id == referrer.id]
@@ -233,7 +251,8 @@ async def test_sixth_referral_triggers_second_milestone() -> None:
     now = datetime.now(UTC)
 
     for i in range(6):
-        ref = _seed_user(users, 200 + i, referred_by=referrer)
+        ref = _seed_user(users, 200 + i)
+        await _seed_pending(referrals, referrer, ref, now)
         await service.mark_profile_created(ref.id, now)
 
     referrer_grants = [g for g in subs.grants if g.owner_id == referrer.id]

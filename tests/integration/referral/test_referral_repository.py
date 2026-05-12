@@ -15,31 +15,59 @@ async def _seed_user(session: AsyncSession, tg_id: int) -> User:
     return user
 
 
-async def test_add_and_exists_for_referee(session: AsyncSession) -> None:
+async def test_add_pending_then_get_by_referee(
+    session: AsyncSession,
+) -> None:
     referrer = await _seed_user(session, 9001)
     referee = await _seed_user(session, 9002)
     repo = ReferralRepository(session=session)
+    now = datetime.now(UTC)
 
-    assert await repo.exists_for_referee(referee.id) is False
+    assert await repo.get_by_referee(referee.id) is None
 
-    await repo.add(Referral.reward(referrer.id, referee.id, datetime.now(UTC)))
+    pending = Referral.create_pending(referrer.id, referee.id, now)
+    await repo.add(pending)
 
-    assert await repo.exists_for_referee(referee.id) is True
+    fetched = await repo.get_by_referee(referee.id)
+    assert fetched is not None
+    assert fetched.id == pending.id
+    assert fetched.rewarded_at is None
+    assert fetched.is_rewarded is False
 
 
-async def test_count_for_referrer_starts_at_zero(session: AsyncSession) -> None:
+async def test_update_persists_reward_timestamp(
+    session: AsyncSession,
+) -> None:
     referrer = await _seed_user(session, 9003)
-    repo = ReferralRepository(session=session)
-
-    assert await repo.count_for_referrer(referrer.id) == 0
-
-
-async def test_count_for_referrer_grows_per_add(session: AsyncSession) -> None:
-    referrer = await _seed_user(session, 9004)
-    refs = [await _seed_user(session, 9005 + i) for i in range(3)]
+    referee = await _seed_user(session, 9004)
     repo = ReferralRepository(session=session)
     now = datetime.now(UTC)
-    for r in refs:
-        await repo.add(Referral.reward(referrer.id, r.id, now))
+    pending = Referral.create_pending(referrer.id, referee.id, now)
+    await repo.add(pending)
 
-    assert await repo.count_for_referrer(referrer.id) == 3
+    pending.mark_rewarded(now)
+    await repo.update(pending)
+
+    refreshed = await repo.get_by_referee(referee.id)
+    assert refreshed is not None
+    assert refreshed.is_rewarded is True
+    assert refreshed.rewarded_at is not None
+
+
+async def test_count_total_vs_rewarded(session: AsyncSession) -> None:
+    referrer = await _seed_user(session, 9100)
+    refs = [await _seed_user(session, 9101 + i) for i in range(3)]
+    repo = ReferralRepository(session=session)
+    now = datetime.now(UTC)
+
+    # Three pending, then promote the first two to rewarded.
+    for r in refs:
+        await repo.add(Referral.create_pending(referrer.id, r.id, now))
+    for r in refs[:2]:
+        stored = await repo.get_by_referee(r.id)
+        assert stored is not None
+        stored.mark_rewarded(now)
+        await repo.update(stored)
+
+    assert await repo.count_total_for_referrer(referrer.id) == 3
+    assert await repo.count_rewarded_for_referrer(referrer.id) == 2
