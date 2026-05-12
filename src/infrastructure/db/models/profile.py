@@ -1,9 +1,9 @@
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from geoalchemy2 import Geography, WKBElement
 from geoalchemy2.shape import to_shape
-from sqlalchemy import DateTime, ForeignKey, String, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.infrastructure.db.models.base import Base
@@ -12,7 +12,7 @@ from src.infrastructure.db.models.base import Base
 class ProfileORM(Base):
     __tablename__ = "profiles"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     owner_id: Mapped[UUID] = mapped_column(
         ForeignKey("users.id"), unique=True, index=True
     )
@@ -27,8 +27,14 @@ class ProfileORM(Base):
         Geography(geometry_type="POINT", srid=4326),
         nullable=False,
     )
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
 
     # 1..6 photos in domain order. Loaded eagerly with `selectin` so a single
     # query brings every photo with its profile; cascade keeps `profile_photos`
@@ -75,7 +81,7 @@ class ProfilePhotoORM(Base):
         UniqueConstraint("profile_id", "position", name="uq_profile_photos_position"),
     )
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     profile_id: Mapped[UUID] = mapped_column(
         ForeignKey("profiles.id", ondelete="CASCADE"), index=True
     )

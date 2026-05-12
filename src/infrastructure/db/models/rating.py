@@ -1,7 +1,7 @@
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.infrastructure.db.models.base import Base
@@ -13,7 +13,7 @@ class RatingORM(Base):
         UniqueConstraint("rater_id", "rated_id", name="uq_ratings_rater_rated"),
     )
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     rater_id: Mapped[UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), index=True
     )
@@ -21,8 +21,14 @@ class RatingORM(Base):
         ForeignKey("users.id", ondelete="CASCADE"), index=True
     )
     score: Mapped[int]
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
 
 
 class ProfileScoreSummaryORM(Base):
@@ -33,4 +39,8 @@ class ProfileScoreSummaryORM(Base):
     )
     average_score: Mapped[float]
     rating_count: Mapped[int]
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )

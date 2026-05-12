@@ -1,7 +1,7 @@
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Index, String
+from sqlalchemy import DateTime, ForeignKey, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.infrastructure.db.models.base import Base
@@ -23,7 +23,7 @@ class SubscriptionORM(Base):
 
     __tablename__ = "subscriptions"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     owner_id: Mapped[UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
@@ -42,7 +42,7 @@ class SubscriptionORM(Base):
     )
     is_revoked: Mapped[bool] = mapped_column(server_default="false", nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     __table_args__ = (

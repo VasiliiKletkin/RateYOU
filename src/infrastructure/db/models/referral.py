@@ -1,7 +1,7 @@
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.infrastructure.db.models.base import Base
@@ -18,7 +18,7 @@ class ReferralORM(Base):
 
     __tablename__ = "referrals"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     referrer_id: Mapped[UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
@@ -34,5 +34,5 @@ class ReferralORM(Base):
     )
     referee: Mapped[UserORM] = relationship(UserORM, foreign_keys=[referee_id])
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
