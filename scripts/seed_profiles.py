@@ -1,27 +1,39 @@
 """Seed fake female profiles into the local DB, distributed across cities.
 
-Pipeline is streaming — each iteration:
-  1. Picks the next image URL from a pool fetched lazily from Unsplash search.
-  2. Downloads image bytes, sends them to OWNER_CHAT_ID via the bot, captures
-     the Telegram file_id from the reply.
-  3. Creates a User + Profile via CreateProfileUseCase, with the location
-     scattered around the city assigned to this index.
+Photos come from a local directory you prepare yourself. Each immediate
+subdirectory under ``--photos-dir`` becomes one profile; image files inside
+(jpg/jpeg/png/webp, 1-6 per folder) become the profile's photos. Subdirs are
+processed in alphanumeric order, so the first sorted subdir is profile idx 0.
+
+Pipeline per profile:
+  1. Read up to 6 image files from the next subdirectory.
+  2. Upload each via the bot to OWNER_CHAT_ID, capture Telegram file_id.
+  3. Create User + Profile in one transaction.
 
 Re-runs are safe: each profile uses a deterministic telegram_id
 (9_000_000_000 + index); if that user already exists the step is skipped.
+
+Expected layout::
+
+  scripts/seed_photos/
+    0001_anna/
+      01.jpg
+      02.jpg
+      03.jpg
+    0002_kate/
+      front.jpg
+      beach.webp
+    ...
 
 Run (note the env -i wrapper from CLAUDE.md):
 
   env -i HOME="$HOME" \
     PATH="/Users/vasiliikletkin/.pyenv/versions/3.13.11/bin:/usr/bin:/bin" \
-    UNSPLASH_ACCESS_KEY="<your key>" \
     /Users/vasiliikletkin/.pyenv/versions/3.13.11/bin/poetry run \
-    python -m scripts.seed_profiles --owner-chat-id 877916659
-
-Get an Unsplash access key at https://unsplash.com/developers (free, ~5 min).
-Demo access has a 50-requests/hour limit on api.unsplash.com — search uses
-per_page=30, so 1000 photos needs ~34 search calls. Image bytes downloaded
-from images.unsplash.com do NOT count toward that limit.
+    python -m scripts.seed_profiles \
+    --owner-chat-id 877916659 \
+    --photos-dir scripts/seed_photos \
+    --limit 5
 
 Cleanup later (cascade should remove profiles + ratings if the FKs are
 configured ON DELETE CASCADE; otherwise delete profiles first):
@@ -34,13 +46,11 @@ from __future__ import annotations
 import argparse
 import asyncio
 import logging
-import os
 import random
 import sys
 from datetime import UTC, datetime
-from typing import Any
+from pathlib import Path
 
-import aiohttp
 from aiogram import Bot
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -132,116 +142,87 @@ def _random_age() -> int:
     return random.randint(25, 29)
 
 
-# --- Unsplash photo pool ----------------------------------------------------
+# --- local photo source -----------------------------------------------------
 
-UNSPLASH_API = "https://api.unsplash.com/search/photos"
-# Multiple queries → more diverse faces and avoids saturating one search's
-# pagination (Unsplash relevance drops off fast past ~5 pages of one query).
-UNSPLASH_QUERIES = [
-    "woman portrait",
-    "girl portrait",
-    "young woman face",
-    "female portrait",
-    "woman smile",
-    "woman headshot",
-]
+# Telegram's send_photo accepts these formats and downscales them.
+PHOTO_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+MAX_PHOTOS_PER_PROFILE = 6  # matches src.domain.profile.value_objects.Photos.MAX_COUNT
 
 
-class UnsplashPool:
-    """Lazy generator of unique Unsplash image URLs.
+class LocalPhotoSource:
+    """Maps a profile index to a list of local image file paths.
 
-    Walks (query, page) combinations, deduping by photo id. Yields the
-    ``urls.regular`` URL (≈1080px wide) — Telegram downscales further.
+    Layout convention (under ``--photos-dir``)::
+
+        photos_dir/
+          0001_anna/          # name doesn't matter, only sort order does
+            01.jpg
+            02.jpg
+          0002_kate/
+            front.jpg
+            beach.webp
+            cafe.png
+          ...
+
+    Each immediate subdirectory becomes one profile. Subdirectories are
+    enumerated in alphanumeric order, so profile idx 0 is the first one.
+    Photo files inside are also sorted, capped at MAX_PHOTOS_PER_PROFILE.
     """
 
-    def __init__(self, http: aiohttp.ClientSession, access_key: str) -> None:
-        self._http = http
-        self._access_key = access_key
-        self._seen: set[str] = set()
-        self._queue: list[str] = []
-        # (query_idx, page) cursor; page is 1-based per Unsplash docs.
-        self._query_idx = 0
-        self._page = 1
+    def __init__(self, root: Path) -> None:
+        if not root.is_dir():
+            raise FileNotFoundError(f"Photos directory not found: {root}")
+        self._profile_dirs: list[Path] = sorted(
+            (p for p in root.iterdir() if p.is_dir()),
+            key=lambda p: p.name,
+        )
+        if not self._profile_dirs:
+            raise RuntimeError(f"No profile subdirectories in {root}")
 
-    async def next_url(self) -> str | None:
-        if not self._queue:
-            await self._refill()
-        if not self._queue:
-            return None
-        return self._queue.pop(0)
+    def __len__(self) -> int:
+        return len(self._profile_dirs)
 
-    async def _refill(self) -> None:
-        for _ in range(len(UNSPLASH_QUERIES) * 6):  # ~6 pages per query before giving up
-            query = UNSPLASH_QUERIES[self._query_idx]
-            page = self._page
-            params: dict[str, str | int] = {
-                "query": query,
-                "per_page": 30,
-                "page": page,
-                "orientation": "portrait",
-                "content_filter": "high",
-            }
-            headers = {"Authorization": f"Client-ID {self._access_key}"}
-            try:
-                async with self._http.get(
-                    UNSPLASH_API,
-                    params=params,
-                    headers=headers,
-                    timeout=aiohttp.ClientTimeout(total=30),
-                ) as r:
-                    if r.status == 403:
-                        body = await r.text()
-                        log.error("Unsplash 403 (rate limit?): %s", body[:200])
-                        await asyncio.sleep(60)
-                        return
-                    r.raise_for_status()
-                    payload: dict[str, Any] = await r.json()
-            except Exception as exc:
-                log.warning("Unsplash search failed (q=%r p=%d): %s", query, page, exc)
-                self._advance_cursor()
-                continue
-
-            results = payload.get("results", []) or []
-            log.info(
-                "Unsplash: q=%r p=%d got %d results", query, page, len(results)
-            )
-
-            for item in results:
-                photo_id = item.get("id")
-                url = (item.get("urls") or {}).get("regular")
-                if not photo_id or not url:
-                    continue
-                if photo_id in self._seen:
-                    continue
-                self._seen.add(photo_id)
-                self._queue.append(url)
-
-            self._advance_cursor()
-            if self._queue:
-                return
-
-    def _advance_cursor(self) -> None:
-        self._query_idx += 1
-        if self._query_idx >= len(UNSPLASH_QUERIES):
-            self._query_idx = 0
-            self._page += 1
-
-
-async def _download_image(http: aiohttp.ClientSession, url: str) -> bytes:
-    async with http.get(url, timeout=aiohttp.ClientTimeout(total=60)) as r:
-        r.raise_for_status()
-        return await r.read()
+    def photos_for(self, idx: int) -> list[Path]:
+        """Return up to ``MAX_PHOTOS_PER_PROFILE`` image paths for profile idx."""
+        if idx >= len(self._profile_dirs):
+            return []
+        profile_dir = self._profile_dirs[idx]
+        files = sorted(
+            f for f in profile_dir.iterdir()
+            if f.is_file() and f.suffix.lower() in PHOTO_EXTENSIONS
+        )
+        return files[:MAX_PHOTOS_PER_PROFILE]
 
 
 # --- per-profile pipeline ---------------------------------------------------
+
+
+async def _upload_photo(
+    bot: Bot,
+    owner_chat_id: int,
+    path: Path,
+) -> str | None:
+    """Upload one local image to the owner chat, return its file_id."""
+    image_bytes = await asyncio.to_thread(path.read_bytes)
+    try:
+        msg = await bot.send_photo(
+            chat_id=owner_chat_id,
+            photo=BufferedInputFile(image_bytes, filename=path.name),
+        )
+    except Exception as exc:
+        log.error("send_photo failed for %s: %s", path, exc)
+        return None
+    if not msg.photo:
+        log.error("Telegram returned message without photo sizes: %s", path)
+        return None
+    return msg.photo[-1].file_id
 
 
 async def _process_one(
     *,
     idx: int,
     name: str,
-    http: aiohttp.ClientSession,
-    pool: UnsplashPool,
+    photo_paths: list[Path],
     bot: Bot,
     owner_chat_id: int,
     session_factory: async_sessionmaker[AsyncSession],
@@ -257,39 +238,21 @@ async def _process_one(
     if existing is not None:
         return False
 
-    # 1. URL from the lazy Unsplash pool.
-    url = await pool.next_url()
-    if url is None:
-        log.error("Unsplash pool exhausted at idx=%d", idx)
-        raise RuntimeError("photo pool exhausted")
-
-    # 2. Image bytes.
-    for attempt in range(3):
-        try:
-            image_bytes = await _download_image(http, url)
-            break
-        except Exception as exc:
-            log.warning("image download attempt %d for idx=%d: %s", attempt + 1, idx, exc)
-            await asyncio.sleep(1.5 * (attempt + 1))
-    else:
-        log.error("Giving up on image for idx=%d", idx)
+    if not photo_paths:
+        log.warning("idx=%d has no photos, skipping", idx)
         return False
 
-    # 3. Send to bot owner chat to obtain file_id.
-    try:
-        msg = await bot.send_photo(
-            chat_id=owner_chat_id,
-            photo=BufferedInputFile(image_bytes, filename=f"face_{idx}.jpg"),
-        )
-    except Exception as exc:
-        log.error("send_photo failed for idx=%d: %s", idx, exc)
-        return False
-    if not msg.photo:
-        log.error("Telegram returned message without photo sizes for idx=%d", idx)
-        return False
-    file_id = msg.photo[-1].file_id
+    # 1. Upload each photo, collect file_ids.
+    file_ids: list[str] = []
+    for path in photo_paths:
+        fid = await _upload_photo(bot, owner_chat_id, path)
+        if fid is None:
+            log.error("idx=%d: photo upload failed for %s — skipping profile", idx, path)
+            return False
+        file_ids.append(fid)
+        await asyncio.sleep(0.35)  # stay under per-chat soft rate-limit
 
-    # 4. Create User + Profile in one transaction.
+    # 2. Create User + Profile in one transaction.
     city_name, city_lat, city_lon = _city_for_index(idx)
     async with session_factory() as session:
         user_repo = UserRepository(session=session)
@@ -319,13 +282,12 @@ async def _process_one(
                 age=_random_age(),
                 gender="female",
                 bio=_random_bio(),
-                photo_file_ids=(file_id,),
+                photo_file_ids=tuple(file_ids),
                 location=_location_around(city_lat, city_lon),
             )
         )
 
-    if idx % 25 == 0:
-        log.info("idx=%d city=%s ok", idx, city_name)
+    log.info("idx=%d city=%s photos=%d ok", idx, city_name, len(file_ids))
     return True
 
 
@@ -338,18 +300,21 @@ async def amain(args: argparse.Namespace) -> int:
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
 
-    access_key = args.unsplash_key or os.environ.get("UNSPLASH_ACCESS_KEY")
-    if not access_key:
-        log.error("Provide UNSPLASH_ACCESS_KEY env var or --unsplash-key.")
+    try:
+        photo_source = LocalPhotoSource(args.photos_dir)
+    except (FileNotFoundError, RuntimeError) as exc:
+        log.error("%s", exc)
         return 2
 
     full_total = len(CITIES) * PROFILES_PER_CITY
-    total = min(full_total, args.limit) if args.limit else full_total
+    available = len(photo_source)
+    total = min(full_total, available)
+    if args.limit:
+        total = min(total, args.limit)
     log.info(
-        "Target: %d profiles (full plan: %d cities x %d each = %d)",
+        "Target: %d profiles (photo dirs: %d, full plan: %d)",
         total,
-        len(CITIES),
-        PROFILES_PER_CITY,
+        available,
         full_total,
     )
 
@@ -383,40 +348,34 @@ async def amain(args: argparse.Namespace) -> int:
     )
 
     try:
-        async with aiohttp.ClientSession() as http:
-            pool = UnsplashPool(http, access_key)
-            for idx in range(total):
-                try:
-                    ok = await _process_one(
-                        idx=idx,
-                        name=name_pool[idx],
-                        http=http,
-                        pool=pool,
-                        bot=bot,
-                        owner_chat_id=args.owner_chat_id,
-                        session_factory=session_factory,
-                    )
-                except Exception as exc:
-                    log.exception("idx=%d crashed: %s", idx, exc)
-                    failed += 1
-                    continue
+        for idx in range(total):
+            try:
+                ok = await _process_one(
+                    idx=idx,
+                    name=name_pool[idx],
+                    photo_paths=photo_source.photos_for(idx),
+                    bot=bot,
+                    owner_chat_id=args.owner_chat_id,
+                    session_factory=session_factory,
+                )
+            except Exception as exc:
+                log.exception("idx=%d crashed: %s", idx, exc)
+                failed += 1
+                continue
 
-                if ok:
-                    created += 1
+            if ok:
+                created += 1
+            else:
+                # Distinguish "already there" from "upload failed / no photos"
+                # via a cheap re-check.
+                async with session_factory() as session:
+                    existing = await UserRepository(
+                        session=session
+                    ).get_by_telegram_id(TelegramId(SEED_TELEGRAM_ID_BASE + idx))
+                if existing is not None:
+                    skipped += 1
                 else:
-                    # Distinguish "already there" from "image/send failed" using
-                    # a cheap re-check. In practice this branch is rare.
-                    async with session_factory() as session:
-                        existing = await UserRepository(
-                            session=session
-                        ).get_by_telegram_id(TelegramId(SEED_TELEGRAM_ID_BASE + idx))
-                    if existing is not None:
-                        skipped += 1
-                    else:
-                        failed += 1
-
-                # Keep send_photo under Telegram's per-chat soft limit.
-                await asyncio.sleep(0.35)
+                    failed += 1
     finally:
         await bot.session.close()
         await engine.dispose()
@@ -442,10 +401,14 @@ def main() -> None:
         help="Telegram chat id where the bot will send photos to obtain file_ids.",
     )
     parser.add_argument(
-        "--unsplash-key",
-        type=str,
-        default=None,
-        help="Unsplash API access key. Falls back to $UNSPLASH_ACCESS_KEY.",
+        "--photos-dir",
+        type=Path,
+        required=True,
+        help=(
+            "Directory of per-profile subdirectories. Each subdirectory "
+            "becomes one profile; image files inside (1-6, jpg/png/webp) "
+            "become its photos. Subdirs are processed in alphanumeric order."
+        ),
     )
     parser.add_argument(
         "--limit",
