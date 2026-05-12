@@ -319,7 +319,7 @@ msgstr[0] "Expires in {days} day."
 msgstr[1] "Expires in {days} days."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -329,7 +329,7 @@ msgid ""
 msgstr ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
-"Feed shows profiles with avg rating >= {threshold}.\n"
+"Set your minimum rating filter via /settings.\n"
 "\n"
 "Pick a tier to renew or upgrade:"
 
@@ -361,7 +361,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ Payment confirmed."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -371,7 +371,7 @@ msgstr ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
 "{expires}\n"
-"Now /feed shows profiles rated >= {threshold}."
+"Pick your minimum rating filter in /settings."
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -426,103 +426,4 @@ msgid ""
 msgstr ""
 "<b>Welcome back, {name}!</b>\n"
 "Send /feed to rate other profiles."
-
-#~ msgid "Send a photo:"
-#~ msgstr "Send a photo:"
-
-#~ msgid "Send new photo:"
-#~ msgstr "Send new photo:"
-
-#~ msgid "Please send a photo."
-#~ msgstr "Please send a photo."
-
-#~ msgid "📸 {n}/{max} photos received. Send more or /done."
-#~ msgstr ""
-
-#~ msgid "Send at least one photo first."
-#~ msgstr ""
-
-#~ msgid "Send 1-{max} new photos, then /done:"
-#~ msgstr ""
-
-#~ msgid "Please send a photo. /done when finished."
-#~ msgstr "Please send a photo (not text)."
-
-#~ msgid "City"
-#~ msgstr ""
-
-#~ msgid "Which city are you in?"
-#~ msgstr "Which city are you in?"
-
-#~ msgid "❌ City must be 1-100 non-empty characters. Try again:"
-#~ msgstr "❌ City must be 1-100 non-empty characters. Try again:"
-
-#~ msgid "Share your location to find nearby profiles (or /skip):"
-#~ msgstr ""
-
-#~ msgid "Please share a location or /skip."
-#~ msgstr "Please send text or /skip."
-
-#~ msgid ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-#~ msgstr ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-
-#~ msgid "Send new city:"
-#~ msgstr "Send new city:"
-
-#~ msgid "Send 1-{max} photos, then /done:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
-#~ msgstr ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
 

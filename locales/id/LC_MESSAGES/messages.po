@@ -325,7 +325,7 @@ msgstr[0] "Berakhir dalam {days} hari."
 msgstr[1] "Berakhir dalam {days} hari."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -335,7 +335,7 @@ msgid ""
 msgstr ""
 "<b>Premium kamu: {tier}</b>\n"
 "{expires}\n"
-"Feed menampilkan profil dengan rata-rata nilai >= {threshold}.\n"
+"Atur filter peringkat minimum melalui /settings.\n"
 "\n"
 "Pilih tingkat untuk memperpanjang atau upgrade:"
 
@@ -367,7 +367,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ Pembayaran dikonfirmasi."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -377,7 +377,7 @@ msgstr ""
 "<b>✅ Premium aktif!</b>\n"
 "Tingkat: {tier}\n"
 "{expires}\n"
-"Sekarang /feed menampilkan profil dengan nilai >= {threshold}."
+"Pilih filter peringkat minimum kamu di /settings."
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -434,41 +434,4 @@ msgid ""
 msgstr ""
 "<b>Selamat datang kembali, {name}!</b>\n"
 "Kirim /feed untuk menilai profil lain."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>Premium</b> memfilter /feed kamu ke profil dengan nilai tinggi.\n"
-#~ "\n"
-#~ "Pilih tingkat:"
 

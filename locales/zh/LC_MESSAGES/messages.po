@@ -323,7 +323,7 @@ msgid_plural "Expires in {days} days."
 msgstr[0] "{days} 天后过期。"
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -333,7 +333,7 @@ msgid ""
 msgstr ""
 "<b>你的高级会员: {tier}</b>\n"
 "{expires}\n"
-"Feed 显示平均评分 >= {threshold} 的个人资料。\n"
+"在 /settings 中设置最低评分筛选。\n"
 "\n"
 "选择一个等级来续费或升级:"
 
@@ -365,7 +365,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ 已确认付款。"
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -375,7 +375,7 @@ msgstr ""
 "<b>✅ 高级会员已激活!</b>\n"
 "等级: {tier}\n"
 "{expires}\n"
-"现在 /feed 显示评分 >= {threshold} 的个人资料。"
+"在 /settings 中选择最低评分筛选。"
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -432,41 +432,4 @@ msgid ""
 msgstr ""
 "<b>欢迎回来,{name}!</b>\n"
 "发送 /feed 来给其他个人资料评分。"
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>高级会员</b>会将你的 /feed 过滤为高评分的个人资料。\n"
-#~ "\n"
-#~ "选择一个等级:"
 

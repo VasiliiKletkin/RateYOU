@@ -326,7 +326,7 @@ msgstr[1] "Закінчується через {days} дні."
 msgstr[2] "Закінчується через {days} днів."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -336,7 +336,7 @@ msgid ""
 msgstr ""
 "<b>Твій преміум: {tier}</b>\n"
 "{expires}\n"
-"У стрічці анкети з середньою оцінкою >= {threshold}.\n"
+"Задай мінімальний рейтинг у /settings.\n"
 "\n"
 "Обери тариф, щоб продовжити або підвищити:"
 
@@ -368,7 +368,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ Платіж підтверджено."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -378,7 +378,7 @@ msgstr ""
 "<b>✅ Преміум активовано!</b>\n"
 "Тариф: {tier}\n"
 "{expires}\n"
-"Тепер /feed показує анкети з оцінкою >= {threshold}."
+"Обери мінімальний рейтинг у /settings."
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -435,41 +435,4 @@ msgid ""
 msgstr ""
 "<b>З поверненням, {name}!</b>\n"
 "Надішли /feed, щоб оцінювати інші анкети."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>Преміум</b> фільтрує /feed до високооцінених анкет.\n"
-#~ "\n"
-#~ "Обери тариф:"
 

@@ -334,7 +334,7 @@ msgstr[4] "ينتهي خلال {days} يومًا."
 msgstr[5] "ينتهي خلال {days} يوم."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -344,7 +344,7 @@ msgid ""
 msgstr ""
 "<b>اشتراكك المميز: {tier}</b>\n"
 "{expires}\n"
-"يعرض الموجز ملفات شخصية بمتوسط تقييم >= {threshold}.\n"
+"اضبط الحد الأدنى لفلتر التقييم عبر /settings.\n"
 "\n"
 "اختر باقة للتجديد أو الترقية:"
 
@@ -376,7 +376,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ تم تأكيد الدفع."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -386,7 +386,7 @@ msgstr ""
 "<b>✅ تم تفعيل الاشتراك المميز!</b>\n"
 "الباقة: {tier}\n"
 "{expires}\n"
-"الآن /feed يعرض الملفات الشخصية بتقييم >= {threshold}."
+"اختر الحد الأدنى لفلتر التقييم في /settings."
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -443,42 +443,4 @@ msgid ""
 msgstr ""
 "<b>مرحبًا بعودتك، {name}!</b>\n"
 "أرسل /feed لتقييم الملفات الشخصية الأخرى."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>الاشتراك المميز</b> يصفّي /feed لعرض "
-#~ "الملفات الشخصية ذات التقييم العالي.\n"
-#~ "\n"
-#~ "اختر باقة:"
 

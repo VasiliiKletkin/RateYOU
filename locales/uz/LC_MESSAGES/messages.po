@@ -327,7 +327,7 @@ msgstr[0] "{days} kundan keyin tugaydi."
 msgstr[1] "{days} kundan keyin tugaydi."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -337,7 +337,7 @@ msgid ""
 msgstr ""
 "<b>Sening premium: {tier}</b>\n"
 "{expires}\n"
-"Tasma o'rtacha bahosi >= {threshold} bo'lgan profillarni ko'rsatadi.\n"
+"Minimal baho filtringni /settings orqali sozla.\n"
 "\n"
 "Yangilash yoki yuqoriroqqa o'tish uchun darajani tanla:"
 
@@ -369,7 +369,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ To'lov tasdiqlandi."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -379,7 +379,7 @@ msgstr ""
 "<b>✅ Premium faollashtirildi!</b>\n"
 "Daraja: {tier}\n"
 "{expires}\n"
-"Endi /feed >= {threshold} baholangan profillarni ko'rsatadi."
+"Minimal baho filtringni /settings da tanla."
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -436,41 +436,4 @@ msgid ""
 msgstr ""
 "<b>Qaytib kelganing bilan, {name}!</b>\n"
 "Boshqa profillarni baholash uchun /feed yubor."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>Premium</b> /feed-ingni yuqori baholangan profillarga filtrlaydi.\n"
-#~ "\n"
-#~ "Darajani tanla:"
 

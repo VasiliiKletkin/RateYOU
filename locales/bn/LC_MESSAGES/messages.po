@@ -325,7 +325,7 @@ msgstr[0] "{days} দিনে শেষ হবে।"
 msgstr[1] "{days} দিনে শেষ হবে।"
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -335,7 +335,7 @@ msgid ""
 msgstr ""
 "<b>তোমার প্রিমিয়াম: {tier}</b>\n"
 "{expires}\n"
-"ফিডে গড় রেটিং >= {threshold} এমন প্রোফাইল দেখানো হয়।\n"
+"/settings থেকে সর্বনিম্ন রেটিং ফিল্টার সেট করো।\n"
 "\n"
 "রিনিউ বা আপগ্রেড করতে একটি টিয়ার নির্বাচন করো:"
 
@@ -367,7 +367,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ পেমেন্ট নিশ্চিত হয়েছে।"
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -377,7 +377,7 @@ msgstr ""
 "<b>✅ প্রিমিয়াম চালু হয়েছে!</b>\n"
 "টিয়ার: {tier}\n"
 "{expires}\n"
-"এখন /feed-এ >= {threshold} রেটিং-এর প্রোফাইল দেখাবে।"
+"/settings থেকে সর্বনিম্ন রেটিং ফিল্টার নির্বাচন করো।"
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -434,41 +434,4 @@ msgid ""
 msgstr ""
 "<b>আবার স্বাগতম, {name}!</b>\n"
 "অন্য প্রোফাইল রেট করতে /feed পাঠাও।"
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>প্রিমিয়াম</b> তোমার /feed-কে উচ্চ রেটেড প্রোফাইলে ফিল্টার করে।\n"
-#~ "\n"
-#~ "একটি টিয়ার নির্বাচন করো:"
 

@@ -323,7 +323,7 @@ msgid_plural "Expires in {days} days."
 msgstr[0] "あと{days}日で期限切れです。"
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -333,7 +333,7 @@ msgid ""
 msgstr ""
 "<b>現在のプレミアム: {tier}</b>\n"
 "{expires}\n"
-"フィードには平均評価 {threshold} 以上のプロフィールが表示されます。\n"
+"/settings から最低評価フィルターを設定してください。\n"
 "\n"
 "更新またはアップグレードするプランを選んでください:"
 
@@ -365,7 +365,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ 支払いを確認しました。"
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -375,7 +375,7 @@ msgstr ""
 "<b>✅ プレミアムを有効化しました!</b>\n"
 "プラン: {tier}\n"
 "{expires}\n"
-"これで /feed には評価 {threshold} 以上のプロフィールが表示されます。"
+"/settings で最低評価フィルターを選んでください。"
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -432,41 +432,4 @@ msgid ""
 msgstr ""
 "<b>おかえりなさい、{name}さん!</b>\n"
 "/feed を送って他のプロフィールを評価しましょう。"
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>プレミアム</b>は /feed を高評価のプロフィールに絞り込みます。\n"
-#~ "\n"
-#~ "プランを選んでください:"
 

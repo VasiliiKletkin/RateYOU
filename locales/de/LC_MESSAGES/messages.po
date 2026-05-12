@@ -325,7 +325,7 @@ msgstr[0] "Läuft in {days} Tag ab."
 msgstr[1] "Läuft in {days} Tagen ab."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -335,7 +335,7 @@ msgid ""
 msgstr ""
 "<b>Dein Premium: {tier}</b>\n"
 "{expires}\n"
-"Der Feed zeigt Profile mit Durchschnittsbewertung >= {threshold}.\n"
+"Lege deinen Mindestbewertungsfilter über /settings fest.\n"
 "\n"
 "Wähle eine Stufe zum Verlängern oder Upgraden:"
 
@@ -367,7 +367,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ Zahlung bestätigt."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -377,7 +377,7 @@ msgstr ""
 "<b>✅ Premium aktiviert!</b>\n"
 "Stufe: {tier}\n"
 "{expires}\n"
-"Jetzt zeigt /feed Profile mit Bewertung >= {threshold}."
+"Wähle deinen Mindestbewertungsfilter in /settings."
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -434,41 +434,4 @@ msgid ""
 msgstr ""
 "<b>Willkommen zurück, {name}!</b>\n"
 "Sende /feed, um andere Profile zu bewerten."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>Premium</b> filtert deinen /feed nach hoch bewerteten Profilen.\n"
-#~ "\n"
-#~ "Wähle eine Stufe:"
 

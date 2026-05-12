@@ -12,7 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -437,88 +438,4 @@ msgid ""
 msgstr ""
 "<b>С возвращением, {name}!</b>\n"
 "Отправь /feed, чтобы оценивать другие анкеты."
-
-#~ msgid "Send a photo:"
-#~ msgstr "Отправь фото:"
-
-#~ msgid "Send new photo:"
-#~ msgstr "Отправь новое фото:"
-
-#~ msgid "Please send a photo."
-#~ msgstr "Пожалуйста, отправь фото."
-
-#~ msgid "📸 {n}/{max} photos received. Send more or /done."
-#~ msgstr "📸 Получено {n}/{max} фото. Отправь ещё или /done."
-
-#~ msgid "Send at least one photo first."
-#~ msgstr "Сначала отправь хотя бы одно фото."
-
-#~ msgid "Please send a photo. /done when finished."
-#~ msgstr "Пожалуйста, отправь фото. /done когда закончишь."
-
-#~ msgid "City"
-#~ msgstr "Город"
-
-#~ msgid "Which city are you in?"
-#~ msgstr "В каком ты городе?"
-
-#~ msgid "❌ City must be 1-100 non-empty characters. Try again:"
-#~ msgstr "❌ Город - от 1 до 100 символов. Попробуй ещё раз:"
-
-#~ msgid "Share your location to find nearby profiles (or /skip):"
-#~ msgstr "Поделись геопозицией, чтобы видеть ближайшие анкеты (или /skip):"
-
-#~ msgid "Please share a location or /skip."
-#~ msgstr "Пожалуйста, поделись геопозицией или /skip."
-
-#~ msgid ""
-#~ "<b>✅ Profile created!</b>\n"
-#~ "Name: {name}\n"
-#~ "Age: {age}\n"
-#~ "City: {city}\n"
-#~ "Send /feed to start rating profiles."
-#~ msgstr ""
-#~ "<b>✅ Анкета создана!</b>\n"
-#~ "Имя: {name}\n"
-#~ "Возраст: {age}\n"
-#~ "Город: {city}\n"
-#~ "Отправь /feed, чтобы начать оценивать анкеты."
-
-#~ msgid "Send new city:"
-#~ msgstr "Отправь новый город:"
-
-#~ msgid "Send 1-{max} photos, then /done:"
-#~ msgstr "Отправь от 1 до {max} фото, потом /done:"
-
-#~ msgid ""
-#~ "<b>Welcome to RateYou!</b>\n"
-#~ "You don't have a profile yet - send /create to make one."
-#~ msgstr ""
-#~ "<b>Добро пожаловать в RateYou!</b>\n"
-#~ "У тебя ещё нет анкеты - отправь /create, чтобы создать."
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr "👥 Все"
-
-#~ msgid "🌐 Change language"
-#~ msgstr "🌐 Сменить язык"
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>Премиум</b> фильтрует /feed по высокому рейтингу.\n"
-#~ "\n"
-#~ "Выбери тариф:"
 

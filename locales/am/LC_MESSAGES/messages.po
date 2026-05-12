@@ -325,7 +325,7 @@ msgstr[0] "በ{days} ቀን ውስጥ ያልቃል።"
 msgstr[1] "በ{days} ቀናት ውስጥ ያልቃል።"
 
 #: src/presentation/bot/handlers/premium.py:61
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
@@ -335,7 +335,7 @@ msgid ""
 msgstr ""
 "<b>ፕሪሚየምህ: {tier}</b>\n"
 "{expires}\n"
-"ምግቡ አማካይ ግምገማቸው >= {threshold} የሆኑ መገለጫዎችን ያሳያል።\n"
+"ዝቅተኛ ግምገማ ማጣሪያህን በ /settings አዘጋጅ።\n"
 "\n"
 "ለማደስ ወይም ለማሻሻል ደረጃ ምረጥ፦"
 
@@ -367,7 +367,7 @@ msgid "✅ Payment confirmed."
 msgstr "✅ ክፍያ ተረጋግጧል።"
 
 #: src/presentation/bot/handlers/premium.py:161
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
@@ -377,7 +377,7 @@ msgstr ""
 "<b>✅ ፕሪሚየም ተግባራዊ ሆኗል!</b>\n"
 "ደረጃ: {tier}\n"
 "{expires}\n"
-"አሁን /feed የ >= {threshold} ግምገማ ያላቸውን መገለጫዎች ያሳያል።"
+"ዝቅተኛ ግምገማ ማጣሪያህን በ /settings ምረጥ።"
 
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
@@ -434,41 +434,4 @@ msgid ""
 msgstr ""
 "<b>እንኳን ደህና ተመለስክ, {name}!</b>\n"
 "ሌሎች መገለጫዎችን ለመገምገም /feed ላክ።"
-
-#~ msgid ""
-#~ "<b>Settings</b>\n"
-#~ "Who you want to rate: {current}\n"
-#~ "\n"
-#~ "Pick a new preference:"
-#~ msgstr ""
-
-#~ msgid "Preference saved: {current}"
-#~ msgstr ""
-
-#~ msgid "👥 All"
-#~ msgstr ""
-
-#~ msgid "🌐 Change language"
-#~ msgstr ""
-
-#~ msgid "Show me: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: {current}"
-#~ msgstr ""
-
-#~ msgid "Min rating: premium only (use /premium)"
-#~ msgstr ""
-
-#~ msgid "Language: {current}"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
-#~ "\n"
-#~ "Pick a tier:"
-#~ msgstr ""
-#~ "<b>ፕሪሚየም</b> /feed-ህን ከፍተኛ ግምገማ ወዳላቸው መገለጫዎች ያጣራል።\n"
-#~ "\n"
-#~ "ደረጃ ምረጥ፦"
 
