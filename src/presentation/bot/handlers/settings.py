@@ -44,8 +44,6 @@ _GENDER_PREFIX = "setpref"
 _RATING_PREFIX = "setrating"
 _LANGUAGE_PREFIX = "setlang"
 
-_BODY = _("<b>Settings</b>")
-
 router = Router(name="settings")
 
 
@@ -105,7 +103,7 @@ async def _refresh_main(
         return
     with suppress(TelegramAPIError):
         await callback.message.edit_text(
-            _BODY,
+            _("<b>Settings</b>"),
             reply_markup=_main_keyboard(
                 prefs, is_premium=is_premium, language=language
             ),
@@ -144,7 +142,7 @@ async def cmd_settings(
     prefs = await get_prefs.execute(user.id)
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await message.answer(
-        _BODY,
+        _("<b>Settings</b>"),
         reply_markup=_main_keyboard(
             prefs, is_premium=is_premium, language=user.language
         ),
