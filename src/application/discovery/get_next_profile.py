@@ -20,7 +20,6 @@ from src.domain.profile.value_objects import Gender
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 from src.domain.subscription.repositories import ISubscriptionRepository
-from src.domain.subscription.tier_catalog import get_tier_spec
 
 
 @dataclass
@@ -29,7 +28,10 @@ class GetNextProfileForRatingUseCase:
 
     Layers of filtering, all expressed as `Specification`s:
       - `default_feed_spec`: visible + not own + not already rated
-      - `ProfileAverageRatingAtLeast`: premium threshold (if active subscription)
+      - `ProfileHasGender`: viewer's gender preference (if not ANY)
+      - `ProfileAverageRatingAtLeast`: viewer's min-rating filter — only
+        honoured for currently-premium users (stored value lingers after
+        premium expires, ignored until they renew)
       - `ProfileOwnerNotIn`: recently skipped owners (Redis cooldown)
 
     Ordering: if the viewer has shared their location (read from their own
@@ -62,17 +64,14 @@ class GetNextProfileForRatingUseCase:
                 Gender(prefs.gender_preference.value)
             )
 
-        # Final min-rating threshold = max(user pref, premium tier floor). User
-        # pref is gated to premium in /settings; this `max` is a defensive net
-        # for any race or backfill ordering.
-        thresholds: list[float] = []
-        if prefs is not None and prefs.min_rating.is_active:
-            thresholds.append(float(prefs.min_rating.value))
-        premium_threshold = await self._premium_threshold(viewer)
-        if premium_threshold is not None:
-            thresholds.append(premium_threshold)
-        if thresholds:
-            spec = spec & ProfileAverageRatingAtLeast(max(thresholds))
+        if (
+            prefs is not None
+            and prefs.min_rating.is_active
+            and await self._is_premium(viewer)
+        ):
+            spec = spec & ProfileAverageRatingAtLeast(
+                float(prefs.min_rating.value)
+            )
 
         skipped = await self.skip_registry.get_skipped(viewer)
         if skipped:
@@ -93,8 +92,6 @@ class GetNextProfileForRatingUseCase:
             distance_meters=match.distance_meters,
         )
 
-    async def _premium_threshold(self, viewer: UserId) -> float | None:
+    async def _is_premium(self, viewer: UserId) -> bool:
         sub = await self.subscription_repo.get_for(viewer)
-        if sub is None or not sub.is_active_at(datetime.now(UTC)):
-            return None
-        return get_tier_spec(sub.tier).min_rating_threshold
+        return sub is not None and sub.is_active_at(datetime.now(UTC))

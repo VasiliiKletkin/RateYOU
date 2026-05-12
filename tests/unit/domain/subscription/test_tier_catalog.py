@@ -23,14 +23,6 @@ def test_tier_prices_are_monotonic() -> None:
     assert bronze.stars_price < silver.stars_price < gold.stars_price
 
 
-def test_tier_thresholds_are_monotonic() -> None:
-    bronze = get_tier_spec(Tier.BRONZE)
-    silver = get_tier_spec(Tier.SILVER)
-    gold = get_tier_spec(Tier.GOLD)
-
-    assert bronze.min_rating_threshold < silver.min_rating_threshold < gold.min_rating_threshold
-
-
 def test_all_tier_specs_returns_all_three() -> None:
     specs = all_tier_specs()
     assert len(specs) == 3

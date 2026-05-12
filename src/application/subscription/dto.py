@@ -15,7 +15,6 @@ class PremiumResponse:
     tier: str
     expires_at: datetime
     days_remaining: int
-    min_rating_threshold: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -24,4 +23,3 @@ class TierInfoResponse:
     display_name: str
     stars_price: int
     duration_days: int
-    min_rating_threshold: float

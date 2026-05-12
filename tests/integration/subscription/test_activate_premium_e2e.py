@@ -35,7 +35,6 @@ async def test_activate_creates_subscription_in_db(session: AsyncSession) -> Non
     )
 
     assert response.tier == "silver"
-    assert response.min_rating_threshold == 7.0
 
     get_uc = GetMyPremiumUseCase(subscription_repo=SubscriptionRepository(session=session))
     current = await get_uc.execute(user.id.value)
@@ -56,7 +55,6 @@ async def test_re_buying_upgrades_in_place(session: AsyncSession) -> None:
     response = await use_case.execute(ActivatePremiumRequest(owner_id=user.id.value, tier="gold"))
 
     assert response.tier == "gold"
-    assert response.min_rating_threshold == 8.0
 
 
 async def test_get_premium_returns_none_for_user_without_subscription(

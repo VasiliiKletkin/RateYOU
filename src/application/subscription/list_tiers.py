@@ -18,7 +18,6 @@ class ListTiersUseCase:
                 display_name=spec.display_name,
                 stars_price=spec.stars_price,
                 duration_days=spec.duration_days,
-                min_rating_threshold=spec.min_rating_threshold,
             )
             for spec in all_tier_specs()
         ]

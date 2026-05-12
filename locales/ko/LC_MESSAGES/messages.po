@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 17:07+0300\n"
+"POT-Creation-Date: 2026-05-12 17:39+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -28,22 +28,22 @@ msgid "♀️ Female"
 msgstr "♀️ 여성"
 
 # WARNING: Machine translation — review by a native speaker before production.
-#: src/presentation/bot/handlers/settings.py:55
+#: src/presentation/bot/handlers/settings.py:53
 #: src/presentation/bot/keyboards.py:52
 msgid "♂️ Men"
 msgstr "♂️ 남성"
 
-#: src/presentation/bot/handlers/settings.py:57
+#: src/presentation/bot/handlers/settings.py:55
 #: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:58
+#: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:63
+#: src/presentation/bot/handlers/settings.py:61
 #: src/presentation/bot/keyboards.py:110
 msgid "Any"
 msgstr ""
@@ -142,10 +142,10 @@ msgstr "성별을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:123
 #: src/presentation/bot/handlers/create_profile.py:147
-#: src/presentation/bot/handlers/settings.py:209
-#: src/presentation/bot/handlers/settings.py:241
-#: src/presentation/bot/handlers/settings.py:264
-#: src/presentation/bot/handlers/settings.py:285
+#: src/presentation/bot/handlers/settings.py:207
+#: src/presentation/bot/handlers/settings.py:239
+#: src/presentation/bot/handlers/settings.py:262
+#: src/presentation/bot/handlers/settings.py:283
 msgid "Invalid choice"
 msgstr "잘못된 선택이에요"
 
@@ -323,11 +323,11 @@ msgid_plural "Expires in {days} days."
 msgstr[0] "{days}일 후에 만료돼요."
 
 #: src/presentation/bot/handlers/premium.py:61
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
 "{expires}\n"
-"Feed shows profiles with avg rating >= {threshold}.\n"
+"Set your minimum rating filter via /settings.\n"
 "\n"
 "Pick a tier to renew or upgrade:"
 msgstr ""
@@ -337,15 +337,12 @@ msgstr ""
 "\n"
 "갱신하거나 업그레이드할 등급을 선택해 주세요:"
 
-#: src/presentation/bot/handlers/premium.py:72
+#: src/presentation/bot/handlers/premium.py:71
 msgid ""
-"<b>Premium</b> filters your /feed to highly rated profiles.\n"
+"<b>Premium</b> unlocks the minimum-rating filter in /settings.\n"
 "\n"
 "Pick a tier:"
 msgstr ""
-"<b>프리미엄</b>은 /feed 에서 평점이 높은 프로필만 보여줘요.\n"
-"\n"
-"등급을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
@@ -368,53 +365,54 @@ msgid "✅ Payment confirmed."
 msgstr "✅ 결제가 확인되었어요."
 
 #: src/presentation/bot/handlers/premium.py:161
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
 "Tier: {tier}\n"
 "{expires}\n"
-"Now /feed shows profiles rated >= {threshold}."
+"Pick your minimum rating filter in /settings."
 msgstr ""
 "<b>✅ 프리미엄이 활성화되었어요!</b>\n"
 "등급: {tier}\n"
 "{expires}\n"
 "이제 /feed 에는 평점 {threshold} 이상의 프로필이 표시돼요."
 
-#: src/presentation/bot/handlers/settings.py:47
-msgid "<b>Settings</b>"
-msgstr ""
-
-#: src/presentation/bot/handlers/settings.py:70
+#: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
 msgid "👤 Show me: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:74
+#: src/presentation/bot/handlers/settings.py:72
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:78
+#: src/presentation/bot/handlers/settings.py:76
 msgid "⭐ Min rating: premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:79
+#: src/presentation/bot/handlers/settings.py:77
 #, python-brace-format
 msgid "🌐 Language: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:141
+#: src/presentation/bot/handlers/settings.py:106
+#: src/presentation/bot/handlers/settings.py:145
+msgid "<b>Settings</b>"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:139
 msgid "No profile yet. Use /create first."
 msgstr "수정할 프로필이 없어요. 먼저 /create 를 사용해 주세요."
 
-#: src/presentation/bot/handlers/settings.py:178
-#: src/presentation/bot/handlers/settings.py:255
+#: src/presentation/bot/handlers/settings.py:176
+#: src/presentation/bot/handlers/settings.py:253
 msgid "Premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:220
-#: src/presentation/bot/handlers/settings.py:266
-#: src/presentation/bot/handlers/settings.py:303
+#: src/presentation/bot/handlers/settings.py:218
+#: src/presentation/bot/handlers/settings.py:264
+#: src/presentation/bot/handlers/settings.py:301
 msgid "Updated"
 msgstr ""
 
@@ -462,4 +460,13 @@ msgstr ""
 
 #~ msgid "Language: {current}"
 #~ msgstr ""
+
+#~ msgid ""
+#~ "<b>Premium</b> filters your /feed to highly rated profiles.\n"
+#~ "\n"
+#~ "Pick a tier:"
+#~ msgstr ""
+#~ "<b>프리미엄</b>은 /feed 에서 평점이 높은 프로필만 보여줘요.\n"
+#~ "\n"
+#~ "등급을 선택해 주세요:"
 

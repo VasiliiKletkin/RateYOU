@@ -142,8 +142,11 @@ class SearchPreferencesAdmin(ModelView):
 class SubscriptionAdmin(ModelView):
     label = "Subscriptions"
     icon = "fa fa-crown"
+    # `owner` is the SQLA relationship — Starlette-Admin renders it as a
+    # searchable HasOne dropdown. `owner_id` (the PK column) is auto-excluded
+    # from create forms, so referencing it directly would yield NULL on insert.
     fields = [
-        "owner_id",
+        "owner",
         "tier",
         "expires_at",
         "is_revoked",

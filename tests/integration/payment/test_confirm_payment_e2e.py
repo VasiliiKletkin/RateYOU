@@ -84,7 +84,6 @@ async def test_confirm_marks_paid_and_activates_premium_in_db(
     ).execute(user.id.value)
     assert premium is not None
     assert premium.tier == "silver"
-    assert premium.min_rating_threshold == 7.0
 
 
 async def test_confirm_upgrades_existing_subscription(session: AsyncSession) -> None:

@@ -55,7 +55,6 @@ async def test_first_activation_creates_subscription() -> None:
     assert response.owner_id == owner
     assert response.tier == "bronze"
     assert response.days_remaining >= 6
-    assert response.min_rating_threshold == 6.0
     assert uow.committed is True
     assert len(repo.subscriptions) == 1
 
@@ -72,7 +71,6 @@ async def test_renewal_replaces_tier_and_expiry() -> None:
     )
 
     assert response.tier == "gold"
-    assert response.min_rating_threshold == 8.0
     assert response.days_remaining >= 29
     assert len(repo.subscriptions) == 1
 

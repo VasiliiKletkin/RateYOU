@@ -60,16 +60,16 @@ async def cmd_premium(
         header = _(
             "<b>Your premium: {tier}</b>\n"
             "{expires}\n"
-            "Feed shows profiles with avg rating >= {threshold}.\n\n"
+            "Set your minimum rating filter via /settings.\n\n"
             "Pick a tier to renew or upgrade:"
         ).format(
             tier=current.tier.upper(),
             expires=_expires_phrase(current.days_remaining),
-            threshold=f"{current.min_rating_threshold:.0f}",
         )
     else:
         header = _(
-            "<b>Premium</b> filters your /feed to highly rated profiles.\n\n"
+            "<b>Premium</b> unlocks the minimum-rating filter "
+            "in /settings.\n\n"
             "Pick a tier:"
         )
 
@@ -161,10 +161,9 @@ async def on_successful_payment(
             "<b>✅ Premium activated!</b>\n"
             "Tier: {tier}\n"
             "{expires}\n"
-            "Now /feed shows profiles rated >= {threshold}."
+            "Pick your minimum rating filter in /settings."
         ).format(
             tier=premium.tier.upper(),
             expires=_expires_phrase(premium.days_remaining),
-            threshold=f"{premium.min_rating_threshold:.0f}",
         )
     )
