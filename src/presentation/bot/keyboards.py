@@ -64,60 +64,66 @@ def gender_preference_keyboard(prefix: str = "genderpref") -> InlineKeyboardMark
     )
 
 
-def settings_keyboard(
-    gender_prefix: str = "setpref",
-    rating_prefix: str = "setrating",
-    language_action: str = "openlang",
+def settings_main_keyboard(
     *,
-    show_min_rating: bool,
+    gender_label: str,
+    rating_label: str,
+    language_label: str,
+    gender_action: str = "openpref",
+    rating_action: str = "openrating",
+    language_action: str = "openlang",
 ) -> InlineKeyboardMarkup:
-    """Compact /settings picker: gender row + (optionally) min-rating row.
+    """Top-level /settings menu: one button per editable setting.
 
-    `show_min_rating=False` hides the rating presets — used to gate the
-    feature behind a premium subscription. A "Change language" button is
-    always present and opens the full picker built by `language_keyboard`.
+    Each button's label embeds the current value (e.g. "👤 Show me: Men")
+    so the user reads the state from the buttons themselves. Tapping a
+    button swaps the keyboard for the corresponding picker; the picker
+    handler restores this view after the user picks.
     """
-    rows: list[list[InlineKeyboardButton]] = [
-        [
-            InlineKeyboardButton(
-                text=_("♂️ Men"), callback_data=f"{gender_prefix}:male"
-            ),
-            InlineKeyboardButton(
-                text=_("♀️ Women"), callback_data=f"{gender_prefix}:female"
-            ),
-            InlineKeyboardButton(
-                text=_("👥 All"), callback_data=f"{gender_prefix}:any"
-            ),
-        ],
-    ]
-    if show_min_rating:
-        rows.append(
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
             [
                 InlineKeyboardButton(
-                    text=_("Any"), callback_data=f"{rating_prefix}:0"
-                ),
+                    text=gender_label, callback_data=gender_action
+                )
+            ],
+            [
                 InlineKeyboardButton(
-                    text="6+", callback_data=f"{rating_prefix}:6"
-                ),
+                    text=rating_label, callback_data=rating_action
+                )
+            ],
+            [
                 InlineKeyboardButton(
-                    text="7+", callback_data=f"{rating_prefix}:7"
-                ),
-                InlineKeyboardButton(
-                    text="8+", callback_data=f"{rating_prefix}:8"
-                ),
-                InlineKeyboardButton(
-                    text="9+", callback_data=f"{rating_prefix}:9"
-                ),
-            ]
-        )
-    rows.append(
-        [
-            InlineKeyboardButton(
-                text=_("🌐 Change language"), callback_data=language_action
-            )
+                    text=language_label, callback_data=language_action
+                )
+            ],
         ]
     )
-    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def rating_picker_keyboard(prefix: str = "setrating") -> InlineKeyboardMarkup:
+    """5-preset min-rating picker for /settings."""
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=_("Any"), callback_data=f"{prefix}:0"
+                ),
+                InlineKeyboardButton(
+                    text="6+", callback_data=f"{prefix}:6"
+                ),
+                InlineKeyboardButton(
+                    text="7+", callback_data=f"{prefix}:7"
+                ),
+                InlineKeyboardButton(
+                    text="8+", callback_data=f"{prefix}:8"
+                ),
+                InlineKeyboardButton(
+                    text="9+", callback_data=f"{prefix}:9"
+                ),
+            ]
+        ]
+    )
 
 
 def language_keyboard(

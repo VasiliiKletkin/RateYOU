@@ -13,6 +13,7 @@ class UserAdmin(ModelView):
         "is_banned",
         "ban_reason",
         "banned_at",
+        "language",
         "created_at",
     ]
     searchable_fields = ["telegram_id"]
@@ -117,9 +118,6 @@ class ProfileScoreSummaryAdmin(ModelView):
         return False
 
     def can_edit(self, request: Request) -> bool:
-        return False
-
-    def can_delete(self, request: Request) -> bool:
         return False
 
 

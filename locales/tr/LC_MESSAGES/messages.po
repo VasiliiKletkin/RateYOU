@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 16:58+0300\n"
+"POT-Creation-Date: 2026-05-12 17:07+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -26,67 +26,59 @@ msgstr "♂️ Erkek"
 msgid "♀️ Female"
 msgstr "♀️ Kadın"
 
-#: src/presentation/bot/handlers/settings.py:43
-#: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:83
+#: src/presentation/bot/handlers/settings.py:55
+#: src/presentation/bot/keyboards.py:52
 msgid "♂️ Men"
 msgstr "♂️ Erkek"
 
-#: src/presentation/bot/handlers/settings.py:45
-#: src/presentation/bot/keyboards.py:55 src/presentation/bot/keyboards.py:86
+#: src/presentation/bot/handlers/settings.py:57
+#: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:46
+#: src/presentation/bot/handlers/settings.py:58
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:89
-msgid "👥 All"
-msgstr ""
-
-#: src/presentation/bot/handlers/settings.py:51
-#: src/presentation/bot/keyboards.py:97
+#: src/presentation/bot/handlers/settings.py:63
+#: src/presentation/bot/keyboards.py:110
 msgid "Any"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:116
-msgid "🌐 Change language"
-msgstr ""
-
-#: src/presentation/bot/keyboards.py:168
+#: src/presentation/bot/keyboards.py:174
 msgid "⏭ Skip"
 msgstr "⏭ Atla"
 
-#: src/presentation/bot/keyboards.py:178
+#: src/presentation/bot/keyboards.py:184
 msgid "Name"
 msgstr "İsim"
 
-#: src/presentation/bot/keyboards.py:179
+#: src/presentation/bot/keyboards.py:185
 msgid "Age"
 msgstr "Yaş"
 
-#: src/presentation/bot/keyboards.py:182
+#: src/presentation/bot/keyboards.py:188
 msgid "Gender"
 msgstr "Cinsiyet"
 
-#: src/presentation/bot/keyboards.py:187
+#: src/presentation/bot/keyboards.py:193
 msgid "Location"
 msgstr "Konum"
 
-#: src/presentation/bot/keyboards.py:190
+#: src/presentation/bot/keyboards.py:196
 msgid "Bio"
 msgstr "Hakkımda"
 
-#: src/presentation/bot/keyboards.py:191
+#: src/presentation/bot/keyboards.py:197
 msgid "Photo"
 msgstr "Fotoğraf"
 
-#: src/presentation/bot/keyboards.py:194
+#: src/presentation/bot/keyboards.py:200
 msgid "✅ Done"
 msgstr "✅ Tamam"
 
-#: src/presentation/bot/keyboards.py:211
+#: src/presentation/bot/keyboards.py:217
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} gün"
@@ -148,10 +140,10 @@ msgstr "Cinsiyet seç:"
 
 #: src/presentation/bot/handlers/create_profile.py:123
 #: src/presentation/bot/handlers/create_profile.py:147
-#: src/presentation/bot/handlers/settings.py:149
-#: src/presentation/bot/handlers/settings.py:181
-#: src/presentation/bot/handlers/settings.py:204
-#: src/presentation/bot/handlers/settings.py:242
+#: src/presentation/bot/handlers/settings.py:209
+#: src/presentation/bot/handlers/settings.py:241
+#: src/presentation/bot/handlers/settings.py:264
+#: src/presentation/bot/handlers/settings.py:285
 msgid "Invalid choice"
 msgstr "Geçersiz seçim"
 
@@ -386,41 +378,42 @@ msgstr ""
 "{expires}\n"
 "Artık /feed >= {threshold} puanlı profilleri gösteriyor."
 
-#: src/presentation/bot/handlers/settings.py:62
+#: src/presentation/bot/handlers/settings.py:47
 msgid "<b>Settings</b>"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:63
+#: src/presentation/bot/handlers/settings.py:70
 #, python-brace-format
-msgid "Show me: {current}"
+msgid "👤 Show me: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:69
+#: src/presentation/bot/handlers/settings.py:74
 #, python-brace-format
-msgid "Min rating: {current}"
-msgstr ""
-
-#: src/presentation/bot/handlers/settings.py:75
-msgid "Min rating: premium only (use /premium)"
+msgid "⭐ Min rating: {current}"
 msgstr ""
 
 #: src/presentation/bot/handlers/settings.py:78
-#, python-brace-format
-msgid "Language: {current}"
+msgid "⭐ Min rating: premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:124
+#: src/presentation/bot/handlers/settings.py:79
+#, python-brace-format
+msgid "🌐 Language: {current}"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:141
 msgid "No profile yet. Use /create first."
 msgstr "Düzenlenecek profil yok. Önce /create kullan."
 
-#: src/presentation/bot/handlers/settings.py:160
-#: src/presentation/bot/handlers/settings.py:206
-#: src/presentation/bot/handlers/settings.py:260
-msgid "Updated"
+#: src/presentation/bot/handlers/settings.py:178
+#: src/presentation/bot/handlers/settings.py:255
+msgid "Premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:195
-msgid "Premium only"
+#: src/presentation/bot/handlers/settings.py:220
+#: src/presentation/bot/handlers/settings.py:266
+#: src/presentation/bot/handlers/settings.py:303
+msgid "Updated"
 msgstr ""
 
 #: src/presentation/bot/handlers/start.py:34
@@ -448,5 +441,23 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Preference saved: {current}"
+#~ msgstr ""
+
+#~ msgid "👥 All"
+#~ msgstr ""
+
+#~ msgid "🌐 Change language"
+#~ msgstr ""
+
+#~ msgid "Show me: {current}"
+#~ msgstr ""
+
+#~ msgid "Min rating: {current}"
+#~ msgstr ""
+
+#~ msgid "Min rating: premium only (use /premium)"
+#~ msgstr ""
+
+#~ msgid "Language: {current}"
 #~ msgstr ""
 
