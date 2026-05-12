@@ -2,7 +2,6 @@ import pytest
 
 from src.domain.profile.exceptions import (
     InvalidAge,
-    InvalidBio,
     InvalidLocation,
     InvalidName,
     InvalidPhoto,
@@ -30,14 +29,6 @@ class TestName:
     def test_rejects_whitespace_only(self) -> None:
         with pytest.raises(InvalidName):
             Name("   ")
-
-    def test_rejects_too_long(self) -> None:
-        with pytest.raises(InvalidName):
-            Name("x" * 51)
-
-    def test_accepts_at_max_length(self) -> None:
-        assert Name("x" * 50).value == "x" * 50
-
 
 class TestAge:
     def test_accepts_in_range(self) -> None:
@@ -72,11 +63,6 @@ class TestBio:
 
     def test_accepts_normal(self) -> None:
         assert Bio("hello world").value == "hello world"
-
-    def test_rejects_too_long(self) -> None:
-        with pytest.raises(InvalidBio):
-            Bio("x" * 501)
-
 
 class TestPhotoFileId:
     def test_accepts_telegram_file_id(self) -> None:

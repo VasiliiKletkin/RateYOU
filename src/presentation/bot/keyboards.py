@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from uuid import UUID
 
 from aiogram.types import (
@@ -9,6 +10,7 @@ from aiogram.types import (
 from aiogram.utils.i18n import gettext as _
 
 from src.application.subscription.dto import TierInfoResponse
+from src.domain.identity.value_objects import Language
 
 
 def share_location_keyboard(label: str) -> ReplyKeyboardMarkup:
@@ -127,8 +129,8 @@ def rating_picker_keyboard(prefix: str = "setrating") -> InlineKeyboardMarkup:
 
 
 def language_keyboard(
-    languages: tuple[str, ...],
-    native_names: dict[str, str],
+    languages: Iterable[Language],
+    native_names: dict[Language, str],
     *,
     prefix: str = "setlang",
     columns: int = 2,
@@ -141,9 +143,10 @@ def language_keyboard(
     """
     buttons = [
         InlineKeyboardButton(
-            text=native_names.get(code, code), callback_data=f"{prefix}:{code}"
+            text=native_names.get(lang, lang.value),
+            callback_data=f"{prefix}:{lang.value}",
         )
-        for code in languages
+        for lang in languages
     ]
     rows = [buttons[i : i + columns] for i in range(0, len(buttons), columns)]
     return InlineKeyboardMarkup(inline_keyboard=rows)

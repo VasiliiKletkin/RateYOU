@@ -56,6 +56,10 @@ known-first-party = ["src", "tests"]
 # would force us to wrap each list in ClassVar, which then conflicts with
 # the base class's instance-variable types. Disable just for views.
 "src/presentation/admin/views.py" = ["RUF012"]
+# SA reads `type_annotation_map` via DeclarativeBase's metaclass — must be
+# a class attribute with that exact name; ClassVar wrapping is fine but
+# adds noise for SA's documented pattern.
+"src/infrastructure/db/models/base.py" = ["RUF012"]
 
 [tool.ruff.format]
 quote-style = "double"

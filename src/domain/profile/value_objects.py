@@ -5,7 +5,6 @@ from uuid import UUID, uuid4
 
 from src.domain.profile.exceptions import (
     InvalidAge,
-    InvalidBio,
     InvalidLocation,
     InvalidName,
     InvalidPhoto,
@@ -25,14 +24,11 @@ class ProfileId:
 @dataclass(frozen=True, slots=True)
 class Name:
     value: str
-    MAX_LENGTH: ClassVar[int] = 50
 
     def __post_init__(self) -> None:
         stripped = self.value.strip()
         if not stripped:
             raise InvalidName("Name cannot be empty")
-        if len(stripped) > self.MAX_LENGTH:
-            raise InvalidName(f"Name too long (max {self.MAX_LENGTH} chars)")
         object.__setattr__(self, "value", stripped)
 
 
@@ -55,11 +51,6 @@ class Gender(StrEnum):
 @dataclass(frozen=True, slots=True)
 class Bio:
     value: str
-    MAX_LENGTH: ClassVar[int] = 500
-
-    def __post_init__(self) -> None:
-        if len(self.value) > self.MAX_LENGTH:
-            raise InvalidBio(f"Bio too long (max {self.MAX_LENGTH} chars)")
 
 
 @dataclass(frozen=True, slots=True)
@@ -97,14 +88,11 @@ class PhotoFileId:
     """
 
     value: str
-    MAX_LENGTH: ClassVar[int] = 500
 
     def __post_init__(self) -> None:
         stripped = self.value.strip()
         if not stripped:
             raise InvalidPhoto("Photo file_id cannot be empty")
-        if len(stripped) > self.MAX_LENGTH:
-            raise InvalidPhoto(f"Photo file_id too long (max {self.MAX_LENGTH} chars)")
         object.__setattr__(self, "value", stripped)
 
 

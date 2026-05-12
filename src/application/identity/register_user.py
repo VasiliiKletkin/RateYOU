@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 from src.application.identity.dto import RegisterUserRequest, UserResponse
 from src.domain.identity.entities import User
 from src.domain.identity.repositories import IUserRepository
-from src.domain.identity.value_objects import TelegramId
+from src.domain.identity.value_objects import Language, TelegramId
 from src.domain.shared.uow import UnitOfWork
 
 
@@ -46,7 +46,7 @@ class RegisterUserUseCase:
         user = User.register(
             telegram_id=telegram_id,
             now=now,
-            language=request.language or "en",
+            language=request.language or Language.EN,
             referred_by=referrer.id if referrer is not None else None,
         )
         await self.user_repo.add(user)

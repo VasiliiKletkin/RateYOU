@@ -5,7 +5,7 @@ from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.domain.discovery.value_objects import GenderPreference
-from src.infrastructure.db.models.base import Base, str_enum_column
+from src.infrastructure.db.models.base import Base, str_enum
 
 
 class SearchPreferencesORM(Base):
@@ -17,7 +17,7 @@ class SearchPreferencesORM(Base):
         ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
     gender_preference: Mapped[GenderPreference] = mapped_column(
-        str_enum_column(GenderPreference, name="gender_preference"),
+        str_enum(GenderPreference, "gender_preference"),
         server_default=GenderPreference.ANY.value,
     )
     min_rating: Mapped[int] = mapped_column(server_default="0")

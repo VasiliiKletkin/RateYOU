@@ -8,89 +8,68 @@ from aiogram.utils.i18n import I18n, I18nMiddleware
 from dishka import AsyncContainer
 
 from src.domain.identity.repositories import IUserRepository
-from src.domain.identity.value_objects import TelegramId
+from src.domain.identity.value_objects import Language, TelegramId
 
 log = logging.getLogger(__name__)
 
 # locales/ at the project root, sibling to src/.
 LOCALES_DIR = Path(__file__).resolve().parents[3] / "locales"
-SUPPORTED_LANGUAGES: tuple[str, ...] = (
-    "en",
-    "ru",
-    "es",
-    "pt",
-    "de",
-    "fr",
-    "it",
-    "tr",
-    "uk",
-    "pl",
-    "ar",
-    "fa",
-    "id",
-    "vi",
-    "zh",
-    "hi",
-    "bn",
-    "am",
-    "uz",
-    "ko",
-    "ja",
-    "th",
-)
-DEFAULT_LANGUAGE = "en"
+DEFAULT_LANGUAGE: Language = Language.EN
 
 # Each supported locale's display name in its own script — used as button
 # labels in the /settings language picker so a Russian user sees "Русский"
-# regardless of their current UI language. Order matches SUPPORTED_LANGUAGES.
-LANGUAGE_NATIVE_NAMES: dict[str, str] = {
-    "en": "English",
-    "ru": "Русский",
-    "es": "Español",
-    "pt": "Português",
-    "de": "Deutsch",
-    "fr": "Français",
-    "it": "Italiano",
-    "tr": "Türkçe",
-    "uk": "Українська",
-    "pl": "Polski",
-    "ar": "العربية",
-    "fa": "فارسی",
-    "id": "Bahasa Indonesia",
-    "vi": "Tiếng Việt",
-    "zh": "中文",
-    "hi": "हिन्दी",
-    "bn": "বাংলা",
-    "am": "አማርኛ",
-    "uz": "Oʻzbekcha",  # noqa: RUF001 — U+02BB is the canonical Uzbek apostrophe
-    "ko": "한국어",
-    "ja": "日本語",
-    "th": "ไทย",
+# regardless of their current UI language.
+LANGUAGE_NATIVE_NAMES: dict[Language, str] = {
+    Language.EN: "English",
+    Language.RU: "Русский",
+    Language.ES: "Español",
+    Language.PT: "Português",
+    Language.DE: "Deutsch",
+    Language.FR: "Français",
+    Language.IT: "Italiano",
+    Language.TR: "Türkçe",
+    Language.UK: "Українська",
+    Language.PL: "Polski",
+    Language.AR: "العربية",
+    Language.FA: "فارسی",
+    Language.ID: "Bahasa Indonesia",
+    Language.VI: "Tiếng Việt",
+    Language.ZH: "中文",
+    Language.HI: "हिन्दी",
+    Language.BN: "বাংলা",
+    Language.AM: "አማርኛ",
+    Language.UZ: "Oʻzbekcha",  # noqa: RUF001 — U+02BB is the canonical Uzbek apostrophe
+    Language.KO: "한국어",
+    Language.JA: "日本語",
+    Language.TH: "ไทย",
 }
 
 
-def native_name(language: str) -> str:
+def native_name(language: Language) -> str:
     """Returns the language's native label, falling back to the code itself."""
-    return LANGUAGE_NATIVE_NAMES.get(language, language)
+    return LANGUAGE_NATIVE_NAMES.get(language, language.value)
 
 
 i18n = I18n(
     path=LOCALES_DIR,
-    default_locale=DEFAULT_LANGUAGE,
+    default_locale=DEFAULT_LANGUAGE.value,
     domain="messages",
 )
 
 
-def normalize_language(raw: str | None) -> str:
-    """Map a Telegram `language_code` (e.g. 'ru', 'ru-RU') to a supported one.
+def normalize_language(raw: str | None) -> Language:
+    """Map a Telegram ``language_code`` (e.g. 'ru', 'ru-RU') to a Language.
 
     Strips the region suffix and lowercases. Unsupported codes (or None) fall
-    back to DEFAULT_LANGUAGE so callers always get a valid locale string.
+    back to ``DEFAULT_LANGUAGE`` so callers always get a valid enum member.
     """
     if not raw:
         return DEFAULT_LANGUAGE
     primary = raw.split("-")[0].lower()
-    return primary if primary in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
+    try:
+        return Language(primary)
+    except ValueError:
+        return DEFAULT_LANGUAGE
 
 
 class UserLanguageI18nMiddleware(I18nMiddleware):
@@ -114,7 +93,7 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
     ) -> str:
         tg_user = getattr(event, "from_user", None)
         if tg_user is None:
-            return DEFAULT_LANGUAGE
+            return DEFAULT_LANGUAGE.value
 
         container: AsyncContainer | None = data.get("dishka_container")
         if container is not None:
@@ -133,9 +112,9 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
                 )
                 user = None
             if user is not None:
-                stored: str = user.language
-                log.info("i18n: tg_user=%s → stored %s", tg_user.id, stored)
-                return stored
+                stored = user.language
+                log.info("i18n: tg_user=%s → stored %s", tg_user.id, stored.value)
+                return stored.value
 
         raw = getattr(tg_user, "language_code", None)
         chosen = normalize_language(raw)
@@ -143,9 +122,9 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
             "i18n: tg_user=%s no stored language, telegram=%r → %s",
             tg_user.id,
             raw,
-            chosen,
+            chosen.value,
         )
-        return chosen
+        return chosen.value
 
     async def __call__(
         self,

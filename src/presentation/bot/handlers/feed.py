@@ -100,7 +100,7 @@ async def _notify_rated_user(
         return
     # Switch the i18n contextvar to the recipient's stored language so the
     # notification reads in their locale, not the rater's.
-    with i18n.use_locale(rated_user.language):
+    with i18n.use_locale(rated_user.language.value):
         text = _("⭐ Someone just rated you: {score}/10").format(score=score)
     with suppress(TelegramAPIError):
         await bot.send_message(rated_user.telegram_id.value, text)

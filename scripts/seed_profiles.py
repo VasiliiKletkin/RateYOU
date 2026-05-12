@@ -66,7 +66,7 @@ from scripts.name_data import FEMALE_NAMES
 from src.application.profile.create_profile import CreateProfileUseCase
 from src.application.profile.dto import CreateProfileRequest
 from src.domain.identity.entities import User
-from src.domain.identity.value_objects import TelegramId
+from src.domain.identity.value_objects import Language, TelegramId
 from src.domain.referral.services import ReferralRewardService
 from src.infrastructure.config import get_settings
 from src.infrastructure.db.repositories.profile import ProfileRepository
@@ -257,7 +257,9 @@ async def _process_one(
     async with session_factory() as session:
         user_repo = UserRepository(session=session)
         now = datetime.now(UTC)
-        user = User.register(telegram_id=TelegramId(tg_id), now=now, language="ru")
+        user = User.register(
+            telegram_id=TelegramId(tg_id), now=now, language=Language.RU
+        )
         await user_repo.add(user)
 
         profile_repo = ProfileRepository(session=session)

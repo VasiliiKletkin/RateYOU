@@ -19,9 +19,9 @@ from src.application.identity.update_language import UpdateUserLanguageUseCase
 from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.domain.discovery.exceptions import InvalidMinRating
+from src.domain.identity.value_objects import Language
 from src.presentation.bot.i18n import (
     LANGUAGE_NATIVE_NAMES,
-    SUPPORTED_LANGUAGES,
     i18n,
     native_name,
     normalize_language,
@@ -63,7 +63,7 @@ def _format_min_rating(value: int) -> str:
 
 
 def _main_keyboard(
-    prefs: SearchPreferencesResponse, *, is_premium: bool, language: str
+    prefs: SearchPreferencesResponse, *, is_premium: bool, language: Language
 ) -> InlineKeyboardMarkup:
     gender_label = _("👤 Show me: {current}").format(
         current=_format_gender(prefs.gender_preference)
@@ -92,7 +92,7 @@ async def _refresh_main(
     prefs: SearchPreferencesResponse,
     *,
     is_premium: bool,
-    language: str,
+    language: Language,
 ) -> None:
     """Restore the top-level settings view after a picker tap.
 
@@ -184,7 +184,7 @@ async def on_open_language_picker(callback: CallbackQuery) -> None:
     await _swap_keyboard(
         callback,
         language_keyboard(
-            SUPPORTED_LANGUAGES,
+            Language,
             LANGUAGE_NATIVE_NAMES,
             prefix=_LANGUAGE_PREFIX,
         ),
@@ -278,8 +278,10 @@ async def on_set_language(
     if callback.data is None or callback.from_user is None:
         await callback.answer()
         return
-    chosen = callback.data.removeprefix(f"{_LANGUAGE_PREFIX}:")
-    if chosen not in SUPPORTED_LANGUAGES:
+    raw = callback.data.removeprefix(f"{_LANGUAGE_PREFIX}:")
+    try:
+        chosen = Language(raw)
+    except ValueError:
         await callback.answer(_("Invalid choice"))
         return
 
@@ -297,7 +299,7 @@ async def on_set_language(
 
     # Render the confirmation in the freshly-picked locale so the refreshed
     # card matches what the user just chose.
-    with i18n.use_locale(updated.language):
+    with i18n.use_locale(updated.language.value):
         await callback.answer(_("Updated"))
         await _refresh_main(
             callback, prefs, is_premium=is_premium, language=updated.language

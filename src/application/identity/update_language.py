@@ -4,6 +4,7 @@ from uuid import UUID
 from src.application.identity.dto import UserResponse
 from src.domain.identity.exceptions import UserNotFound
 from src.domain.identity.repositories import IUserRepository
+from src.domain.identity.value_objects import Language
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.uow import UnitOfWork
 
@@ -20,7 +21,7 @@ class UpdateUserLanguageUseCase:
     user_repo: IUserRepository
     uow: UnitOfWork
 
-    async def execute(self, user_id: UUID, language: str) -> UserResponse:
+    async def execute(self, user_id: UUID, language: Language) -> UserResponse:
         user = await self.user_repo.get_by_id(UserId(user_id))
         if user is None:
             raise UserNotFound(f"User {user_id} not found")

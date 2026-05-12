@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from src.domain.identity.exceptions import InvalidBanReason, UserIsBanned
-from src.domain.identity.value_objects import Role, TelegramId
+from src.domain.identity.value_objects import Language, Role, TelegramId
 from src.domain.shared.identifiers import UserId
 
 
@@ -28,18 +28,18 @@ class User:
     is_banned: bool = False
     ban_reason: str | None = None
     banned_at: datetime | None = None
-    # ISO 639-1 short code. Normalised by the presentation layer to one of
-    # the bot's supported locales; kept on the entity so we can localise
-    # outgoing notifications (rating notifications, etc.) without an active
-    # i18n context from a Telegram update.
-    language: str = "en"
+    # Normalised by the presentation layer to one of the bot's supported
+    # locales (ISO 639-1 short code); kept on the entity so we can
+    # localise outgoing notifications (rating notifications, etc.) without
+    # an active i18n context from a Telegram update.
+    language: Language = Language.EN
 
     @classmethod
     def register(
         cls,
         telegram_id: TelegramId,
         now: datetime,
-        language: str = "en",
+        language: Language = Language.EN,
         referred_by: UserId | None = None,
     ) -> "User":
         return cls(
@@ -50,7 +50,7 @@ class User:
             referred_by_user_id=referred_by,
         )
 
-    def change_language(self, language: str) -> None:
+    def change_language(self, language: Language) -> None:
         self.language = language
 
     def ban(self, reason: str, now: datetime) -> None:
