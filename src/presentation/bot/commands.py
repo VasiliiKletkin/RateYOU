@@ -8,6 +8,7 @@ def _en_commands() -> list[BotCommand]:
         BotCommand(command="create", description="Create your profile"),
         BotCommand(command="edit", description="Edit your profile"),
         BotCommand(command="feed", description="Rate other profiles"),
+        BotCommand(command="settings", description="Rating preferences"),
         BotCommand(command="premium", description="Premium subscription"),
         BotCommand(command="cancel", description="Cancel current action"),
     ]
@@ -19,6 +20,7 @@ def _ru_commands() -> list[BotCommand]:
         BotCommand(command="create", description="Создать анкету"),
         BotCommand(command="edit", description="Редактировать анкету"),
         BotCommand(command="feed", description="Оценивать анкеты"),
+        BotCommand(command="settings", description="Настройки оценок"),
         BotCommand(command="premium", description="Премиум-подписка"),
         BotCommand(command="cancel", description="Отменить текущее действие"),
     ]

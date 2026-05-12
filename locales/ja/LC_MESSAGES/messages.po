@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:14+0300\n"
+"POT-Creation-Date: 2026-05-12 15:39+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -27,57 +27,74 @@ msgstr "♂️ 男性"
 msgid "♀️ Female"
 msgstr "♀️ 女性"
 
-#: src/presentation/bot/keyboards.py:63
+# WARNING: Machine translation — review by a native speaker before production.
+#: src/presentation/bot/handlers/settings.py:24
+#: src/presentation/bot/keyboards.py:52
+#, fuzzy
+msgid "♂️ Men"
+msgstr "♂️ 男性"
+
+#: src/presentation/bot/handlers/settings.py:26
+#: src/presentation/bot/keyboards.py:55
+msgid "♀️ Women"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:27
+#: src/presentation/bot/keyboards.py:60
+msgid "👥 Everyone"
+msgstr ""
+
+#: src/presentation/bot/keyboards.py:89
 msgid "⏭ Skip"
 msgstr "⏭ スキップ"
 
-#: src/presentation/bot/keyboards.py:73
+#: src/presentation/bot/keyboards.py:99
 msgid "Name"
 msgstr "名前"
 
-#: src/presentation/bot/keyboards.py:74
+#: src/presentation/bot/keyboards.py:100
 msgid "Age"
 msgstr "年齢"
 
-#: src/presentation/bot/keyboards.py:77
+#: src/presentation/bot/keyboards.py:103
 msgid "Gender"
 msgstr "性別"
 
-#: src/presentation/bot/keyboards.py:82
+#: src/presentation/bot/keyboards.py:108
 msgid "Location"
 msgstr "位置情報"
 
-#: src/presentation/bot/keyboards.py:85
+#: src/presentation/bot/keyboards.py:111
 msgid "Bio"
 msgstr "自己紹介"
 
-#: src/presentation/bot/keyboards.py:86
+#: src/presentation/bot/keyboards.py:112
 msgid "Photo"
 msgstr "写真"
 
-#: src/presentation/bot/keyboards.py:89
+#: src/presentation/bot/keyboards.py:115
 msgid "✅ Done"
 msgstr "✅ 完了"
 
-#: src/presentation/bot/keyboards.py:106
+#: src/presentation/bot/keyboards.py:132
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days}日"
 
-#: src/presentation/bot/handlers/create_profile.py:43
+#: src/presentation/bot/handlers/create_profile.py:47
 msgid "Nothing to cancel."
 msgstr "キャンセルするものがありません。"
 
-#: src/presentation/bot/handlers/create_profile.py:46
+#: src/presentation/bot/handlers/create_profile.py:50
 msgid "Cancelled."
 msgstr "キャンセルしました。"
 
-#: src/presentation/bot/handlers/create_profile.py:62
-#: src/presentation/bot/handlers/create_profile.py:194
+#: src/presentation/bot/handlers/create_profile.py:66
+#: src/presentation/bot/handlers/create_profile.py:223
 msgid "You already have a profile."
 msgstr "すでにプロフィールをお持ちです。"
 
-#: src/presentation/bot/handlers/create_profile.py:67
+#: src/presentation/bot/handlers/create_profile.py:71
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -85,77 +102,83 @@ msgstr ""
 "プロフィールを作成しましょう。\n"
 "お名前は何ですか?"
 
-#: src/presentation/bot/handlers/create_profile.py:73
+#: src/presentation/bot/handlers/create_profile.py:77
 #: src/presentation/bot/handlers/edit_profile.py:162
 msgid "Please send text."
 msgstr "テキストで送ってください。"
 
-#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/create_profile.py:82
 #: src/presentation/bot/handlers/edit_profile.py:167
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ 名前は1〜50文字で入力してください。もう一度どうぞ:"
 
-#: src/presentation/bot/handlers/create_profile.py:82
+#: src/presentation/bot/handlers/create_profile.py:86
 msgid "How old are you?"
 msgstr "おいくつですか?"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:92
 #: src/presentation/bot/handlers/edit_profile.py:179
 msgid "Please send a number."
 msgstr "数字で送ってください。"
 
-#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/create_profile.py:97
 #: src/presentation/bot/handlers/edit_profile.py:185
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ それは数字ではありません。もう一度どうぞ:"
 
-#: src/presentation/bot/handlers/create_profile.py:96
+#: src/presentation/bot/handlers/create_profile.py:100
 #: src/presentation/bot/handlers/edit_profile.py:188
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ 年齢は18〜100の間で入力してください。もう一度どうぞ:"
 
-#: src/presentation/bot/handlers/create_profile.py:100
+#: src/presentation/bot/handlers/create_profile.py:104
 #: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Pick gender:"
 msgstr "性別を選んでください:"
 
-#: src/presentation/bot/handlers/create_profile.py:113
+#: src/presentation/bot/handlers/create_profile.py:117
+#: src/presentation/bot/handlers/create_profile.py:141
+#: src/presentation/bot/handlers/settings.py:68
 msgid "Invalid choice"
 msgstr "無効な選択です"
 
-#: src/presentation/bot/handlers/create_profile.py:119
+#: src/presentation/bot/handlers/create_profile.py:123
+msgid "Who would you like to rate?"
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:147
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "位置情報を共有してください — 近くのプロフィールを探すのに使います:"
 
-#: src/presentation/bot/handlers/create_profile.py:120
+#: src/presentation/bot/handlers/create_profile.py:148
 #: src/presentation/bot/handlers/edit_profile.py:144
 msgid "📍 Share location"
 msgstr "📍 位置情報を共有"
 
-#: src/presentation/bot/handlers/create_profile.py:135
+#: src/presentation/bot/handlers/create_profile.py:163
 msgid "Tell something about yourself (or /skip):"
 msgstr "自己紹介を書いてください (または /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:142
+#: src/presentation/bot/handlers/create_profile.py:170
 msgid "Please share a location to continue."
 msgstr "続けるには位置情報を共有してください。"
 
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/create_profile.py:167
+#: src/presentation/bot/handlers/create_profile.py:178
+#: src/presentation/bot/handlers/create_profile.py:195
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "最大{max}枚の写真を送ってください:"
 
-#: src/presentation/bot/handlers/create_profile.py:157
+#: src/presentation/bot/handlers/create_profile.py:185
 msgid "Please send text or /skip."
 msgstr "テキストを送るか /skip してください。"
 
-#: src/presentation/bot/handlers/create_profile.py:162
+#: src/presentation/bot/handlers/create_profile.py:190
 #: src/presentation/bot/handlers/edit_profile.py:231
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ 自己紹介が長すぎます (最大500文字)。もう一度どうぞ、または /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:201
+#: src/presentation/bot/handlers/create_profile.py:230
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -168,7 +191,7 @@ msgstr ""
 "年齢: {age}\n"
 "/feed を送ってプロフィールの評価を始めましょう。"
 
-#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/create_profile.py:267
 msgid "Please send a photo (not text)."
 msgstr "写真を送ってください (テキストではなく)。"
 
@@ -177,6 +200,7 @@ msgid "Session lost. Use /edit again."
 msgstr "セッションが切れました。もう一度 /edit を使ってください。"
 
 #: src/presentation/bot/handlers/edit_profile.py:75
+#: src/presentation/bot/handlers/settings.py:87
 msgid "Profile not found."
 msgstr "プロフィールが見つかりません。"
 
@@ -349,6 +373,30 @@ msgstr ""
 "プラン: {tier}\n"
 "{expires}\n"
 "これで /feed には評価 {threshold} 以上のプロフィールが表示されます。"
+
+#: src/presentation/bot/handlers/settings.py:43
+#: src/presentation/bot/handlers/settings.py:76
+#, fuzzy
+msgid "No profile yet. Use /create first."
+msgstr "編集するプロフィールがありません。まず /create を使ってください。"
+
+#: src/presentation/bot/handlers/settings.py:48
+#, python-brace-format
+msgid ""
+"<b>Settings</b>\n"
+"Who you want to rate: {current}\n"
+"\n"
+"Pick a new preference:"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:90
+msgid "Updated"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:93
+#, python-brace-format
+msgid "Preference saved: {current}"
+msgstr ""
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""

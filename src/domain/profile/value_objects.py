@@ -52,6 +52,19 @@ class Gender(StrEnum):
     FEMALE = "female"
 
 
+class GenderPreference(StrEnum):
+    """Who the viewer wants to see in their feed.
+
+    `ANY` disables the filter; `MALE` / `FEMALE` restrict candidates to
+    profiles of that gender. Stored on Profile, not User — it's part of the
+    public-facing preference set, alongside age/bio/etc.
+    """
+
+    MALE = "male"
+    FEMALE = "female"
+    ANY = "any"
+
+
 @dataclass(frozen=True, slots=True)
 class Bio:
     value: str

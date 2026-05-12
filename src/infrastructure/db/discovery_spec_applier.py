@@ -4,6 +4,7 @@ from sqlalchemy import Select, not_, select
 
 from src.domain.discovery.specifications import (
     ProfileAverageRatingAtLeast,
+    ProfileHasGender,
     ProfileIsVisible,
     ProfileNotOwnedBy,
     ProfileNotRatedBy,
@@ -34,6 +35,8 @@ class DiscoverySpecApplier:
             return stmt.where(ProfileORM.is_visible.is_(True))
         if isinstance(spec, ProfileNotOwnedBy):
             return stmt.where(ProfileORM.owner_id != spec.user_id.value)
+        if isinstance(spec, ProfileHasGender):
+            return stmt.where(ProfileORM.gender == spec.gender.value)
         if isinstance(spec, ProfileNotRatedBy):
             already_rated = (
                 select(RatingORM.id)

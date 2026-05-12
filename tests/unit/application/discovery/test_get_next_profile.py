@@ -6,6 +6,7 @@ from src.application.discovery.get_next_profile import GetNextProfileForRatingUs
 from src.domain.discovery.repositories import DiscoveryMatch
 from src.domain.discovery.specifications import (
     ProfileAverageRatingAtLeast,
+    ProfileHasGender,
     ProfileOwnerNotIn,
 )
 from src.domain.profile.entities import Profile
@@ -13,6 +14,7 @@ from src.domain.profile.value_objects import (
     Age,
     Bio,
     Gender,
+    GenderPreference,
     Location,
     Name,
     PhotoFileId,
@@ -88,12 +90,16 @@ class FakeSkipRegistry:
         return list(self.skipped)
 
 
-def _make_profile() -> Profile:
+def _make_profile(
+    gender: Gender = Gender.MALE,
+    gender_preference: GenderPreference = GenderPreference.ANY,
+) -> Profile:
     return Profile.create(
         owner_id=UserId.new(),
         name=Name("Vasya"),
         age=Age(25),
-        gender=Gender.MALE,
+        gender=gender,
+        gender_preference=gender_preference,
         bio=Bio("hi"),
         photos=Photos(items=(PhotoFileId("file-id"),)),
         location=Location(lat=55.7558, lon=37.6173),
@@ -201,6 +207,40 @@ async def test_active_gold_adds_threshold_8_spec() -> None:
     threshold_spec = _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast)
     assert threshold_spec is not None
     assert threshold_spec.threshold == 8.0
+
+
+async def test_any_preference_omits_gender_spec() -> None:
+    viewer = _make_profile(gender_preference=GenderPreference.ANY)
+    discovery = FakeDiscoveryRepository(next_profile=viewer)
+    use_case = _make_use_case(
+        discovery,
+        FakeSubscriptionRepository(),
+        FakeSkipRegistry(),
+        profiles=FakeProfileRepository(profile=viewer),
+    )
+
+    await use_case.execute(uuid4())
+
+    assert discovery.last_spec is not None
+    assert _find_spec(discovery.last_spec, ProfileHasGender) is None
+
+
+async def test_male_preference_adds_male_gender_spec() -> None:
+    viewer = _make_profile(gender_preference=GenderPreference.MALE)
+    discovery = FakeDiscoveryRepository(next_profile=viewer)
+    use_case = _make_use_case(
+        discovery,
+        FakeSubscriptionRepository(),
+        FakeSkipRegistry(),
+        profiles=FakeProfileRepository(profile=viewer),
+    )
+
+    await use_case.execute(uuid4())
+
+    assert discovery.last_spec is not None
+    gender_spec = _find_spec(discovery.last_spec, ProfileHasGender)
+    assert gender_spec is not None
+    assert gender_spec.gender == Gender.MALE
 
 
 async def test_expired_subscription_omits_threshold_spec() -> None:

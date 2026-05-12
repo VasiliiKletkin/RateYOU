@@ -7,10 +7,12 @@ from src.domain.discovery.repositories import IDiscoveryRepository
 from src.domain.discovery.skip_registry import ISkipRegistry
 from src.domain.discovery.specifications import (
     ProfileAverageRatingAtLeast,
+    ProfileHasGender,
     ProfileOwnerNotIn,
     default_feed_spec,
 )
 from src.domain.profile.repositories import IProfileRepository
+from src.domain.profile.value_objects import Gender, GenderPreference
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 from src.domain.subscription.repositories import ISubscriptionRepository
@@ -46,6 +48,14 @@ class GetNextProfileForRatingUseCase:
             return None
 
         spec: Specification = default_feed_spec(viewer)
+
+        if viewer_profile.gender_preference != GenderPreference.ANY:
+            # ANY disables the filter; the other two enums map 1:1 to Gender
+            # so the lookup is safe.
+            spec = spec & ProfileHasGender(
+                Gender(viewer_profile.gender_preference.value)
+            )
+
         threshold = await self._premium_threshold(viewer)
         if threshold is not None:
             spec = spec & ProfileAverageRatingAtLeast(threshold)

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from src.domain.profile.value_objects import Gender
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 
@@ -32,6 +33,17 @@ class ProfileAverageRatingAtLeast(Specification):
     """
 
     threshold: float
+
+
+@dataclass(frozen=True, slots=True)
+class ProfileHasGender(Specification):
+    """Restricts candidates to a single gender.
+
+    Used to honour the viewer's `gender_preference` when it's not ANY —
+    the use case translates the preference into this spec.
+    """
+
+    gender: Gender
 
 
 @dataclass(frozen=True, slots=True)

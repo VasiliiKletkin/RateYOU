@@ -8,6 +8,7 @@ from src.domain.profile.value_objects import (
     Age,
     Bio,
     Gender,
+    GenderPreference,
     Location,
     Name,
     Photos,
@@ -37,6 +38,11 @@ class EditProfileUseCase:
             now=now,
         )
 
+        if request.gender_preference is not None:
+            profile.change_gender_preference(
+                GenderPreference(request.gender_preference), now
+            )
+
         if request.bio is not None:
             profile.update_bio(Bio(request.bio), now)
 
@@ -59,6 +65,7 @@ class EditProfileUseCase:
             name=profile.name.value,
             age=profile.age.value,
             gender=profile.gender.value,
+            gender_preference=profile.gender_preference.value,
             bio=profile.bio.value,
             photo_file_ids=tuple(profile.photos.to_strings()),
             location=(profile.location.lat, profile.location.lon),

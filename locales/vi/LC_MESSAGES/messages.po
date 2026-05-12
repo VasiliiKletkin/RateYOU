@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:14+0300\n"
+"POT-Creation-Date: 2026-05-12 15:39+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -27,57 +27,74 @@ msgstr "♂️ Nam"
 msgid "♀️ Female"
 msgstr "♀️ Nữ"
 
-#: src/presentation/bot/keyboards.py:63
+# WARNING: Machine translation — review by a native speaker before production.
+#: src/presentation/bot/handlers/settings.py:24
+#: src/presentation/bot/keyboards.py:52
+#, fuzzy
+msgid "♂️ Men"
+msgstr "♂️ Nam"
+
+#: src/presentation/bot/handlers/settings.py:26
+#: src/presentation/bot/keyboards.py:55
+msgid "♀️ Women"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:27
+#: src/presentation/bot/keyboards.py:60
+msgid "👥 Everyone"
+msgstr ""
+
+#: src/presentation/bot/keyboards.py:89
 msgid "⏭ Skip"
 msgstr "⏭ Bỏ qua"
 
-#: src/presentation/bot/keyboards.py:73
+#: src/presentation/bot/keyboards.py:99
 msgid "Name"
 msgstr "Tên"
 
-#: src/presentation/bot/keyboards.py:74
+#: src/presentation/bot/keyboards.py:100
 msgid "Age"
 msgstr "Tuổi"
 
-#: src/presentation/bot/keyboards.py:77
+#: src/presentation/bot/keyboards.py:103
 msgid "Gender"
 msgstr "Giới tính"
 
-#: src/presentation/bot/keyboards.py:82
+#: src/presentation/bot/keyboards.py:108
 msgid "Location"
 msgstr "Vị trí"
 
-#: src/presentation/bot/keyboards.py:85
+#: src/presentation/bot/keyboards.py:111
 msgid "Bio"
 msgstr "Giới thiệu"
 
-#: src/presentation/bot/keyboards.py:86
+#: src/presentation/bot/keyboards.py:112
 msgid "Photo"
 msgstr "Ảnh"
 
-#: src/presentation/bot/keyboards.py:89
+#: src/presentation/bot/keyboards.py:115
 msgid "✅ Done"
 msgstr "✅ Xong"
 
-#: src/presentation/bot/keyboards.py:106
+#: src/presentation/bot/keyboards.py:132
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} ngày"
 
-#: src/presentation/bot/handlers/create_profile.py:43
+#: src/presentation/bot/handlers/create_profile.py:47
 msgid "Nothing to cancel."
 msgstr "Không có gì để hủy."
 
-#: src/presentation/bot/handlers/create_profile.py:46
+#: src/presentation/bot/handlers/create_profile.py:50
 msgid "Cancelled."
 msgstr "Đã hủy."
 
-#: src/presentation/bot/handlers/create_profile.py:62
-#: src/presentation/bot/handlers/create_profile.py:194
+#: src/presentation/bot/handlers/create_profile.py:66
+#: src/presentation/bot/handlers/create_profile.py:223
 msgid "You already have a profile."
 msgstr "Bạn đã có hồ sơ rồi."
 
-#: src/presentation/bot/handlers/create_profile.py:67
+#: src/presentation/bot/handlers/create_profile.py:71
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -85,77 +102,83 @@ msgstr ""
 "Hãy tạo hồ sơ của bạn nào.\n"
 "Tên bạn là gì?"
 
-#: src/presentation/bot/handlers/create_profile.py:73
+#: src/presentation/bot/handlers/create_profile.py:77
 #: src/presentation/bot/handlers/edit_profile.py:162
 msgid "Please send text."
 msgstr "Vui lòng gửi văn bản."
 
-#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/create_profile.py:82
 #: src/presentation/bot/handlers/edit_profile.py:167
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ Tên phải có 1-50 ký tự và không được rỗng. Thử lại:"
 
-#: src/presentation/bot/handlers/create_profile.py:82
+#: src/presentation/bot/handlers/create_profile.py:86
 msgid "How old are you?"
 msgstr "Bạn bao nhiêu tuổi?"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:92
 #: src/presentation/bot/handlers/edit_profile.py:179
 msgid "Please send a number."
 msgstr "Vui lòng gửi một số."
 
-#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/create_profile.py:97
 #: src/presentation/bot/handlers/edit_profile.py:185
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ Đó không phải là số. Thử lại:"
 
-#: src/presentation/bot/handlers/create_profile.py:96
+#: src/presentation/bot/handlers/create_profile.py:100
 #: src/presentation/bot/handlers/edit_profile.py:188
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ Tuổi phải nằm trong khoảng 18 đến 100. Thử lại:"
 
-#: src/presentation/bot/handlers/create_profile.py:100
+#: src/presentation/bot/handlers/create_profile.py:104
 #: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Pick gender:"
 msgstr "Chọn giới tính:"
 
-#: src/presentation/bot/handlers/create_profile.py:113
+#: src/presentation/bot/handlers/create_profile.py:117
+#: src/presentation/bot/handlers/create_profile.py:141
+#: src/presentation/bot/handlers/settings.py:68
 msgid "Invalid choice"
 msgstr "Lựa chọn không hợp lệ"
 
-#: src/presentation/bot/handlers/create_profile.py:119
+#: src/presentation/bot/handlers/create_profile.py:123
+msgid "Who would you like to rate?"
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:147
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "Chia sẻ vị trí của bạn — dùng để tìm hồ sơ gần đó:"
 
-#: src/presentation/bot/handlers/create_profile.py:120
+#: src/presentation/bot/handlers/create_profile.py:148
 #: src/presentation/bot/handlers/edit_profile.py:144
 msgid "📍 Share location"
 msgstr "📍 Chia sẻ vị trí"
 
-#: src/presentation/bot/handlers/create_profile.py:135
+#: src/presentation/bot/handlers/create_profile.py:163
 msgid "Tell something about yourself (or /skip):"
 msgstr "Kể gì đó về bản thân bạn nào (hoặc /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:142
+#: src/presentation/bot/handlers/create_profile.py:170
 msgid "Please share a location to continue."
 msgstr "Vui lòng chia sẻ vị trí để tiếp tục."
 
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/create_profile.py:167
+#: src/presentation/bot/handlers/create_profile.py:178
+#: src/presentation/bot/handlers/create_profile.py:195
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "Gửi tối đa {max} ảnh:"
 
-#: src/presentation/bot/handlers/create_profile.py:157
+#: src/presentation/bot/handlers/create_profile.py:185
 msgid "Please send text or /skip."
 msgstr "Vui lòng gửi văn bản hoặc /skip."
 
-#: src/presentation/bot/handlers/create_profile.py:162
+#: src/presentation/bot/handlers/create_profile.py:190
 #: src/presentation/bot/handlers/edit_profile.py:231
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ Giới thiệu quá dài (tối đa 500 ký tự). Thử lại hoặc /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:201
+#: src/presentation/bot/handlers/create_profile.py:230
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -168,7 +191,7 @@ msgstr ""
 "Tuổi: {age}\n"
 "Gửi /feed để bắt đầu đánh giá hồ sơ."
 
-#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/create_profile.py:267
 msgid "Please send a photo (not text)."
 msgstr "Vui lòng gửi ảnh (không phải văn bản)."
 
@@ -177,6 +200,7 @@ msgid "Session lost. Use /edit again."
 msgstr "Mất phiên làm việc. Dùng /edit lại."
 
 #: src/presentation/bot/handlers/edit_profile.py:75
+#: src/presentation/bot/handlers/settings.py:87
 msgid "Profile not found."
 msgstr "Không tìm thấy hồ sơ."
 
@@ -349,6 +373,30 @@ msgstr ""
 "Gói: {tier}\n"
 "{expires}\n"
 "Giờ /feed hiển thị hồ sơ được đánh giá >= {threshold}."
+
+#: src/presentation/bot/handlers/settings.py:43
+#: src/presentation/bot/handlers/settings.py:76
+#, fuzzy
+msgid "No profile yet. Use /create first."
+msgstr "Không có hồ sơ để sửa. Dùng /create trước."
+
+#: src/presentation/bot/handlers/settings.py:48
+#, python-brace-format
+msgid ""
+"<b>Settings</b>\n"
+"Who you want to rate: {current}\n"
+"\n"
+"Pick a new preference:"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:90
+msgid "Updated"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:93
+#, python-brace-format
+msgid "Preference saved: {current}"
+msgstr ""
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""

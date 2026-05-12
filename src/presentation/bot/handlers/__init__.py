@@ -5,6 +5,7 @@ from src.presentation.bot.handlers import (
     edit_profile,
     feed,
     premium,
+    settings,
     start,
 )
 
@@ -16,4 +17,5 @@ def all_routers() -> list[Router]:
         edit_profile.router,
         feed.router,
         premium.router,
+        settings.router,
     ]

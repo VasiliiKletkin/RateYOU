@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 15:14+0300\n"
+"POT-Creation-Date: 2026-05-12 15:39+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uk\n"
@@ -27,57 +27,73 @@ msgstr "♂️ Чоловік"
 msgid "♀️ Female"
 msgstr "♀️ Жінка"
 
-#: src/presentation/bot/keyboards.py:63
+#: src/presentation/bot/handlers/settings.py:24
+#: src/presentation/bot/keyboards.py:52
+#, fuzzy
+msgid "♂️ Men"
+msgstr "♂️ Чоловік"
+
+#: src/presentation/bot/handlers/settings.py:26
+#: src/presentation/bot/keyboards.py:55
+msgid "♀️ Women"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:27
+#: src/presentation/bot/keyboards.py:60
+msgid "👥 Everyone"
+msgstr ""
+
+#: src/presentation/bot/keyboards.py:89
 msgid "⏭ Skip"
 msgstr "⏭ Пропустити"
 
-#: src/presentation/bot/keyboards.py:73
+#: src/presentation/bot/keyboards.py:99
 msgid "Name"
 msgstr "Ім'я"
 
-#: src/presentation/bot/keyboards.py:74
+#: src/presentation/bot/keyboards.py:100
 msgid "Age"
 msgstr "Вік"
 
-#: src/presentation/bot/keyboards.py:77
+#: src/presentation/bot/keyboards.py:103
 msgid "Gender"
 msgstr "Стать"
 
-#: src/presentation/bot/keyboards.py:82
+#: src/presentation/bot/keyboards.py:108
 msgid "Location"
 msgstr "Локація"
 
-#: src/presentation/bot/keyboards.py:85
+#: src/presentation/bot/keyboards.py:111
 msgid "Bio"
 msgstr "Про себе"
 
-#: src/presentation/bot/keyboards.py:86
+#: src/presentation/bot/keyboards.py:112
 msgid "Photo"
 msgstr "Фото"
 
-#: src/presentation/bot/keyboards.py:89
+#: src/presentation/bot/keyboards.py:115
 msgid "✅ Done"
 msgstr "✅ Готово"
 
-#: src/presentation/bot/keyboards.py:106
+#: src/presentation/bot/keyboards.py:132
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} дн."
 
-#: src/presentation/bot/handlers/create_profile.py:43
+#: src/presentation/bot/handlers/create_profile.py:47
 msgid "Nothing to cancel."
 msgstr "Немає що скасовувати."
 
-#: src/presentation/bot/handlers/create_profile.py:46
+#: src/presentation/bot/handlers/create_profile.py:50
 msgid "Cancelled."
 msgstr "Скасовано."
 
-#: src/presentation/bot/handlers/create_profile.py:62
-#: src/presentation/bot/handlers/create_profile.py:194
+#: src/presentation/bot/handlers/create_profile.py:66
+#: src/presentation/bot/handlers/create_profile.py:223
 msgid "You already have a profile."
 msgstr "У тебе вже є анкета."
 
-#: src/presentation/bot/handlers/create_profile.py:67
+#: src/presentation/bot/handlers/create_profile.py:71
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -85,77 +101,83 @@ msgstr ""
 "Створімо твою анкету.\n"
 "Як тебе звати?"
 
-#: src/presentation/bot/handlers/create_profile.py:73
+#: src/presentation/bot/handlers/create_profile.py:77
 #: src/presentation/bot/handlers/edit_profile.py:162
 msgid "Please send text."
 msgstr "Будь ласка, надішли текст."
 
-#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/create_profile.py:82
 #: src/presentation/bot/handlers/edit_profile.py:167
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ Ім'я має бути 1-50 непорожніх символів. Спробуй ще раз:"
 
-#: src/presentation/bot/handlers/create_profile.py:82
+#: src/presentation/bot/handlers/create_profile.py:86
 msgid "How old are you?"
 msgstr "Скільки тобі років?"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:92
 #: src/presentation/bot/handlers/edit_profile.py:179
 msgid "Please send a number."
 msgstr "Будь ласка, надішли число."
 
-#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/create_profile.py:97
 #: src/presentation/bot/handlers/edit_profile.py:185
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ Це не число. Спробуй ще раз:"
 
-#: src/presentation/bot/handlers/create_profile.py:96
+#: src/presentation/bot/handlers/create_profile.py:100
 #: src/presentation/bot/handlers/edit_profile.py:188
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ Вік має бути від 18 до 100. Спробуй ще раз:"
 
-#: src/presentation/bot/handlers/create_profile.py:100
+#: src/presentation/bot/handlers/create_profile.py:104
 #: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Pick gender:"
 msgstr "Обери стать:"
 
-#: src/presentation/bot/handlers/create_profile.py:113
+#: src/presentation/bot/handlers/create_profile.py:117
+#: src/presentation/bot/handlers/create_profile.py:141
+#: src/presentation/bot/handlers/settings.py:68
 msgid "Invalid choice"
 msgstr "Невірний вибір"
 
-#: src/presentation/bot/handlers/create_profile.py:119
+#: src/presentation/bot/handlers/create_profile.py:123
+msgid "Who would you like to rate?"
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:147
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "Поділись локацією — вона використовується для пошуку анкет поруч:"
 
-#: src/presentation/bot/handlers/create_profile.py:120
+#: src/presentation/bot/handlers/create_profile.py:148
 #: src/presentation/bot/handlers/edit_profile.py:144
 msgid "📍 Share location"
 msgstr "📍 Поділитися локацією"
 
-#: src/presentation/bot/handlers/create_profile.py:135
+#: src/presentation/bot/handlers/create_profile.py:163
 msgid "Tell something about yourself (or /skip):"
 msgstr "Розкажи щось про себе (або /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:142
+#: src/presentation/bot/handlers/create_profile.py:170
 msgid "Please share a location to continue."
 msgstr "Будь ласка, поділись локацією, щоб продовжити."
 
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/create_profile.py:167
+#: src/presentation/bot/handlers/create_profile.py:178
+#: src/presentation/bot/handlers/create_profile.py:195
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "Надішли до {max} фото:"
 
-#: src/presentation/bot/handlers/create_profile.py:157
+#: src/presentation/bot/handlers/create_profile.py:185
 msgid "Please send text or /skip."
 msgstr "Будь ласка, надішли текст або /skip."
 
-#: src/presentation/bot/handlers/create_profile.py:162
+#: src/presentation/bot/handlers/create_profile.py:190
 #: src/presentation/bot/handlers/edit_profile.py:231
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ Опис задовгий (макс. 500 символів). Спробуй ще раз або /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:201
+#: src/presentation/bot/handlers/create_profile.py:230
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -168,7 +190,7 @@ msgstr ""
 "Вік: {age}\n"
 "Надішли /feed, щоб почати оцінювати анкети."
 
-#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/create_profile.py:267
 msgid "Please send a photo (not text)."
 msgstr "Будь ласка, надішли фото (не текст)."
 
@@ -177,6 +199,7 @@ msgid "Session lost. Use /edit again."
 msgstr "Сесію втрачено. Скористайся /edit знову."
 
 #: src/presentation/bot/handlers/edit_profile.py:75
+#: src/presentation/bot/handlers/settings.py:87
 msgid "Profile not found."
 msgstr "Анкету не знайдено."
 
@@ -353,6 +376,30 @@ msgstr ""
 "Тариф: {tier}\n"
 "{expires}\n"
 "Тепер /feed показує анкети з оцінкою >= {threshold}."
+
+#: src/presentation/bot/handlers/settings.py:43
+#: src/presentation/bot/handlers/settings.py:76
+#, fuzzy
+msgid "No profile yet. Use /create first."
+msgstr "Немає анкети для редагування. Спочатку скористайся /create."
+
+#: src/presentation/bot/handlers/settings.py:48
+#, python-brace-format
+msgid ""
+"<b>Settings</b>\n"
+"Who you want to rate: {current}\n"
+"\n"
+"Pick a new preference:"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:90
+msgid "Updated"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:93
+#, python-brace-format
+msgid "Preference saved: {current}"
+msgstr ""
 
 #: src/presentation/bot/handlers/start.py:30
 msgid ""

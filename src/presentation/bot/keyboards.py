@@ -38,6 +38,32 @@ def gender_keyboard() -> InlineKeyboardMarkup:
     )
 
 
+def gender_preference_keyboard(prefix: str = "genderpref") -> InlineKeyboardMarkup:
+    """Three-way preference picker: men / women / everyone.
+
+    `prefix` lets callers disambiguate their callback namespace — /create
+    uses the default "genderpref" and /settings uses "setpref" so the two
+    handlers can coexist without state filters.
+    """
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=_("♂️ Men"), callback_data=f"{prefix}:male"
+                ),
+                InlineKeyboardButton(
+                    text=_("♀️ Women"), callback_data=f"{prefix}:female"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text=_("👥 Everyone"), callback_data=f"{prefix}:any"
+                ),
+            ],
+        ]
+    )
+
+
 def rating_keyboard(rated_user_id: UUID) -> InlineKeyboardMarkup:
     """Buttons 0..10 (split into two rows) plus a Skip button.
 

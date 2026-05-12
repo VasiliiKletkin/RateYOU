@@ -21,6 +21,7 @@ from src.domain.profile.value_objects import (
     Age,
     Bio,
     Gender,
+    GenderPreference,
     Location,
     Name,
     PhotoFileId,
@@ -49,12 +50,18 @@ async def _seed_user(session: AsyncSession, tg_id: int) -> User:
     return user
 
 
-async def _seed_profile(session: AsyncSession, owner_id: UserId) -> Profile:
+async def _seed_profile(
+    session: AsyncSession,
+    owner_id: UserId,
+    gender: Gender = Gender.MALE,
+    gender_preference: GenderPreference = GenderPreference.ANY,
+) -> Profile:
     profile = Profile.create(
         owner_id=owner_id,
         name=Name("Vasya"),
         age=Age(25),
-        gender=Gender.MALE,
+        gender=gender,
+        gender_preference=gender_preference,
         bio=Bio("hi"),
         photos=Photos(items=(PhotoFileId("file-id"),)),
         location=Location(lat=55.7558, lon=37.6173),

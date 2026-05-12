@@ -19,6 +19,11 @@ class ProfileORM(Base):
     name: Mapped[str] = mapped_column(String(50))
     age: Mapped[int]
     gender: Mapped[str] = mapped_column(String(16))
+    # Server default lets the column be added in-place without a backfill —
+    # existing rows are treated as "show me everyone" (no filter).
+    gender_preference: Mapped[str] = mapped_column(
+        String(16), server_default="any"
+    )
     bio: Mapped[str] = mapped_column(String(500), server_default="")
     is_visible: Mapped[bool] = mapped_column(server_default="true")
     # PostGIS geography (Point, SRID 4326). NOT NULL — every profile must

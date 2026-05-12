@@ -20,7 +20,11 @@ from src.domain.profile.exceptions import (
     ProfileAlreadyExists,
 )
 from src.domain.profile.value_objects import Age, Bio, Name, Photos
-from src.presentation.bot.keyboards import gender_keyboard, share_location_keyboard
+from src.presentation.bot.keyboards import (
+    gender_keyboard,
+    gender_preference_keyboard,
+    share_location_keyboard,
+)
 from src.presentation.bot.states import CreateProfile
 
 # How long to wait after the last photo arrives before finalizing the
@@ -113,6 +117,30 @@ async def process_gender(callback: CallbackQuery, state: FSMContext) -> None:
         await callback.answer(_("Invalid choice"))
         return
     await state.update_data(gender=gender)
+    await state.set_state(CreateProfile.waiting_for_gender_preference)
+    if isinstance(callback.message, Message):
+        await callback.message.answer(
+            _("Who would you like to rate?"),
+            reply_markup=gender_preference_keyboard(),
+        )
+    await callback.answer()
+
+
+@router.callback_query(
+    F.data.startswith("genderpref:"),
+    CreateProfile.waiting_for_gender_preference,
+)
+async def process_gender_preference(
+    callback: CallbackQuery, state: FSMContext
+) -> None:
+    if callback.data is None:
+        await callback.answer()
+        return
+    preference = callback.data.removeprefix("genderpref:")
+    if preference not in ("male", "female", "any"):
+        await callback.answer(_("Invalid choice"))
+        return
+    await state.update_data(gender_preference=preference)
     await state.set_state(CreateProfile.waiting_for_location)
     if isinstance(callback.message, Message):
         await callback.message.answer(
@@ -185,6 +213,7 @@ async def _finalize_create(
                 name=data["name"],
                 age=data["age"],
                 gender=data["gender"],
+                gender_preference=data["gender_preference"],
                 bio=data["bio"],
                 photo_file_ids=tuple(photos),
                 location=(data["location_lat"], data["location_lon"]),

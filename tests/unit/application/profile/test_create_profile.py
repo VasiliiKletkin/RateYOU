@@ -51,6 +51,7 @@ def _make_request(owner_id: UUID) -> CreateProfileRequest:
         name="Vasya",
         age=25,
         gender="male",
+        gender_preference="any",
         bio="hi",
         photo_file_ids=("file-id-1",),
         location=(55.7558, 37.6173),
