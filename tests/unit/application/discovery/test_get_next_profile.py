@@ -203,7 +203,9 @@ async def test_no_subscription_omits_threshold_spec() -> None:
     assert _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast) is None
 
 
-async def test_active_silver_adds_threshold_7_spec() -> None:
+async def test_premium_without_user_pref_adds_no_threshold() -> None:
+    """Premium no longer baked in a tier-specific floor — without an
+    explicit `min_rating` in the user's prefs, the feed stays unfiltered."""
     viewer_id = uuid4()
     sub = Subscription.activate(
         UserId(viewer_id), Tier.SILVER, duration_days=30, now=datetime.now(UTC)
@@ -216,27 +218,7 @@ async def test_active_silver_adds_threshold_7_spec() -> None:
     await use_case.execute(viewer_id)
 
     assert discovery.last_spec is not None
-    threshold_spec = _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast)
-    assert threshold_spec is not None
-    assert threshold_spec.threshold == 7.0
-
-
-async def test_active_gold_adds_threshold_8_spec() -> None:
-    viewer_id = uuid4()
-    sub = Subscription.activate(
-        UserId(viewer_id), Tier.GOLD, duration_days=30, now=datetime.now(UTC)
-    )
-    discovery = FakeDiscoveryRepository(next_profile=_make_profile())
-    use_case = _make_use_case(
-        discovery, FakeSubscriptionRepository(subscription=sub), FakeSkipRegistry()
-    )
-
-    await use_case.execute(viewer_id)
-
-    assert discovery.last_spec is not None
-    threshold_spec = _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast)
-    assert threshold_spec is not None
-    assert threshold_spec.threshold == 8.0
+    assert _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast) is None
 
 
 async def test_any_preference_omits_gender_spec() -> None:
@@ -277,7 +259,9 @@ async def test_male_preference_adds_male_gender_spec() -> None:
     assert gender_spec.gender == Gender.MALE
 
 
-async def test_user_min_rating_adds_threshold_spec_without_premium() -> None:
+async def test_user_min_rating_ignored_without_premium() -> None:
+    """A stored min_rating value lingers if premium expires — the feed
+    must ignore it so free users aren't silently filtered."""
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
     prefs = FakeSearchPreferencesRepository(preferences=_make_prefs(min_rating=7))
     use_case = _make_use_case(
@@ -287,12 +271,10 @@ async def test_user_min_rating_adds_threshold_spec_without_premium() -> None:
     await use_case.execute(uuid4())
 
     assert discovery.last_spec is not None
-    threshold_spec = _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast)
-    assert threshold_spec is not None
-    assert threshold_spec.threshold == 7.0
+    assert _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast) is None
 
 
-async def test_user_min_rating_lower_than_premium_uses_premium() -> None:
+async def test_user_min_rating_applied_when_premium() -> None:
     viewer_id = uuid4()
     sub = Subscription.activate(
         UserId(viewer_id), Tier.GOLD, duration_days=30, now=datetime.now(UTC)
@@ -311,8 +293,8 @@ async def test_user_min_rating_lower_than_premium_uses_premium() -> None:
     assert discovery.last_spec is not None
     threshold_spec = _find_spec(discovery.last_spec, ProfileAverageRatingAtLeast)
     assert threshold_spec is not None
-    # Premium Gold = 8.0 > user 6 → premium wins.
-    assert threshold_spec.threshold == 8.0
+    # User's exact pick — no longer max'd with a tier floor.
+    assert threshold_spec.threshold == 6.0
 
 
 async def test_expired_subscription_omits_threshold_spec() -> None:
