@@ -27,7 +27,7 @@ async def on_start(
     if profile is None:
         await message.answer(
             _(
-                "<b>Welcome to RateMe!</b>\n"
+                "<b>Welcome to RateYou!</b>\n"
                 "You don't have a profile yet - send /create to make one."
             )
         )

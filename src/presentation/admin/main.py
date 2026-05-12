@@ -31,13 +31,13 @@ from src.presentation.admin.views import (
 
 def create_app() -> FastAPI:
     settings = get_settings()
-    app = FastAPI(title="RateMe Admin")
+    app = FastAPI(title="RateYou Admin")
 
     engine = create_async_engine(settings.postgres.dsn)
 
     admin = Admin(
         engine,
-        title="RateMe Admin",
+        title="RateYou Admin",
         auth_provider=AdminAuthProvider(settings.admin),
         middlewares=[
             Middleware(

@@ -5,25 +5,25 @@ services:
     # In production we'd deploy to native amd64 anyway.
     image: postgis/postgis:17-3.5
     platform: linux/amd64
-    container_name: rateme-postgres
+    container_name: rateyou-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-rateme}
-      POSTGRES_USER: ${POSTGRES_USER:-rateme}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rateme}
+      POSTGRES_DB: ${POSTGRES_DB:-rateyou}
+      POSTGRES_USER: ${POSTGRES_USER:-rateyou}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rateyou}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rateme}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rateyou}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   redis:
     image: redis:7-alpine
-    container_name: rateme-redis
+    container_name: rateyou-redis
     restart: unless-stopped
     ports:
       - "${REDIS_PORT:-6379}:6379"
@@ -37,7 +37,7 @@ services:
 
   migrate:
     build: .
-    container_name: rateme-migrate
+    container_name: rateyou-migrate
     command: python -m alembic upgrade head
     env_file:
       - .env
@@ -51,7 +51,7 @@ services:
 
   bot:
     build: .
-    container_name: rateme-bot
+    container_name: rateyou-bot
     command: python -m src.presentation.bot.main
     env_file:
       - .env
@@ -71,7 +71,7 @@ services:
 
   admin:
     build: .
-    container_name: rateme-admin
+    container_name: rateyou-admin
     command: python -m src.presentation.admin.main
     env_file:
       - .env

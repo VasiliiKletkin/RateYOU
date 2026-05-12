@@ -1,5 +1,5 @@
 [project]
-name = "rateme"
+name = "rateyou"
 version = "0.1.0"
 description = "Telegram bot for rating profiles with payments via Telegram Stars"
 authors = [
