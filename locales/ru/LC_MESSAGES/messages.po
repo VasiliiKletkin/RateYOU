@@ -21,43 +21,39 @@ msgstr ""
 
 #: src/presentation/bot/commands.py:15
 msgid "Start the bot"
-msgstr ""
+msgstr "Запуск бота"
 
 #: src/presentation/bot/commands.py:16
-#, fuzzy
 msgid "Create your profile"
-msgstr "Оцени анкету:"
+msgstr "Создать анкету"
 
 #: src/presentation/bot/commands.py:17
 msgid "Edit your profile"
-msgstr ""
+msgstr "Редактировать анкету"
 
 #: src/presentation/bot/commands.py:18
-#, fuzzy
 msgid "Rate other profiles"
-msgstr "Оцени анкету:"
+msgstr "Оценивать анкеты"
 
 #: src/presentation/bot/commands.py:19
 msgid "Rating preferences"
-msgstr ""
+msgstr "Настройки оценок"
 
 #: src/presentation/bot/commands.py:20
-#, fuzzy
 msgid "Premium subscription"
-msgstr "Только для премиума"
+msgstr "Премиум-подписка"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
 msgid "Who rated me (premium)"
-msgstr "🌟 Кто меня оценил"
+msgstr "Кто меня оценил (премиум)"
 
 #: src/presentation/bot/commands.py:25
 msgid "Invite friends and earn premium"
-msgstr ""
+msgstr "Пригласить друзей и получить премиум"
 
 #: src/presentation/bot/commands.py:27
 msgid "Cancel current action"
-msgstr ""
+msgstr "Отменить текущее действие"
 
 #: src/presentation/bot/keyboards.py:34
 msgid "♂️ Male"

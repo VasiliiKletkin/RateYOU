@@ -1,6 +1,7 @@
 from aiogram import Bot
 from aiogram.types import BotCommand
-from aiogram.utils.i18n import I18n, gettext as _
+from aiogram.utils.i18n import I18n
+from aiogram.utils.i18n import gettext as _
 
 from src.domain.identity.value_objects import Language
 
