@@ -25,6 +25,14 @@ class IRatingRepository(Protocol):
         """Returns (average_score, rating_count). avg=0.0, count=0 if no ratings."""
         ...
 
+    async def list_for_rated(
+        self,
+        rated_id: UserId,
+        limit: int,
+    ) -> list[Rating]:
+        """Latest ratings of `rated_id`, newest first."""
+        ...
+
 
 class IProfileScoreSummaryRepository(Protocol):
     async def upsert(self, summary: ProfileScoreSummary) -> None: ...

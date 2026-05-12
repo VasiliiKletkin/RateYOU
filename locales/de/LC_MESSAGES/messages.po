@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 17:39+0300\n"
+"POT-Creation-Date: 2026-05-12 18:20+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -78,7 +78,11 @@ msgstr "Foto"
 msgid "✅ Done"
 msgstr "✅ Fertig"
 
-#: src/presentation/bot/keyboards.py:217
+#: src/presentation/bot/keyboards.py:225
+msgid "🌟 Who rated me"
+msgstr "🌟 Wer hat mich bewertet"
+
+#: src/presentation/bot/keyboards.py:232
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} T"
@@ -317,6 +321,26 @@ msgstr[1] "📊 Durchschnitt: {avg}/10 (aus {count} Bewertungen)"
 msgid "Skipped"
 msgstr "Übersprungen"
 
+#: src/presentation/bot/handlers/my_ratings.py:30
+msgid ""
+"🔒 This is a premium feature.\n"
+"Use /premium to subscribe."
+msgstr ""
+"🔒 Das ist eine Premium-Funktion.\n"
+"Nutze /premium zum Abonnieren."
+
+#: src/presentation/bot/handlers/my_ratings.py:37
+msgid "No one has rated you yet."
+msgstr "Dich hat noch niemand bewertet."
+
+#: src/presentation/bot/handlers/my_ratings.py:40
+msgid "🌟 Latest people who rated you:"
+msgstr "🌟 Wer dich zuletzt bewertet hat:"
+
+#: src/presentation/bot/handlers/my_ratings.py:42
+msgid "Anonymous"
+msgstr "Anonym"
+
 #: src/presentation/bot/handlers/premium.py:34
 #, python-brace-format
 msgid "Expires in {days} day."
@@ -349,27 +373,27 @@ msgstr ""
 "\n"
 "Wähle eine Stufe:"
 
-#: src/presentation/bot/handlers/premium.py:106
+#: src/presentation/bot/handlers/premium.py:111
 msgid "Unknown tier"
 msgstr "Unbekannte Stufe"
 
-#: src/presentation/bot/handlers/premium.py:109
+#: src/presentation/bot/handlers/premium.py:114
 msgid "Invoice sent — pay in the chat"
 msgstr "Rechnung gesendet — bezahle im Chat"
 
-#: src/presentation/bot/handlers/premium.py:131
+#: src/presentation/bot/handlers/premium.py:136
 msgid "Unknown payment payload."
 msgstr "Unbekannte Zahlungsdaten."
 
-#: src/presentation/bot/handlers/premium.py:142
+#: src/presentation/bot/handlers/premium.py:147
 msgid "This payment is not in our records."
 msgstr "Diese Zahlung ist nicht in unseren Aufzeichnungen."
 
-#: src/presentation/bot/handlers/premium.py:156
+#: src/presentation/bot/handlers/premium.py:161
 msgid "✅ Payment confirmed."
 msgstr "✅ Zahlung bestätigt."
 
-#: src/presentation/bot/handlers/premium.py:161
+#: src/presentation/bot/handlers/premium.py:166
 #, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"

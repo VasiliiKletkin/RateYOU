@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 17:39+0300\n"
+"POT-Creation-Date: 2026-05-12 18:20+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uk\n"
@@ -79,7 +79,11 @@ msgstr "Фото"
 msgid "✅ Done"
 msgstr "✅ Готово"
 
-#: src/presentation/bot/keyboards.py:217
+#: src/presentation/bot/keyboards.py:225
+msgid "🌟 Who rated me"
+msgstr "🌟 Хто мене оцінив"
+
+#: src/presentation/bot/keyboards.py:232
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} дн."
@@ -317,6 +321,26 @@ msgstr[2] "📊 Середня оцінка: {avg}/10 (з {count} оцінок)"
 msgid "Skipped"
 msgstr "Пропущено"
 
+#: src/presentation/bot/handlers/my_ratings.py:30
+msgid ""
+"🔒 This is a premium feature.\n"
+"Use /premium to subscribe."
+msgstr ""
+"🔒 Це преміум-функція.\n"
+"Підпишись через /premium."
+
+#: src/presentation/bot/handlers/my_ratings.py:37
+msgid "No one has rated you yet."
+msgstr "Тебе ще ніхто не оцінив."
+
+#: src/presentation/bot/handlers/my_ratings.py:40
+msgid "🌟 Latest people who rated you:"
+msgstr "🌟 Останні, хто тебе оцінив:"
+
+#: src/presentation/bot/handlers/my_ratings.py:42
+msgid "Anonymous"
+msgstr "Анонім"
+
 #: src/presentation/bot/handlers/premium.py:34
 #, python-brace-format
 msgid "Expires in {days} day."
@@ -350,27 +374,27 @@ msgstr ""
 "\n"
 "Обери тариф:"
 
-#: src/presentation/bot/handlers/premium.py:106
+#: src/presentation/bot/handlers/premium.py:111
 msgid "Unknown tier"
 msgstr "Невідомий тариф"
 
-#: src/presentation/bot/handlers/premium.py:109
+#: src/presentation/bot/handlers/premium.py:114
 msgid "Invoice sent — pay in the chat"
 msgstr "Рахунок надіслано — оплати в чаті"
 
-#: src/presentation/bot/handlers/premium.py:131
+#: src/presentation/bot/handlers/premium.py:136
 msgid "Unknown payment payload."
 msgstr "Невідомі дані платежу."
 
-#: src/presentation/bot/handlers/premium.py:142
+#: src/presentation/bot/handlers/premium.py:147
 msgid "This payment is not in our records."
 msgstr "Цей платіж не знайдено в наших записах."
 
-#: src/presentation/bot/handlers/premium.py:156
+#: src/presentation/bot/handlers/premium.py:161
 msgid "✅ Payment confirmed."
 msgstr "✅ Платіж підтверджено."
 
-#: src/presentation/bot/handlers/premium.py:161
+#: src/presentation/bot/handlers/premium.py:166
 #, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"

@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -86,3 +86,61 @@ async def test_delete_removes_rating(session: AsyncSession) -> None:
     await repo.delete(rating)
 
     assert await repo.get_by_rater_and_rated(rater.id, rated.id) is None
+
+
+async def test_list_for_rated_returns_newest_first_capped_by_limit(
+    session: AsyncSession,
+) -> None:
+    rated = await _seed_user(session, 2040)
+    rater_a = await _seed_user(session, 2041)
+    rater_b = await _seed_user(session, 2042)
+    rater_c = await _seed_user(session, 2043)
+    repo = RatingRepository(session=session)
+    base = datetime.now(UTC)
+
+    # Distinct created_at values so ORDER BY is deterministic.
+    await repo.add(
+        Rating(
+            id=Rating.give(rater_a.id, rated.id, Score(4), base).id,
+            rater_id=rater_a.id,
+            rated_id=rated.id,
+            score=Score(4),
+            created_at=base - timedelta(hours=2),
+            updated_at=base - timedelta(hours=2),
+        )
+    )
+    await repo.add(
+        Rating(
+            id=Rating.give(rater_b.id, rated.id, Score(7), base).id,
+            rater_id=rater_b.id,
+            rated_id=rated.id,
+            score=Score(7),
+            created_at=base - timedelta(minutes=30),
+            updated_at=base - timedelta(minutes=30),
+        )
+    )
+    await repo.add(
+        Rating(
+            id=Rating.give(rater_c.id, rated.id, Score(9), base).id,
+            rater_id=rater_c.id,
+            rated_id=rated.id,
+            score=Score(9),
+            created_at=base,
+            updated_at=base,
+        )
+    )
+
+    all_three = await repo.list_for_rated(rated.id, limit=10)
+    assert [r.score.value for r in all_three] == [9, 7, 4]
+
+    top_two = await repo.list_for_rated(rated.id, limit=2)
+    assert [r.score.value for r in top_two] == [9, 7]
+
+
+async def test_list_for_rated_returns_empty_when_no_ratings(
+    session: AsyncSession,
+) -> None:
+    rated = await _seed_user(session, 2050)
+    repo = RatingRepository(session=session)
+
+    assert await repo.list_for_rated(rated.id, limit=10) == []

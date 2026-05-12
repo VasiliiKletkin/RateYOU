@@ -18,6 +18,7 @@ from src.application.profile.edit_profile import EditProfileUseCase
 from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.profile.visibility import HideProfileUseCase, ShowProfileUseCase
 from src.application.rating.get_profile_score import GetProfileScoreUseCase
+from src.application.rating.list_incoming_ratings import ListIncomingRatingsUseCase
 from src.application.rating.rate_user import RateUserUseCase
 from src.application.rating.withdraw_rating import WithdrawRatingUseCase
 from src.application.subscription.activate_premium import ActivatePremiumUseCase
@@ -51,6 +52,7 @@ class UseCaseProvider(Provider):
     rate_user = provide(RateUserUseCase)
     withdraw_rating = provide(WithdrawRatingUseCase)
     get_profile_score = provide(GetProfileScoreUseCase)
+    list_incoming_ratings = provide(ListIncomingRatingsUseCase)
 
     # Discovery
     get_next_profile = provide(GetNextProfileForRatingUseCase)

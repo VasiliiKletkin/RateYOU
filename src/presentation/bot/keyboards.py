@@ -204,24 +204,39 @@ def edit_menu_keyboard() -> InlineKeyboardMarkup:
     )
 
 
-def tiers_keyboard(tiers: list[TierInfoResponse]) -> InlineKeyboardMarkup:
+def tiers_keyboard(
+    tiers: list[TierInfoResponse],
+    *,
+    show_my_ratings_button: bool = False,
+) -> InlineKeyboardMarkup:
     """One button per tier: 'Bronze - 100 ⭐ / 7d'.
 
     Tier names (`display_name`) stay as-is — they're product proper-nouns.
     Only the surrounding template gets localized.
+
+    When `show_my_ratings_button` is True, prepends a 'Who rated me' row
+    so active-premium users have a single entry to their incoming-ratings list.
     """
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
+    rows: list[list[InlineKeyboardButton]] = []
+    if show_my_ratings_button:
+        rows.append(
             [
                 InlineKeyboardButton(
-                    text=_("{name} — {price} ⭐ / {days}d").format(
-                        name=tier.display_name,
-                        price=tier.stars_price,
-                        days=tier.duration_days,
-                    ),
-                    callback_data=f"buy:{tier.tier}",
+                    text=_("🌟 Who rated me"), callback_data="show_my_ratings"
                 )
             ]
-            for tier in tiers
+        )
+    rows.extend(
+        [
+            InlineKeyboardButton(
+                text=_("{name} — {price} ⭐ / {days}d").format(
+                    name=tier.display_name,
+                    price=tier.stars_price,
+                    days=tier.duration_days,
+                ),
+                callback_data=f"buy:{tier.tier}",
+            )
         ]
+        for tier in tiers
     )
+    return InlineKeyboardMarkup(inline_keyboard=rows)

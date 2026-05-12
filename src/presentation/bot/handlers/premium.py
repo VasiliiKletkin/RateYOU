@@ -73,7 +73,12 @@ async def cmd_premium(
             "Pick a tier:"
         )
 
-    await message.answer(header, reply_markup=tiers_keyboard(tiers))
+    await message.answer(
+        header,
+        reply_markup=tiers_keyboard(
+            tiers, show_my_ratings_button=current is not None
+        ),
+    )
 
 
 @router.callback_query(F.data.startswith("buy:"))

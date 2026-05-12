@@ -10,6 +10,7 @@ def _en_commands() -> list[BotCommand]:
         BotCommand(command="feed", description="Rate other profiles"),
         BotCommand(command="settings", description="Rating preferences"),
         BotCommand(command="premium", description="Premium subscription"),
+        BotCommand(command="my_ratings", description="Who rated me (premium)"),
         BotCommand(command="cancel", description="Cancel current action"),
     ]
 
@@ -22,6 +23,7 @@ def _ru_commands() -> list[BotCommand]:
         BotCommand(command="feed", description="Оценивать анкеты"),
         BotCommand(command="settings", description="Настройки оценок"),
         BotCommand(command="premium", description="Премиум-подписка"),
+        BotCommand(command="my_ratings", description="Кто меня оценил (премиум)"),
         BotCommand(command="cancel", description="Отменить текущее действие"),
     ]
 

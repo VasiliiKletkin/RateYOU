@@ -71,6 +71,19 @@ class RatingRepository:
         count = int(count_raw)
         return avg, count
 
+    async def list_for_rated(
+        self,
+        rated_id: UserId,
+        limit: int,
+    ) -> list[Rating]:
+        result = await self.session.execute(
+            select(RatingORM)
+            .where(RatingORM.rated_id == rated_id.value)
+            .order_by(RatingORM.created_at.desc())
+            .limit(limit)
+        )
+        return [orm_to_rating(orm) for orm in result.scalars().all()]
+
 
 @dataclass
 class ProfileScoreSummaryRepository:

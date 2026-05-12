@@ -8,3 +8,7 @@ class SubscriptionNotFound(SubscriptionError):
 
 class InvalidTier(SubscriptionError):
     pass
+
+
+class PremiumRequired(SubscriptionError):
+    """Raised when a premium-gated action is attempted without an active subscription."""
