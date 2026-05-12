@@ -27,7 +27,7 @@ class TransactionRepository:
         existing = await self.session.get(TransactionORM, transaction.id.value)
         if existing is None:
             raise ValueError(f"Transaction {transaction.id.value} not found for update")
-        existing.status = transaction.status.value
+        existing.status = transaction.status
         existing.external_id = transaction.external_id
         existing.updated_at = transaction.updated_at
         await self.session.flush()

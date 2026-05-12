@@ -39,7 +39,7 @@ class SubscriptionRepository:
     ) -> list[Subscription]:
         stmt = select(SubscriptionORM).where(
             SubscriptionORM.owner_id == owner_id.value,
-            SubscriptionORM.source == SubscriptionSource.PURCHASE.value,
+            SubscriptionORM.source == SubscriptionSource.PURCHASE,
             SubscriptionORM.is_revoked.is_(False),
             SubscriptionORM.expires_at > now,
         )
@@ -62,8 +62,8 @@ class SubscriptionRepository:
             raise ValueError(
                 f"Subscription {grant.id.value} not found for update"
             )
-        existing.tier = grant.tier.value
-        existing.source = grant.source.value
+        existing.tier = grant.tier
+        existing.source = grant.source
         existing.transaction_id = (
             grant.transaction_id.value if grant.transaction_id is not None else None
         )

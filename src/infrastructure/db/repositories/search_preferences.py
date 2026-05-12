@@ -37,7 +37,7 @@ class SearchPreferencesRepository:
             raise ValueError(
                 f"SearchPreferences for {prefs.user_id.value} not found for update"
             )
-        existing.gender_preference = prefs.gender_preference.value
+        existing.gender_preference = prefs.gender_preference
         existing.min_rating = prefs.min_rating.value
         existing.updated_at = prefs.updated_at
         await self.session.flush()

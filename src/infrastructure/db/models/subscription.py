@@ -1,10 +1,11 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Index, String, func
+from sqlalchemy import DateTime, ForeignKey, Index, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.db.models.base import Base
+from src.domain.subscription.value_objects import SubscriptionSource, Tier
+from src.infrastructure.db.models.base import Base, str_enum_column
 from src.infrastructure.db.models.identity import UserORM
 from src.infrastructure.db.models.payment import TransactionORM
 
@@ -28,8 +29,13 @@ class SubscriptionORM(Base):
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     owner: Mapped[UserORM] = relationship(UserORM)
-    tier: Mapped[str] = mapped_column(String(16), nullable=False)
-    source: Mapped[str] = mapped_column(String(16), nullable=False)
+    tier: Mapped[Tier] = mapped_column(
+        str_enum_column(Tier, name="subscription_tier"), nullable=False
+    )
+    source: Mapped[SubscriptionSource] = mapped_column(
+        str_enum_column(SubscriptionSource, name="subscription_source"),
+        nullable=False,
+    )
     transaction_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("transactions.id", ondelete="SET NULL"), nullable=True
     )

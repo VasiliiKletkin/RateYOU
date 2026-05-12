@@ -1,10 +1,11 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.infrastructure.db.models.base import Base
+from src.domain.discovery.value_objects import GenderPreference
+from src.infrastructure.db.models.base import Base, str_enum_column
 
 
 class SearchPreferencesORM(Base):
@@ -15,8 +16,9 @@ class SearchPreferencesORM(Base):
     user_id: Mapped[UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
-    gender_preference: Mapped[str] = mapped_column(
-        String(16), server_default="any"
+    gender_preference: Mapped[GenderPreference] = mapped_column(
+        str_enum_column(GenderPreference, name="gender_preference"),
+        server_default=GenderPreference.ANY.value,
     )
     min_rating: Mapped[int] = mapped_column(server_default="0")
     created_at: Mapped[datetime] = mapped_column(

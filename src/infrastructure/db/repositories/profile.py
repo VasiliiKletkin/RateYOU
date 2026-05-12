@@ -58,7 +58,7 @@ class ProfileRepository:
             raise ValueError(f"Profile {profile.id.value} not found for update")
         existing.name = profile.name.value
         existing.age = profile.age.value
-        existing.gender = profile.gender.value
+        existing.gender = profile.gender
         existing.bio = profile.bio.value
         existing.is_visible = profile.is_visible
         # SQLAlchemy accepts WKTElement for a Geography(WKBElement) column —

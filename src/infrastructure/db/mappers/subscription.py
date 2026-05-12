@@ -1,7 +1,7 @@
 from src.domain.payment.value_objects import TransactionId
 from src.domain.shared.identifiers import UserId
 from src.domain.subscription.entities import Subscription
-from src.domain.subscription.value_objects import SubscriptionId, SubscriptionSource, Tier
+from src.domain.subscription.value_objects import SubscriptionId
 from src.infrastructure.db.models.subscription import SubscriptionORM
 
 
@@ -9,8 +9,8 @@ def subscription_to_orm(grant: Subscription) -> SubscriptionORM:
     return SubscriptionORM(
         id=grant.id.value,
         owner_id=grant.owner_id.value,
-        tier=grant.tier.value,
-        source=grant.source.value,
+        tier=grant.tier,
+        source=grant.source,
         transaction_id=(
             grant.transaction_id.value if grant.transaction_id is not None else None
         ),
@@ -25,8 +25,8 @@ def orm_to_subscription(orm: SubscriptionORM) -> Subscription:
     return Subscription(
         id=SubscriptionId(orm.id),
         owner_id=UserId(orm.owner_id),
-        tier=Tier(orm.tier),
-        source=SubscriptionSource(orm.source),
+        tier=orm.tier,
+        source=orm.source,
         transaction_id=(
             TransactionId(orm.transaction_id) if orm.transaction_id is not None else None
         ),

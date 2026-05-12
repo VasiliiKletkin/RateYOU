@@ -6,7 +6,8 @@ from geoalchemy2.shape import to_shape
 from sqlalchemy import DateTime, ForeignKey, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.db.models.base import Base
+from src.domain.profile.value_objects import Gender
+from src.infrastructure.db.models.base import Base, str_enum_column
 
 
 class ProfileORM(Base):
@@ -18,7 +19,7 @@ class ProfileORM(Base):
     )
     name: Mapped[str] = mapped_column(String(50))
     age: Mapped[int]
-    gender: Mapped[str] = mapped_column(String(16))
+    gender: Mapped[Gender] = mapped_column(str_enum_column(Gender, name="gender"))
     bio: Mapped[str] = mapped_column(String(500), server_default="")
     is_visible: Mapped[bool] = mapped_column(server_default="true")
     # PostGIS geography (Point, SRID 4326). NOT NULL — every profile must

@@ -44,7 +44,7 @@ class UserRepository:
         existing = await self.session.get(UserORM, user.id.value)
         if existing is None:
             raise ValueError(f"User {user.id.value} not found for update")
-        existing.role = user.role.value
+        existing.role = user.role
         existing.is_banned = user.is_banned
         existing.ban_reason = user.ban_reason
         existing.banned_at = user.banned_at

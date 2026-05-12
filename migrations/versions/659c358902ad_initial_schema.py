@@ -31,7 +31,7 @@ def upgrade() -> None:
         sa.Column("telegram_id", sa.BigInteger(), nullable=False),
         sa.Column(
             "role",
-            sa.String(length=16),
+            sa.Enum("user", "admin", name="role"),
             server_default="user",
             nullable=False,
         ),
@@ -65,7 +65,9 @@ def upgrade() -> None:
         sa.Column("owner_id", sa.Uuid(), nullable=False),
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("age", sa.Integer(), nullable=False),
-        sa.Column("gender", sa.String(length=16), nullable=False),
+        sa.Column(
+            "gender", sa.Enum("male", "female", name="gender"), nullable=False
+        ),
         sa.Column(
             "bio",
             sa.String(length=500),
@@ -146,7 +148,7 @@ def upgrade() -> None:
         sa.Column("user_id", sa.Uuid(), nullable=False),
         sa.Column(
             "gender_preference",
-            sa.String(length=16),
+            sa.Enum("any", "male", "female", name="gender_preference"),
             server_default="any",
             nullable=False,
         ),
@@ -167,9 +169,19 @@ def upgrade() -> None:
         sa.Column("payer_id", sa.Uuid(), nullable=False),
         sa.Column("amount", sa.Integer(), nullable=False),
         sa.Column("currency", sa.String(length=8), nullable=False),
-        sa.Column("provider", sa.String(length=32), nullable=False),
+        sa.Column(
+            "provider",
+            sa.Enum("telegram_stars", name="payment_provider"),
+            nullable=False,
+        ),
         sa.Column("purpose", sa.String(length=100), nullable=False),
-        sa.Column("status", sa.String(length=16), nullable=False),
+        sa.Column(
+            "status",
+            sa.Enum(
+                "pending", "paid", "failed", "refunded", name="payment_status"
+            ),
+            nullable=False,
+        ),
         sa.Column("external_id", sa.String(length=255), nullable=True),
         sa.Column(
             "created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False
@@ -186,8 +198,18 @@ def upgrade() -> None:
         "subscriptions",
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("owner_id", sa.Uuid(), nullable=False),
-        sa.Column("tier", sa.String(length=16), nullable=False),
-        sa.Column("source", sa.String(length=16), nullable=False),
+        sa.Column(
+            "tier",
+            sa.Enum(
+                "bronze", "silver", "gold", "bonus", name="subscription_tier"
+            ),
+            nullable=False,
+        ),
+        sa.Column(
+            "source",
+            sa.Enum("purchase", "bonus", name="subscription_source"),
+            nullable=False,
+        ),
         sa.Column("transaction_id", sa.Uuid(), nullable=True),
         sa.Column("starts_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=False),
@@ -243,4 +265,15 @@ def downgrade() -> None:
     op.drop_table("profile_photos")
     op.drop_table("profiles")
     op.drop_table("users")
+    # Postgres ENUM types are not dropped together with the tables that use them.
+    for enum_name in (
+        "subscription_source",
+        "subscription_tier",
+        "payment_status",
+        "payment_provider",
+        "gender_preference",
+        "gender",
+        "role",
+    ):
+        op.execute(f"DROP TYPE IF EXISTS {enum_name}")
     op.execute("DROP EXTENSION IF EXISTS postgis")
