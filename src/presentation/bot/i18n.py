@@ -5,6 +5,10 @@ from typing import Any
 
 from aiogram.types import TelegramObject
 from aiogram.utils.i18n import I18n, I18nMiddleware
+from dishka import AsyncContainer
+
+from src.domain.identity.repositories import IUserRepository
+from src.domain.identity.value_objects import TelegramId
 
 log = logging.getLogger(__name__)
 
@@ -90,10 +94,17 @@ def normalize_language(raw: str | None) -> str:
 
 
 class UserLanguageI18nMiddleware(I18nMiddleware):
-    """Picks the locale from Telegram's `from_user.language_code`.
+    """Picks the locale from `User.language` stored in the DB.
 
-    Delegates the actual normalisation to `normalize_language` so the
-    register-user flow can store the same canonical code on `User.language`.
+    The user's stored language is authoritative: it's set on first /start
+    from Telegram's `language_code` and then only changed via /settings.
+    Subsequent updates ignore Telegram's client locale and follow whatever
+    the user picked.
+
+    Fallback chain:
+      1. `User.language` looked up by `telegram_id` (request-scope container)
+      2. Telegram's `from_user.language_code`, normalised
+      3. `DEFAULT_LANGUAGE`
     """
 
     async def get_locale(
@@ -102,11 +113,35 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
         data: dict[str, Any],
     ) -> str:
         tg_user = getattr(event, "from_user", None)
-        raw = getattr(tg_user, "language_code", None) if tg_user else None
+        if tg_user is None:
+            return DEFAULT_LANGUAGE
+
+        container: AsyncContainer | None = data.get("dishka_container")
+        if container is not None:
+            try:
+                user_repo = await container.get(IUserRepository)
+                user = await user_repo.get_by_telegram_id(
+                    TelegramId(tg_user.id)
+                )
+            except Exception:
+                # DB unreachable / repo not yet wired — fall back rather
+                # than 500-ing every update.
+                log.warning(
+                    "i18n: stored language lookup failed; "
+                    "falling back to Telegram code",
+                    exc_info=True,
+                )
+                user = None
+            if user is not None:
+                stored: str = user.language
+                log.info("i18n: tg_user=%s → stored %s", tg_user.id, stored)
+                return stored
+
+        raw = getattr(tg_user, "language_code", None)
         chosen = normalize_language(raw)
         log.info(
-            "i18n: tg_user=%s raw=%r → %s",
-            getattr(tg_user, "id", None),
+            "i18n: tg_user=%s no stored language, telegram=%r → %s",
+            tg_user.id,
             raw,
             chosen,
         )

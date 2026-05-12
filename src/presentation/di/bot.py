@@ -28,5 +28,9 @@ class BotProvider(Provider):
             await bot.session.close()
 
     @provide
-    def storage(self, redis: Redis) -> BaseStorage:
-        return RedisStorage(redis=redis)
+    def storage(self, redis: Redis, settings: Settings) -> BaseStorage:
+        return RedisStorage(
+            redis=redis,
+            state_ttl=settings.redis.fsm_state_ttl_seconds,
+            data_ttl=settings.redis.fsm_data_ttl_seconds,
+        )

@@ -50,6 +50,13 @@ class RedisConfig(BaseSettings):
     port: int = 6379
     db: int = 0
 
+    # Default TTLs (seconds) for every Redis-backed feature. Keeps the keyspace
+    # bounded: abandoned FSM sessions, throttle markers and skip sets all expire.
+    fsm_state_ttl_seconds: int = 86400  # 24h — covers long onboarding/profile flows
+    fsm_data_ttl_seconds: int = 86400
+    throttle_ttl_seconds: int = 1
+    skip_ttl_seconds: int = 3600  # 1h cooldown before a skipped profile may resurface
+
     @property
     def dsn(self) -> str:
         return f"redis://{self.host}:{self.port}/{self.db}"

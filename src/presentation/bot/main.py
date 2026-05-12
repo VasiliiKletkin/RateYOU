@@ -25,9 +25,16 @@ WEBHOOK_PATH = "/webhook"
 WEBHOOK_PORT = 8080
 
 
-def _register_middlewares(dp: Dispatcher, redis: Redis) -> None:
+def _register_middlewares(
+    dp: Dispatcher,
+    redis: Redis,
+    settings: Settings,
+) -> None:
     """Throttling first (cheap Redis SET NX), then ban-check (DB lookup)."""
-    throttling = ThrottlingMiddleware(redis=redis)
+    throttling = ThrottlingMiddleware(
+        redis=redis,
+        ttl_seconds=settings.redis.throttle_ttl_seconds,
+    )
     ban_check = BanCheckMiddleware()
     for observer in (dp.message, dp.callback_query):
         observer.middleware(throttling)
@@ -101,7 +108,7 @@ async def main() -> None:
         dp.include_router(router)
 
     setup_dishka(container=container, router=dp, auto_inject=True)
-    _register_middlewares(dp, redis)
+    _register_middlewares(dp, redis, settings)
     _register_error_handler(dp)
     UserLanguageI18nMiddleware(i18n).setup(dp)
     await register_commands(bot)

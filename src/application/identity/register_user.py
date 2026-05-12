@@ -24,13 +24,10 @@ class RegisterUserUseCase:
 
         existing = await self.user_repo.get_by_telegram_id(telegram_id)
         if existing is not None:
-            # Refresh the stored language if Telegram now reports a different
-            # one — users sometimes switch their client locale and we want
-            # outgoing notifications to follow.
-            if request.language and existing.language != request.language:
-                existing.change_language(request.language)
-                await self.user_repo.update(existing)
-                await self.uow.commit()
+            # `User.language` is owned by the user once registered (settable
+            # via /settings, read by the i18n middleware). The Telegram code
+            # passed in `request.language` is only useful for the new-user
+            # branch below — never overwrites a returning user's preference.
             return _to_response(existing)
 
         user = User.register(
