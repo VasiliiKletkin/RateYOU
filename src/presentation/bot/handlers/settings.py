@@ -16,7 +16,6 @@ from src.application.discovery.search_preferences import (
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.identity.update_language import UpdateUserLanguageUseCase
-from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.domain.discovery.exceptions import InvalidMinRating
 from src.domain.identity.value_objects import Language
@@ -123,7 +122,6 @@ async def _swap_keyboard(
 async def cmd_settings(
     message: Message,
     register_user: FromDishka[RegisterUserUseCase],
-    get_my_profile: FromDishka[GetMyProfileUseCase],
     get_prefs: FromDishka[GetSearchPreferencesUseCase],
     get_my_premium: FromDishka[GetMyPremiumUseCase],
 ) -> None:
@@ -135,10 +133,8 @@ async def cmd_settings(
             language=normalize_language(message.from_user.language_code),
         )
     )
-    if (await get_my_profile.execute(user.id)) is None:
-        await message.answer(_("No profile yet. Use /create first."))
-        return
-
+    # Settings (language picker + search prefs) don't depend on a profile —
+    # GetSearchPreferencesUseCase lazily materialises the row on first read.
     prefs = await get_prefs.execute(user.id)
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await message.answer(

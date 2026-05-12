@@ -30,7 +30,7 @@ def upgrade() -> None:
         sa.Column(
             "role", sa.Enum("USER", "ADMIN", name="role"), nullable=False
         ),
-        sa.Column("is_banned", sa.Boolean(), server_default="false", nullable=False),
+        sa.Column("is_banned", sa.Boolean(), nullable=False),
         sa.Column("ban_reason", sa.String(length=500), nullable=True),
         sa.Column("banned_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column(
@@ -94,8 +94,8 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("age", sa.Integer(), nullable=False),
         sa.Column("gender", sa.Enum("MALE", "FEMALE", name="gender"), nullable=False),
-        sa.Column("bio", sa.String(length=500), server_default="", nullable=False),
-        sa.Column("is_visible", sa.Boolean(), server_default="true", nullable=False),
+        sa.Column("bio", sa.String(length=500), nullable=False),
+        sa.Column("is_visible", sa.Boolean(), nullable=False),
         sa.Column(
             "location",
             geoalchemy2.types.Geography(
@@ -179,7 +179,7 @@ def upgrade() -> None:
             sa.Enum("MALE", "FEMALE", "ANY", name="genderpreference"),
             nullable=False,
         ),
-        sa.Column("min_rating", sa.Integer(), server_default="0", nullable=False),
+        sa.Column("min_rating", sa.Integer(), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -251,7 +251,7 @@ def upgrade() -> None:
         sa.Column("transaction_id", sa.Uuid(), nullable=True),
         sa.Column("starts_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column("is_revoked", sa.Boolean(), server_default="false", nullable=False),
+        sa.Column("is_revoked", sa.Boolean(), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),

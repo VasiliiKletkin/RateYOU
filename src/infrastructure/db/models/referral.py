@@ -1,14 +1,13 @@
-from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, func
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.db.models.base import Base
+from src.infrastructure.db.models.base import Base, CreatedAtMixin
 from src.infrastructure.db.models.identity import UserORM
 
 
-class ReferralORM(Base):
+class ReferralORM(Base, CreatedAtMixin):
     """One row per paid-out referral.
 
     `referee_id` is UNIQUE — a user can only be referred once, regardless
@@ -33,6 +32,3 @@ class ReferralORM(Base):
         UserORM, foreign_keys=[referrer_id]
     )
     referee: Mapped[UserORM] = relationship(UserORM, foreign_keys=[referee_id])
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )

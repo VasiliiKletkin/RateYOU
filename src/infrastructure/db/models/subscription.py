@@ -1,16 +1,16 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Index, func
+from sqlalchemy import DateTime, Enum, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.domain.subscription.value_objects import SubscriptionSource, Tier
-from src.infrastructure.db.models.base import Base
+from src.infrastructure.db.models.base import Base, CreatedAtMixin
 from src.infrastructure.db.models.identity import UserORM
 from src.infrastructure.db.models.payment import TransactionORM
 
 
-class SubscriptionORM(Base):
+class SubscriptionORM(Base, CreatedAtMixin):
     """One row per granted period of premium days (purchase, bonus, ...).
 
     The user's current premium state is derived from the set of their grants
@@ -29,9 +29,7 @@ class SubscriptionORM(Base):
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     owner: Mapped[UserORM] = relationship(UserORM)
-    tier: Mapped[Tier] = mapped_column(
-        Enum(Tier), nullable=False
-    )
+    tier: Mapped[Tier] = mapped_column(Enum(Tier), nullable=False)
     source: Mapped[SubscriptionSource] = mapped_column(
         Enum(SubscriptionSource), nullable=False
     )
@@ -45,10 +43,7 @@ class SubscriptionORM(Base):
     expires_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False
     )
-    is_revoked: Mapped[bool] = mapped_column(server_default="false", nullable=False)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
-    )
+    is_revoked: Mapped[bool] = mapped_column(default=False)
 
     __table_args__ = (
         Index(
