@@ -111,7 +111,7 @@ async def main() -> None:
     _register_middlewares(dp, redis, settings)
     _register_error_handler(dp)
     UserLanguageI18nMiddleware(i18n).setup(dp)
-    await register_commands(bot)
+    await register_commands(bot, i18n)
 
     try:
         if settings.bot.use_webhook:

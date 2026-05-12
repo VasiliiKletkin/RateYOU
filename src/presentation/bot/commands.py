@@ -1,44 +1,53 @@
 from aiogram import Bot
 from aiogram.types import BotCommand
+from aiogram.utils.i18n import I18n, gettext as _
+
+from src.domain.identity.value_objects import Language
 
 
-def _en_commands() -> list[BotCommand]:
+def _build_commands() -> list[BotCommand]:
+    """Renders the command list under the currently-active i18n locale.
+
+    Must be called inside ``i18n.context() / i18n.use_locale(...)`` so
+    the `_(...)` calls resolve to the right translation.
+    """
     return [
-        BotCommand(command="start", description="Start the bot"),
-        BotCommand(command="create", description="Create your profile"),
-        BotCommand(command="edit", description="Edit your profile"),
-        BotCommand(command="feed", description="Rate other profiles"),
-        BotCommand(command="settings", description="Rating preferences"),
-        BotCommand(command="premium", description="Premium subscription"),
-        BotCommand(command="my_ratings", description="Who rated me (premium)"),
-        BotCommand(command="refer", description="Invite friends and earn premium"),
-        BotCommand(command="cancel", description="Cancel current action"),
+        BotCommand(command="start", description=_("Start the bot")),
+        BotCommand(command="create", description=_("Create your profile")),
+        BotCommand(command="edit", description=_("Edit your profile")),
+        BotCommand(command="feed", description=_("Rate other profiles")),
+        BotCommand(command="settings", description=_("Rating preferences")),
+        BotCommand(command="premium", description=_("Premium subscription")),
+        BotCommand(
+            command="my_ratings", description=_("Who rated me (premium)")
+        ),
+        BotCommand(
+            command="refer", description=_("Invite friends and earn premium")
+        ),
+        BotCommand(command="cancel", description=_("Cancel current action")),
     ]
 
 
-def _ru_commands() -> list[BotCommand]:
-    return [
-        BotCommand(command="start", description="Запуск бота"),
-        BotCommand(command="create", description="Создать анкету"),
-        BotCommand(command="edit", description="Редактировать анкету"),
-        BotCommand(command="feed", description="Оценивать анкеты"),
-        BotCommand(command="settings", description="Настройки оценок"),
-        BotCommand(command="premium", description="Премиум-подписка"),
-        BotCommand(command="my_ratings", description="Кто меня оценил (премиум)"),
-        BotCommand(command="refer", description="Пригласить друзей и получить премиум"),
-        BotCommand(command="cancel", description="Отменить текущее действие"),
-    ]
+async def register_commands(bot: Bot, i18n: I18n) -> None:
+    """Registers bot commands shown in Telegram's `/` menu, per language.
 
-
-async def register_commands(bot: Bot) -> None:
-    """Registers bot commands shown in Telegram's `/` menu.
-
-    The English list is the default; Russian Telegram clients see the
-    `language_code="ru"` variant. Idempotent — safe to call on every startup.
+    English is the default (no ``language_code``). For every other supported
+    `Language`, descriptions are rendered under that locale and registered
+    via ``set_my_commands(..., language_code=...)``. Idempotent — Telegram
+    overwrites the previous list on each call.
 
     `/skip` is NOT listed because it's only valid inside FSM states (e.g.
     "skip bio" when collecting the profile). It's prompted contextually
     rather than via the menu.
     """
-    await bot.set_my_commands(_en_commands())
-    await bot.set_my_commands(_ru_commands(), language_code="ru")
+    # Default (English) — used by any client whose locale isn't in our list.
+    with i18n.context(), i18n.use_locale(Language.EN.value):
+        await bot.set_my_commands(_build_commands())
+
+    for lang in Language:
+        if lang is Language.EN:
+            continue
+        with i18n.context(), i18n.use_locale(lang.value):
+            await bot.set_my_commands(
+                _build_commands(), language_code=lang.value
+            )
