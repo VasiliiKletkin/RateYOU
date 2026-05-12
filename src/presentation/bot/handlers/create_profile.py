@@ -79,7 +79,7 @@ async def process_name(message: Message, state: FSMContext) -> None:
         return
     await state.update_data(name=name.value)
     await state.set_state(CreateProfile.waiting_for_age)
-    await message.answer(_("How old are you? (18-100)"))
+    await message.answer(_("How old are you?"))
 
 
 @router.message(CreateProfile.waiting_for_age)

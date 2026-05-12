@@ -97,8 +97,8 @@ msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ Name must be 1-50 non-empty characters. Try again:"
 
 #: src/presentation/bot/handlers/create_profile.py:82
-msgid "How old are you? (18-100)"
-msgstr "How old are you? (18-100)"
+msgid "How old are you?"
+msgstr "How old are you?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
 #: src/presentation/bot/handlers/edit_profile.py:179
