@@ -6,10 +6,6 @@ class UserNotFound(IdentityError):
     pass
 
 
-class UserAlreadyExists(IdentityError):
-    pass
-
-
 class UserIsBanned(IdentityError):
     pass
 
