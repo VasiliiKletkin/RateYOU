@@ -19,6 +19,7 @@ dev = [
     "pytest-cov (>=7.1.0,<8.0.0)",
     "ruff (>=0.15.12,<0.16.0)",
     "mypy (>=2.0.0,<3.0.0)",
+    "pytest-env (>=1.6.0,<2.0.0)",
 ]
 
 # ─── Ruff ────────────────────────────────────────────────────────
@@ -74,7 +75,7 @@ show_error_codes = true
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
-module = ["alembic.*"]
+module = ["alembic.*", "asyncpg"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
@@ -91,3 +92,9 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 addopts = "-ra --strict-markers --strict-config"
+# pytest-env sets these BEFORE pydantic-settings imports .env, so integration
+# tests target a separate database. The session bootstrap fixture in
+# tests/integration/conftest.py creates it and runs migrations if needed.
+env = [
+    "POSTGRES_DB=rateyou_test",
+]

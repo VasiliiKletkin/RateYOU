@@ -59,24 +59,29 @@ class ProfileRepository:
         existing.name = profile.name.value
         existing.age = profile.age.value
         existing.gender = profile.gender.value
+        existing.gender_preference = profile.gender_preference.value
         existing.bio = profile.bio.value
         existing.is_visible = profile.is_visible
         # SQLAlchemy accepts WKTElement for a Geography(WKBElement) column —
         # the type hierarchy is just narrower than the runtime behaviour.
         existing.location = _location_to_wkt(profile.location)  # type: ignore[assignment]
         existing.updated_at = profile.updated_at
-        self._reconcile_photos(existing, profile)
+        await self._reconcile_photos(existing, profile)
         await self.session.flush()
 
-    def _reconcile_photos(self, existing: ProfileORM, profile: Profile) -> None:
+    async def _reconcile_photos(
+        self, existing: ProfileORM, profile: Profile
+    ) -> None:
         """Replace-all strategy: drop everything, recreate with fresh positions.
 
         With ≤6 photos and an indexed FK, deleting+inserting beats diffing —
         simpler code, identical I/O. `cascade="all, delete-orphan"` on the
         relationship turns the .clear() into proper DELETE statements when
-        we flush.
+        we flush. We flush BETWEEN the clear and the extend so the old rows
+        leave the DB before new rows reuse their (profile_id, position).
         """
         existing.photos.clear()
+        await self.session.flush()
         existing.photos.extend(
             ProfilePhotoORM(
                 id=uuid4(),

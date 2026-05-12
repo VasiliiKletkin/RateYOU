@@ -23,6 +23,15 @@ poetry run pytest tests/integration/       # needs postgres + redis up
 poetry run pytest -k <name>                # single test by substring
 poetry run pytest tests/unit/domain/identity/test_user.py  # one file
 
+# Integration tests run against `rateyou_test`, not the dev `rateyou` DB.
+# `pytest-env` forces POSTGRES_DB=rateyou_test in pyproject.toml's
+# [tool.pytest.ini_options].env BEFORE pydantic-settings reads .env. The
+# session bootstrap in tests/integration/conftest.py creates the DB and runs
+# `alembic upgrade head` on it automatically — first run adds ~1s, later
+# runs are no-ops. After a schema change, just run pytest; the fixture
+# upgrades the test DB. The dev DB still needs `alembic upgrade head`
+# manually when you want the bot/admin to see the new schema.
+
 # Lint and type-check
 poetry run ruff check src/ tests/
 poetry run ruff check --fix src/ tests/
