@@ -1,7 +1,10 @@
 from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.discovery.repositories import IDiscoveryRepository
+from src.domain.discovery.repositories import (
+    IDiscoveryRepository,
+    ISearchPreferencesRepository,
+)
 from src.domain.identity.repositories import IUserRepository
 from src.domain.payment.repositories import ITransactionRepository
 from src.domain.profile.repositories import IProfileRepository
@@ -16,6 +19,9 @@ from src.infrastructure.db.repositories.profile import ProfileRepository
 from src.infrastructure.db.repositories.rating import (
     ProfileScoreSummaryRepository,
     RatingRepository,
+)
+from src.infrastructure.db.repositories.search_preferences import (
+    SearchPreferencesRepository,
 )
 from src.infrastructure.db.repositories.subscription import SubscriptionRepository
 from src.infrastructure.db.repositories.user import UserRepository
@@ -46,6 +52,12 @@ class RepositoryProvider(Provider):
     @provide
     def discovery_repo(self, session: AsyncSession) -> IDiscoveryRepository:
         return DiscoveryRepository(session=session)
+
+    @provide
+    def search_preferences_repo(
+        self, session: AsyncSession
+    ) -> ISearchPreferencesRepository:
+        return SearchPreferencesRepository(session=session)
 
     @provide
     def subscription_repo(

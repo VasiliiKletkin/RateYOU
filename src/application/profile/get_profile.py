@@ -22,7 +22,6 @@ class GetMyProfileUseCase:
             name=profile.name.value,
             age=profile.age.value,
             gender=profile.gender.value,
-            gender_preference=profile.gender_preference.value,
             bio=profile.bio.value,
             photo_file_ids=tuple(profile.photos.to_strings()),
             location=(profile.location.lat, profile.location.lon),

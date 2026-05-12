@@ -8,7 +8,6 @@ class CreateProfileRequest:
     name: str
     age: int
     gender: str  # "male" | "female"
-    gender_preference: str  # "male" | "female" | "any"
     bio: str
     photo_file_ids: tuple[str, ...]  # 1..6
     location: tuple[float, float]  # (lat, lon) — required
@@ -20,7 +19,6 @@ class EditProfileRequest:
     name: str | None = None
     age: int | None = None
     gender: str | None = None
-    gender_preference: str | None = None
     bio: str | None = None
     # None = don't change. Non-None replaces the whole set (1..6).
     photo_file_ids: tuple[str, ...] | None = None
@@ -34,7 +32,6 @@ class ProfileResponse:
     name: str
     age: int
     gender: str
-    gender_preference: str
     bio: str
     photo_file_ids: tuple[str, ...]
     location: tuple[float, float]

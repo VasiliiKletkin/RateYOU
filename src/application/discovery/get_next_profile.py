@@ -3,7 +3,10 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from src.application.discovery.dto import NextProfileResponse
-from src.domain.discovery.repositories import IDiscoveryRepository
+from src.domain.discovery.repositories import (
+    IDiscoveryRepository,
+    ISearchPreferencesRepository,
+)
 from src.domain.discovery.skip_registry import ISkipRegistry
 from src.domain.discovery.specifications import (
     ProfileAverageRatingAtLeast,
@@ -11,8 +14,9 @@ from src.domain.discovery.specifications import (
     ProfileOwnerNotIn,
     default_feed_spec,
 )
+from src.domain.discovery.value_objects import GenderPreference
 from src.domain.profile.repositories import IProfileRepository
-from src.domain.profile.value_objects import Gender, GenderPreference
+from src.domain.profile.value_objects import Gender
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 from src.domain.subscription.repositories import ISubscriptionRepository
@@ -35,6 +39,7 @@ class GetNextProfileForRatingUseCase:
 
     discovery_repo: IDiscoveryRepository
     profile_repo: IProfileRepository
+    prefs_repo: ISearchPreferencesRepository
     subscription_repo: ISubscriptionRepository
     skip_registry: ISkipRegistry
 
@@ -49,16 +54,25 @@ class GetNextProfileForRatingUseCase:
 
         spec: Specification = default_feed_spec(viewer)
 
-        if viewer_profile.gender_preference != GenderPreference.ANY:
+        prefs = await self.prefs_repo.get_for(viewer)
+        if prefs is not None and prefs.gender_preference != GenderPreference.ANY:
             # ANY disables the filter; the other two enums map 1:1 to Gender
             # so the lookup is safe.
             spec = spec & ProfileHasGender(
-                Gender(viewer_profile.gender_preference.value)
+                Gender(prefs.gender_preference.value)
             )
 
-        threshold = await self._premium_threshold(viewer)
-        if threshold is not None:
-            spec = spec & ProfileAverageRatingAtLeast(threshold)
+        # Final min-rating threshold = max(user pref, premium tier floor). User
+        # pref is gated to premium in /settings; this `max` is a defensive net
+        # for any race or backfill ordering.
+        thresholds: list[float] = []
+        if prefs is not None and prefs.min_rating.is_active:
+            thresholds.append(float(prefs.min_rating.value))
+        premium_threshold = await self._premium_threshold(viewer)
+        if premium_threshold is not None:
+            thresholds.append(premium_threshold)
+        if thresholds:
+            spec = spec & ProfileAverageRatingAtLeast(max(thresholds))
 
         skipped = await self.skip_registry.get_skipped(viewer)
         if skipped:

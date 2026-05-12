@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from typing import Protocol
 
+from src.domain.discovery.entities import SearchPreferences
 from src.domain.profile.entities import Profile
 from src.domain.profile.value_objects import Location
+from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 
 
@@ -28,3 +30,11 @@ class IDiscoveryRepository(Protocol):
         spec: Specification,
         viewer_location: Location,
     ) -> DiscoveryMatch | None: ...
+
+
+class ISearchPreferencesRepository(Protocol):
+    """CRUD for the `SearchPreferences` aggregate (1:1 with User)."""
+
+    async def get_for(self, user_id: UserId) -> SearchPreferences | None: ...
+    async def add(self, prefs: SearchPreferences) -> None: ...
+    async def update(self, prefs: SearchPreferences) -> None: ...

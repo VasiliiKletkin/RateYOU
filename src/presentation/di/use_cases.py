@@ -1,6 +1,11 @@
 from dishka import Provider, Scope, provide
 
 from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
+from src.application.discovery.search_preferences import (
+    GetSearchPreferencesUseCase,
+    UpdateGenderPreferenceUseCase,
+    UpdateMinRatingUseCase,
+)
 from src.application.discovery.skip_profile import SkipProfileUseCase
 from src.application.identity.get_user import GetUserByTelegramIdUseCase
 from src.application.identity.register_user import RegisterUserUseCase
@@ -48,6 +53,9 @@ class UseCaseProvider(Provider):
     # Discovery
     get_next_profile = provide(GetNextProfileForRatingUseCase)
     skip_profile = provide(SkipProfileUseCase)
+    get_search_preferences = provide(GetSearchPreferencesUseCase)
+    update_gender_preference = provide(UpdateGenderPreferenceUseCase)
+    update_min_rating = provide(UpdateMinRatingUseCase)
 
     # Subscription
     activate_premium = provide(ActivatePremiumUseCase)

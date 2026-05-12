@@ -1,4 +1,5 @@
 from src.infrastructure.db.models.base import Base
+from src.infrastructure.db.models.discovery import SearchPreferencesORM
 from src.infrastructure.db.models.identity import UserORM
 from src.infrastructure.db.models.payment import TransactionORM
 from src.infrastructure.db.models.profile import ProfileORM, ProfilePhotoORM
@@ -11,6 +12,7 @@ __all__ = [
     "ProfilePhotoORM",
     "ProfileScoreSummaryORM",
     "RatingORM",
+    "SearchPreferencesORM",
     "SubscriptionORM",
     "TransactionORM",
     "UserORM",

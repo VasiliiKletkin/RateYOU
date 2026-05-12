@@ -64,6 +64,53 @@ def gender_preference_keyboard(prefix: str = "genderpref") -> InlineKeyboardMark
     )
 
 
+def settings_keyboard(
+    gender_prefix: str = "setpref",
+    rating_prefix: str = "setrating",
+    *,
+    show_min_rating: bool,
+) -> InlineKeyboardMarkup:
+    """Compact /settings picker: gender row + (optionally) min-rating row.
+
+    `show_min_rating=False` hides the rating presets — used to gate the
+    feature behind a premium subscription.
+    """
+    rows: list[list[InlineKeyboardButton]] = [
+        [
+            InlineKeyboardButton(
+                text=_("♂️ Men"), callback_data=f"{gender_prefix}:male"
+            ),
+            InlineKeyboardButton(
+                text=_("♀️ Women"), callback_data=f"{gender_prefix}:female"
+            ),
+            InlineKeyboardButton(
+                text=_("👥 All"), callback_data=f"{gender_prefix}:any"
+            ),
+        ],
+    ]
+    if show_min_rating:
+        rows.append(
+            [
+                InlineKeyboardButton(
+                    text=_("Any"), callback_data=f"{rating_prefix}:0"
+                ),
+                InlineKeyboardButton(
+                    text="6+", callback_data=f"{rating_prefix}:6"
+                ),
+                InlineKeyboardButton(
+                    text="7+", callback_data=f"{rating_prefix}:7"
+                ),
+                InlineKeyboardButton(
+                    text="8+", callback_data=f"{rating_prefix}:8"
+                ),
+                InlineKeyboardButton(
+                    text="9+", callback_data=f"{rating_prefix}:9"
+                ),
+            ]
+        )
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
 def rating_keyboard(rated_user_id: UUID) -> InlineKeyboardMarkup:
     """Buttons 0..10 (split into two rows) plus a Skip button.
 

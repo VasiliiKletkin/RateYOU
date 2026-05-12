@@ -5,7 +5,6 @@ from src.domain.profile.value_objects import (
     Age,
     Bio,
     Gender,
-    GenderPreference,
     Location,
     Name,
     Photos,
@@ -29,7 +28,6 @@ class Profile:
     name: Name
     age: Age
     gender: Gender
-    gender_preference: GenderPreference
     bio: Bio
     photos: Photos
     location: Location
@@ -44,7 +42,6 @@ class Profile:
         name: Name,
         age: Age,
         gender: Gender,
-        gender_preference: GenderPreference,
         bio: Bio,
         photos: Photos,
         location: Location,
@@ -56,7 +53,6 @@ class Profile:
             name=name,
             age=age,
             gender=gender,
-            gender_preference=gender_preference,
             bio=bio,
             photos=photos,
             location=location,
@@ -77,12 +73,6 @@ class Profile:
             self.age = age
         if gender is not None:
             self.gender = gender
-        self.updated_at = now
-
-    def change_gender_preference(
-        self, preference: GenderPreference, now: datetime
-    ) -> None:
-        self.gender_preference = preference
         self.updated_at = now
 
     def update_bio(self, bio: Bio, now: datetime) -> None:

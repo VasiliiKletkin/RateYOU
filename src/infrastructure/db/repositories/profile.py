@@ -59,7 +59,6 @@ class ProfileRepository:
         existing.name = profile.name.value
         existing.age = profile.age.value
         existing.gender = profile.gender.value
-        existing.gender_preference = profile.gender_preference.value
         existing.bio = profile.bio.value
         existing.is_visible = profile.is_visible
         # SQLAlchemy accepts WKTElement for a Geography(WKBElement) column —

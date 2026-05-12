@@ -7,6 +7,9 @@ from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from aiogram.utils.i18n import gettext as _
 from dishka import FromDishka
 
+from src.application.discovery.search_preferences import (
+    UpdateGenderPreferenceUseCase,
+)
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.profile.create_profile import CreateProfileUseCase
@@ -200,6 +203,7 @@ async def _finalize_create(
     state: FSMContext,
     register_user: RegisterUserUseCase,
     create_profile: CreateProfileUseCase,
+    update_gender_preference: UpdateGenderPreferenceUseCase,
 ) -> None:
     data = await state.get_data()
     photos: list[str] = data.get("photos", [])
@@ -220,7 +224,6 @@ async def _finalize_create(
                 name=data["name"],
                 age=data["age"],
                 gender=data["gender"],
-                gender_preference=data["gender_preference"],
                 bio=data["bio"],
                 photo_file_ids=tuple(photos),
                 location=(data["location_lat"], data["location_lon"]),
@@ -230,6 +233,13 @@ async def _finalize_create(
         await message.answer(_("You already have a profile."))
         await state.clear()
         return
+
+    # Persist the gender preference into the SearchPreferences aggregate.
+    # `update_gender_preference` is idempotent (creates the row with defaults
+    # if missing) so we don't need to differentiate first-time vs re-create.
+    await update_gender_preference.execute(
+        user.id, data["gender_preference"]
+    )
 
     await state.clear()
     await message.answer(
@@ -248,6 +258,7 @@ async def collect_photo(
     state: FSMContext,
     register_user: FromDishka[RegisterUserUseCase],
     create_profile: FromDishka[CreateProfileUseCase],
+    update_gender_preference: FromDishka[UpdateGenderPreferenceUseCase],
 ) -> None:
     if not message.photo:
         return
@@ -267,7 +278,13 @@ async def collect_photo(
     if not photos:
         return
     await state.update_data(photos=photos)
-    await _finalize_create(message, state, register_user, create_profile)
+    await _finalize_create(
+        message,
+        state,
+        register_user,
+        create_profile,
+        update_gender_preference,
+    )
 
 
 @router.message(CreateProfile.waiting_for_photo)
