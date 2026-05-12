@@ -17,6 +17,7 @@ from src.infrastructure.db.models import (
     TransactionORM,
     UserORM,
 )
+from src.infrastructure.observability import init_sentry
 from src.presentation.admin.auth import AdminAuthProvider
 from src.presentation.admin.views import (
     ProfileAdmin,
@@ -63,6 +64,7 @@ def create_app() -> FastAPI:
 def main() -> None:
     settings = get_settings()
     logging.basicConfig(level=settings.log_level.value)
+    init_sentry(settings, component="admin")
     uvicorn.run(create_app(), host="0.0.0.0", port=8000)
 
 

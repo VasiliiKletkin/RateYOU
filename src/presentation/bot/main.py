@@ -1,8 +1,10 @@
 import asyncio
 import logging
 
+import sentry_sdk
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.base import BaseStorage
+from aiogram.types import ErrorEvent
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
 from dishka import make_async_container
@@ -10,6 +12,7 @@ from dishka.integrations.aiogram import setup_dishka
 from redis.asyncio import Redis
 
 from src.infrastructure.config import Settings, get_settings
+from src.infrastructure.observability import init_sentry
 from src.presentation.bot.commands import register_commands
 from src.presentation.bot.handlers import all_routers
 from src.presentation.bot.i18n import UserLanguageI18nMiddleware, i18n
@@ -29,6 +32,13 @@ def _register_middlewares(dp: Dispatcher, redis: Redis) -> None:
     for observer in (dp.message, dp.callback_query):
         observer.middleware(throttling)
         observer.middleware(ban_check)
+
+
+def _register_error_handler(dp: Dispatcher) -> None:
+    @dp.errors()
+    async def _on_error(event: ErrorEvent) -> None:
+        log.exception("Unhandled error in update %s", event.update.update_id)
+        sentry_sdk.capture_exception(event.exception)
 
 
 async def _run_polling(bot: Bot, dp: Dispatcher) -> None:
@@ -78,6 +88,7 @@ async def _run_webhook(bot: Bot, dp: Dispatcher, settings: Settings) -> None:
 async def main() -> None:
     settings = get_settings()
     logging.basicConfig(level=settings.log_level.value)
+    init_sentry(settings, component="bot")
 
     container = make_async_container(*all_providers())
 
@@ -91,6 +102,7 @@ async def main() -> None:
 
     setup_dishka(container=container, router=dp, auto_inject=True)
     _register_middlewares(dp, redis)
+    _register_error_handler(dp)
     UserLanguageI18nMiddleware(i18n).setup(dp)
     await register_commands(bot)
 

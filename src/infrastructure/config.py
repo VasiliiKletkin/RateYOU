@@ -63,6 +63,13 @@ class AdminConfig(BaseSettings):
     secret_key: SecretStr
 
 
+class SentryConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="SENTRY_", env_file=".env", extra="ignore")
+
+    dsn: SecretStr | None = None
+    traces_sample_rate: float = 0.1
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -73,6 +80,7 @@ class Settings(BaseSettings):
     postgres: PostgresConfig = Field(default_factory=PostgresConfig)  # type: ignore[arg-type]
     redis: RedisConfig = Field(default_factory=RedisConfig)
     admin: AdminConfig = Field(default_factory=AdminConfig)  # type: ignore[arg-type]
+    sentry: SentryConfig = Field(default_factory=SentryConfig)
 
 
 @lru_cache
