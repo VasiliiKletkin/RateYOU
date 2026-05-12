@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.identity.entities import User
@@ -33,12 +33,6 @@ class UserRepository:
         )
         orm = result.scalar_one_or_none()
         return orm_to_user(orm) if orm is not None else None
-
-    async def count_referees_for(self, referrer_id: UserId) -> int:
-        stmt = select(func.count(UserORM.id)).where(
-            UserORM.referred_by_user_id == referrer_id.value
-        )
-        return int((await self.session.execute(stmt)).scalar_one())
 
     async def update(self, user: User) -> None:
         existing = await self.session.get(UserORM, user.id.value)

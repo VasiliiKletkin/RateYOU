@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import BigInteger, DateTime, Enum, ForeignKey, String
+from sqlalchemy import BigInteger, DateTime, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src.domain.identity.value_objects import Language, Role
@@ -21,7 +21,4 @@ class UserORM(Base, CreatedAtMixin):
     )
     language: Mapped[Language] = mapped_column(
         Enum(Language), default=Language.EN
-    )
-    referred_by_user_id: Mapped[UUID | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )

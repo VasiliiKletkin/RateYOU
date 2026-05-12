@@ -8,26 +8,31 @@ from src.domain.shared.identifiers import UserId
 
 @dataclass
 class Referral:
-    """Aggregate root: an append-only record of a paid-out referral.
+    """Aggregate root: one referrer→referee invitation lifecycle.
 
-    A row exists iff the referee created their profile and both parties
-    received their bonus grants. There is no PENDING state — invitations
-    that never produce a profile are derived from the `users` table
-    (rows with `referred_by_user_id` and no Referral entry).
+    Single source of truth for who-invited-whom. The row is created the
+    moment the referee clicks `/start <referrer_telegram_id>` and lives
+    forever (no deletion). `rewarded_at` distinguishes the two states:
+
+      - ``rewarded_at is None``  → pending. Referee hasn't created their
+        profile yet, no bonus paid out.
+      - ``rewarded_at is not None`` → both parties received their BONUS
+        SubscriptionGrants.
 
     Invariants:
-      - `referrer_id != referee_id` (enforced in `reward`)
+      - `referrer_id != referee_id` (enforced in `create_pending`)
       - At most one Referral per `referee_id` (DB-enforced UNIQUE)
-      - Append-only: rows are never updated or revoked
+      - `rewarded_at` is monotonic: once set, never cleared
     """
 
     id: ReferralId
     referrer_id: UserId
     referee_id: UserId
     created_at: datetime
+    rewarded_at: datetime | None
 
     @classmethod
-    def reward(
+    def create_pending(
         cls,
         referrer_id: UserId,
         referee_id: UserId,
@@ -42,4 +47,16 @@ class Referral:
             referrer_id=referrer_id,
             referee_id=referee_id,
             created_at=now,
+            rewarded_at=None,
         )
+
+    def mark_rewarded(self, now: datetime) -> None:
+        """Sets the reward timestamp. Idempotent — repeated calls don't
+        overwrite the original timestamp."""
+        if self.rewarded_at is not None:
+            return
+        self.rewarded_at = now
+
+    @property
+    def is_rewarded(self) -> bool:
+        return self.rewarded_at is not None

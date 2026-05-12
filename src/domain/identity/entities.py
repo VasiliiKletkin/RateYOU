@@ -11,19 +11,17 @@ class User:
     """Aggregate root of the Identity context.
 
     Models who can act in the system. Profile data (photos, bio, etc.)
-    lives in the Profile bounded context, not here.
+    lives in the Profile bounded context, not here. Who-invited-whom is
+    owned by the Referral context — the `referrals` table is the single
+    source of truth for that link.
 
-    `referred_by_user_id` is set ONLY at registration time (from a
-    `/start <referrer_telegram_id>` deep link) and treated as immutable
-    thereafter — the Referral context relies on this to prevent
-    retroactive referrer switching. The user's own referral handle is
-    their `telegram_id` — shared via `/refer` as part of the start link.
+    The user's own referral handle is their `telegram_id` — shared via
+    `/refer` as part of the start link.
     """
 
     id: UserId
     telegram_id: TelegramId
     created_at: datetime
-    referred_by_user_id: UserId | None = None
     role: Role = Role.USER
     is_banned: bool = False
     ban_reason: str | None = None
@@ -40,14 +38,12 @@ class User:
         telegram_id: TelegramId,
         now: datetime,
         language: Language = Language.EN,
-        referred_by: UserId | None = None,
     ) -> "User":
         return cls(
             id=UserId.new(),
             telegram_id=telegram_id,
             language=language,
             created_at=now,
-            referred_by_user_id=referred_by,
         )
 
     def change_language(self, language: Language) -> None:

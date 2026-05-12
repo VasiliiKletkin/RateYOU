@@ -5,6 +5,8 @@ from src.application.identity.dto import RegisterUserRequest, UserResponse
 from src.domain.identity.entities import User
 from src.domain.identity.repositories import IUserRepository
 from src.domain.identity.value_objects import Language, TelegramId
+from src.domain.referral.entities import Referral
+from src.domain.referral.repositories import IReferralRepository
 from src.domain.shared.uow import UnitOfWork
 
 
@@ -16,13 +18,19 @@ class RegisterUserUseCase:
     they were just created or already existed.
 
     When the start payload carries a referrer Telegram ID, the use case
-    resolves it to a User and stamps `User.referred_by_user_id` on the new
-    row — but only on the new-user branch. Returning users keep whatever
-    link they had (or none). Unknown / self-pointing payloads are silently
-    dropped; the registration always succeeds.
+    resolves it to a User and creates a **pending** ``Referral`` row
+    (``rewarded_at=None``) linking referrer → new user — but only on the
+    new-user branch. Returning users keep whatever link they had (or none).
+    Unknown / self-pointing payloads are silently dropped; the registration
+    always succeeds.
+
+    The pending Referral is later promoted to "rewarded" by
+    ``ReferralRewardService.mark_profile_created`` when the referee
+    creates their profile.
     """
 
     user_repo: IUserRepository
+    referral_repo: IReferralRepository
     uow: UnitOfWork
 
     async def execute(self, request: RegisterUserRequest) -> UserResponse:
@@ -47,9 +55,18 @@ class RegisterUserUseCase:
             telegram_id=telegram_id,
             now=now,
             language=request.language or Language.EN,
-            referred_by=referrer.id if referrer is not None else None,
         )
         await self.user_repo.add(user)
+
+        if referrer is not None:
+            await self.referral_repo.add(
+                Referral.create_pending(
+                    referrer_id=referrer.id,
+                    referee_id=user.id,
+                    now=now,
+                )
+            )
+
         await self.uow.commit()
         return _to_response(user)
 

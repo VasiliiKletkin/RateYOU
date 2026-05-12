@@ -13,11 +13,6 @@ def user_to_orm(user: User) -> UserORM:
         ban_reason=user.ban_reason,
         banned_at=user.banned_at,
         language=user.language,
-        referred_by_user_id=(
-            user.referred_by_user_id.value
-            if user.referred_by_user_id is not None
-            else None
-        ),
         created_at=user.created_at,
     )
 
@@ -31,10 +26,5 @@ def orm_to_user(orm: UserORM) -> User:
         ban_reason=orm.ban_reason,
         banned_at=orm.banned_at,
         language=orm.language,
-        referred_by_user_id=(
-            UserId(orm.referred_by_user_id)
-            if orm.referred_by_user_id is not None
-            else None
-        ),
         created_at=orm.created_at,
     )
