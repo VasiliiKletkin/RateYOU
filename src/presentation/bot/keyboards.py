@@ -67,13 +67,15 @@ def gender_preference_keyboard(prefix: str = "genderpref") -> InlineKeyboardMark
 def settings_keyboard(
     gender_prefix: str = "setpref",
     rating_prefix: str = "setrating",
+    language_action: str = "openlang",
     *,
     show_min_rating: bool,
 ) -> InlineKeyboardMarkup:
     """Compact /settings picker: gender row + (optionally) min-rating row.
 
     `show_min_rating=False` hides the rating presets — used to gate the
-    feature behind a premium subscription.
+    feature behind a premium subscription. A "Change language" button is
+    always present and opens the full picker built by `language_keyboard`.
     """
     rows: list[list[InlineKeyboardButton]] = [
         [
@@ -108,6 +110,36 @@ def settings_keyboard(
                 ),
             ]
         )
+    rows.append(
+        [
+            InlineKeyboardButton(
+                text=_("🌐 Change language"), callback_data=language_action
+            )
+        ]
+    )
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def language_keyboard(
+    languages: tuple[str, ...],
+    native_names: dict[str, str],
+    *,
+    prefix: str = "setlang",
+    columns: int = 2,
+) -> InlineKeyboardMarkup:
+    """Grid picker for the /settings language selection.
+
+    Native labels keep the button readable regardless of the user's current
+    UI locale. `columns=2` keeps each button wide enough on mobile while the
+    full list of 22 supported languages stays within Telegram's height budget.
+    """
+    buttons = [
+        InlineKeyboardButton(
+            text=native_names.get(code, code), callback_data=f"{prefix}:{code}"
+        )
+        for code in languages
+    ]
+    rows = [buttons[i : i + columns] for i in range(0, len(buttons), columns)]
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 

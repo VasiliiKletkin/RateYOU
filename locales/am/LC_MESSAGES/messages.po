@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-12 16:26+0300\n"
+"POT-Creation-Date: 2026-05-12 16:58+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: am\n"
@@ -28,81 +28,85 @@ msgid "♀️ Female"
 msgstr "♀️ ሴት"
 
 # WARNING: Machine translation — review by a native speaker before production.
-#: src/presentation/bot/handlers/settings.py:33
-#: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:81
+#: src/presentation/bot/handlers/settings.py:43
+#: src/presentation/bot/keyboards.py:52 src/presentation/bot/keyboards.py:83
 msgid "♂️ Men"
 msgstr "♂️ ወንድ"
 
-#: src/presentation/bot/handlers/settings.py:35
-#: src/presentation/bot/keyboards.py:55 src/presentation/bot/keyboards.py:84
+#: src/presentation/bot/handlers/settings.py:45
+#: src/presentation/bot/keyboards.py:55 src/presentation/bot/keyboards.py:86
 msgid "♀️ Women"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:36
+#: src/presentation/bot/handlers/settings.py:46
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:87
+#: src/presentation/bot/keyboards.py:89
 msgid "👥 All"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:41
-#: src/presentation/bot/keyboards.py:95
+#: src/presentation/bot/handlers/settings.py:51
+#: src/presentation/bot/keyboards.py:97
 msgid "Any"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:136
+#: src/presentation/bot/keyboards.py:116
+msgid "🌐 Change language"
+msgstr ""
+
+#: src/presentation/bot/keyboards.py:168
 msgid "⏭ Skip"
 msgstr "⏭ ዝለል"
 
-#: src/presentation/bot/keyboards.py:146
+#: src/presentation/bot/keyboards.py:178
 msgid "Name"
 msgstr "ስም"
 
-#: src/presentation/bot/keyboards.py:147
+#: src/presentation/bot/keyboards.py:179
 msgid "Age"
 msgstr "ዕድሜ"
 
-#: src/presentation/bot/keyboards.py:150
+#: src/presentation/bot/keyboards.py:182
 msgid "Gender"
 msgstr "ጾታ"
 
-#: src/presentation/bot/keyboards.py:155
+#: src/presentation/bot/keyboards.py:187
 msgid "Location"
 msgstr "አካባቢ"
 
-#: src/presentation/bot/keyboards.py:158
+#: src/presentation/bot/keyboards.py:190
 msgid "Bio"
 msgstr "ስለ አንተ"
 
-#: src/presentation/bot/keyboards.py:159
+#: src/presentation/bot/keyboards.py:191
 msgid "Photo"
 msgstr "ፎቶ"
 
-#: src/presentation/bot/keyboards.py:162
+#: src/presentation/bot/keyboards.py:194
 msgid "✅ Done"
 msgstr "✅ ተጠናቋል"
 
-#: src/presentation/bot/keyboards.py:179
+#: src/presentation/bot/keyboards.py:211
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days}ቀን"
 
-#: src/presentation/bot/handlers/create_profile.py:49
+#: src/presentation/bot/handlers/create_profile.py:50
 msgid "Nothing to cancel."
 msgstr "የሚሰረዝ ምንም ነገር የለም።"
 
-#: src/presentation/bot/handlers/create_profile.py:52
+#: src/presentation/bot/handlers/create_profile.py:53
 msgid "Cancelled."
 msgstr "ተሰርዟል።"
 
-#: src/presentation/bot/handlers/create_profile.py:68
-#: src/presentation/bot/handlers/create_profile.py:233
+#: src/presentation/bot/handlers/create_profile.py:72
+#: src/presentation/bot/handlers/create_profile.py:240
 msgid "You already have a profile."
 msgstr "ቀደም ሲል መገለጫ አለህ።"
 
-#: src/presentation/bot/handlers/create_profile.py:73
+#: src/presentation/bot/handlers/create_profile.py:77
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -110,85 +114,86 @@ msgstr ""
 "መገለጫህን እንፍጠር።\n"
 "ስምህ ማን ነው?"
 
-#: src/presentation/bot/handlers/create_profile.py:79
-#: src/presentation/bot/handlers/edit_profile.py:162
+#: src/presentation/bot/handlers/create_profile.py:83
+#: src/presentation/bot/handlers/edit_profile.py:166
 msgid "Please send text."
 msgstr "እባክህ ጽሑፍ ላክ።"
 
-#: src/presentation/bot/handlers/create_profile.py:84
-#: src/presentation/bot/handlers/edit_profile.py:167
+#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/edit_profile.py:171
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ ስም ከ1 እስከ 50 ባዶ ያልሆኑ ቁምፊዎች መሆን አለበት። እንደገና ሞክር፦"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:92
 msgid "How old are you?"
 msgstr "ዕድሜህ ስንት ነው?"
 
-#: src/presentation/bot/handlers/create_profile.py:94
-#: src/presentation/bot/handlers/edit_profile.py:179
+#: src/presentation/bot/handlers/create_profile.py:98
+#: src/presentation/bot/handlers/edit_profile.py:183
 msgid "Please send a number."
 msgstr "እባክህ ቁጥር ላክ።"
 
-#: src/presentation/bot/handlers/create_profile.py:99
-#: src/presentation/bot/handlers/edit_profile.py:185
+#: src/presentation/bot/handlers/create_profile.py:103
+#: src/presentation/bot/handlers/edit_profile.py:189
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ ይህ ቁጥር አይደለም። እንደገና ሞክር፦"
 
-#: src/presentation/bot/handlers/create_profile.py:102
-#: src/presentation/bot/handlers/edit_profile.py:188
+#: src/presentation/bot/handlers/create_profile.py:106
+#: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ ዕድሜ ከ18 እስከ 100 መሆን አለበት። እንደገና ሞክር፦"
 
-#: src/presentation/bot/handlers/create_profile.py:106
-#: src/presentation/bot/handlers/edit_profile.py:134
+#: src/presentation/bot/handlers/create_profile.py:110
+#: src/presentation/bot/handlers/edit_profile.py:138
 msgid "Pick gender:"
 msgstr "ጾታ ምረጥ፦"
 
-#: src/presentation/bot/handlers/create_profile.py:119
-#: src/presentation/bot/handlers/create_profile.py:143
-#: src/presentation/bot/handlers/settings.py:124
-#: src/presentation/bot/handlers/settings.py:151
-#: src/presentation/bot/handlers/settings.py:169
+#: src/presentation/bot/handlers/create_profile.py:123
+#: src/presentation/bot/handlers/create_profile.py:147
+#: src/presentation/bot/handlers/settings.py:149
+#: src/presentation/bot/handlers/settings.py:181
+#: src/presentation/bot/handlers/settings.py:204
+#: src/presentation/bot/handlers/settings.py:242
 msgid "Invalid choice"
 msgstr "ልክ ያልሆነ ምርጫ"
 
-#: src/presentation/bot/handlers/create_profile.py:125
+#: src/presentation/bot/handlers/create_profile.py:129
 msgid "Who would you like to rate?"
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:149
+#: src/presentation/bot/handlers/create_profile.py:153
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "አካባቢህን አጋራ — በአቅራቢያ ያሉ መገለጫዎችን ለማግኘት ይውላል፦"
 
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/edit_profile.py:144
+#: src/presentation/bot/handlers/create_profile.py:154
+#: src/presentation/bot/handlers/edit_profile.py:148
 msgid "📍 Share location"
 msgstr "📍 አካባቢ አጋራ"
 
-#: src/presentation/bot/handlers/create_profile.py:165
+#: src/presentation/bot/handlers/create_profile.py:169
 msgid "Tell something about yourself (or /skip):"
 msgstr "ስለ ራስህ ጥቂት ንገረን (ወይም /skip)፦"
 
-#: src/presentation/bot/handlers/create_profile.py:172
+#: src/presentation/bot/handlers/create_profile.py:176
 msgid "Please share a location to continue."
 msgstr "ለመቀጠል እባክህ አካባቢህን አጋራ።"
 
-#: src/presentation/bot/handlers/create_profile.py:180
-#: src/presentation/bot/handlers/create_profile.py:197
+#: src/presentation/bot/handlers/create_profile.py:184
+#: src/presentation/bot/handlers/create_profile.py:201
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "እስከ {max} ፎቶዎች ድረስ ላክ፦"
 
-#: src/presentation/bot/handlers/create_profile.py:187
+#: src/presentation/bot/handlers/create_profile.py:191
 msgid "Please send text or /skip."
 msgstr "እባክህ ጽሑፍ ላክ ወይም /skip።"
 
-#: src/presentation/bot/handlers/create_profile.py:192
-#: src/presentation/bot/handlers/edit_profile.py:231
+#: src/presentation/bot/handlers/create_profile.py:196
+#: src/presentation/bot/handlers/edit_profile.py:235
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ መግለጫው በጣም ረጅም ነው (ቢበዛ 500 ቁምፊዎች)። እንደገና ሞክር ወይም /skip፦"
 
-#: src/presentation/bot/handlers/create_profile.py:247
+#: src/presentation/bot/handlers/create_profile.py:254
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -201,76 +206,76 @@ msgstr ""
 "ዕድሜ: {age}\n"
 "መገለጫዎችን መገምገም ለመጀመር /feed ላክ።"
 
-#: src/presentation/bot/handlers/create_profile.py:292
+#: src/presentation/bot/handlers/create_profile.py:299
 msgid "Please send a photo (not text)."
 msgstr "እባክህ ፎቶ ላክ (ጽሑፍ አይደለም)።"
 
-#: src/presentation/bot/handlers/edit_profile.py:59
+#: src/presentation/bot/handlers/edit_profile.py:60
 msgid "Session lost. Use /edit again."
 msgstr "ክፍለ ጊዜው ጠፍቷል። እንደገና /edit ተጠቀም።"
 
-#: src/presentation/bot/handlers/edit_profile.py:75
+#: src/presentation/bot/handlers/edit_profile.py:76
 msgid "Profile not found."
 msgstr "መገለጫ አልተገኘም።"
 
-#: src/presentation/bot/handlers/edit_profile.py:81
+#: src/presentation/bot/handlers/edit_profile.py:82
 msgid "Location updated."
 msgstr "አካባቢ ተዘምኗል።"
 
-#: src/presentation/bot/handlers/edit_profile.py:82
+#: src/presentation/bot/handlers/edit_profile.py:83
 msgid "Updated. Pick another field or [Done]:"
 msgstr "ተዘምኗል። ሌላ መስክ ምረጥ ወይም [Done]፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:99
+#: src/presentation/bot/handlers/edit_profile.py:103
 msgid "No profile to edit. Use /create first."
 msgstr "የሚስተካከል መገለጫ የለም። መጀመሪያ /create ተጠቀም።"
 
-#: src/presentation/bot/handlers/edit_profile.py:102
+#: src/presentation/bot/handlers/edit_profile.py:106
 msgid "Pick a field to edit:"
 msgstr "የሚስተካከል መስክ ምረጥ፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:114
+#: src/presentation/bot/handlers/edit_profile.py:118
 msgid "Saved. /feed to keep rating."
 msgstr "ተቀምጧል። መገምገምን ለመቀጠል /feed።"
 
-#: src/presentation/bot/handlers/edit_profile.py:127
+#: src/presentation/bot/handlers/edit_profile.py:131
 msgid "Unknown field"
 msgstr "የማይታወቅ መስክ"
 
-#: src/presentation/bot/handlers/edit_profile.py:132
+#: src/presentation/bot/handlers/edit_profile.py:136
 msgid "Send new name:"
 msgstr "አዲስ ስም ላክ፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:133
+#: src/presentation/bot/handlers/edit_profile.py:137
 msgid "Send new age (18-100):"
 msgstr "አዲስ ዕድሜ ላክ (18-100)፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:135
+#: src/presentation/bot/handlers/edit_profile.py:139
 msgid "Share your new location:"
 msgstr "አዲሱን አካባቢህን አጋራ፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:136
+#: src/presentation/bot/handlers/edit_profile.py:140
 msgid "Send new bio (or /skip to clear):"
 msgstr "አዲስ መግለጫ ላክ (ወይም ለማጽዳት /skip)፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:137
+#: src/presentation/bot/handlers/edit_profile.py:141
 #, python-brace-format
 msgid "Send up to {max} new photos:"
 msgstr "እስከ {max} አዳዲስ ፎቶዎች ድረስ ላክ፦"
 
-#: src/presentation/bot/handlers/edit_profile.py:204
+#: src/presentation/bot/handlers/edit_profile.py:208
 msgid "Invalid"
 msgstr "ልክ ያልሆነ"
 
-#: src/presentation/bot/handlers/edit_profile.py:226
+#: src/presentation/bot/handlers/edit_profile.py:230
 msgid "Please send text or /skip to clear."
 msgstr "እባክህ ጽሑፍ ላክ ወይም ለማጽዳት /skip።"
 
-#: src/presentation/bot/handlers/edit_profile.py:264
+#: src/presentation/bot/handlers/edit_profile.py:268
 msgid "Please send a photo."
 msgstr "እባክህ ፎቶ ላክ።"
 
-#: src/presentation/bot/handlers/edit_profile.py:285
+#: src/presentation/bot/handlers/edit_profile.py:289
 msgid "Please share a location."
 msgstr "እባክህ አካባቢ አጋራ።"
 
@@ -287,47 +292,47 @@ msgstr "ይህን መገለጫ ገምግም፦"
 msgid "⭐ Someone just rated you: {score}/10"
 msgstr ""
 
-#: src/presentation/bot/handlers/feed.py:123
+#: src/presentation/bot/handlers/feed.py:126
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr "በመጀመሪያ የራስህ መገለጫ ያስፈልግሃል። ለመፍጠር /create ላክ።"
 
-#: src/presentation/bot/handlers/feed.py:144
-#: src/presentation/bot/handlers/feed.py:150
+#: src/presentation/bot/handlers/feed.py:147
+#: src/presentation/bot/handlers/feed.py:153
 msgid "Bad payload"
 msgstr "ልክ ያልሆነ መረጃ"
 
-#: src/presentation/bot/handlers/feed.py:164
+#: src/presentation/bot/handlers/feed.py:170
 msgid "Can't rate yourself"
 msgstr "ራስህን መገምገም አትችልም"
 
-#: src/presentation/bot/handlers/feed.py:167
+#: src/presentation/bot/handlers/feed.py:173
 msgid "Bad score"
 msgstr "ልክ ያልሆነ ነጥብ"
 
-#: src/presentation/bot/handlers/feed.py:170
+#: src/presentation/bot/handlers/feed.py:176
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "{score}/10 ተገምግሟል ✓"
 
-#: src/presentation/bot/handlers/feed.py:180
+#: src/presentation/bot/handlers/feed.py:186
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 አማካዩ: {avg}/10 (ከ{count} ግምገማ)"
 msgstr[1] "📊 አማካዩ: {avg}/10 (ከ{count} ግምገማዎች)"
 
-#: src/presentation/bot/handlers/feed.py:216
+#: src/presentation/bot/handlers/feed.py:225
 msgid "Skipped"
 msgstr "ተዘሏል"
 
-#: src/presentation/bot/handlers/premium.py:33
+#: src/presentation/bot/handlers/premium.py:34
 #, python-brace-format
 msgid "Expires in {days} day."
 msgid_plural "Expires in {days} days."
 msgstr[0] "በ{days} ቀን ውስጥ ያልቃል።"
 msgstr[1] "በ{days} ቀናት ውስጥ ያልቃል።"
 
-#: src/presentation/bot/handlers/premium.py:57
+#: src/presentation/bot/handlers/premium.py:61
 #, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
@@ -342,7 +347,7 @@ msgstr ""
 "\n"
 "ለማደስ ወይም ለማሻሻል ደረጃ ምረጥ፦"
 
-#: src/presentation/bot/handlers/premium.py:68
+#: src/presentation/bot/handlers/premium.py:72
 msgid ""
 "<b>Premium</b> filters your /feed to highly rated profiles.\n"
 "\n"
@@ -352,27 +357,27 @@ msgstr ""
 "\n"
 "ደረጃ ምረጥ፦"
 
-#: src/presentation/bot/handlers/premium.py:99
+#: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
 msgstr "የማይታወቅ ደረጃ"
 
-#: src/presentation/bot/handlers/premium.py:102
+#: src/presentation/bot/handlers/premium.py:109
 msgid "Invoice sent — pay in the chat"
 msgstr "ደረሰኝ ተልኳል — በውይይቱ ውስጥ ክፈል"
 
-#: src/presentation/bot/handlers/premium.py:124
+#: src/presentation/bot/handlers/premium.py:131
 msgid "Unknown payment payload."
 msgstr "የማይታወቅ የክፍያ መረጃ።"
 
-#: src/presentation/bot/handlers/premium.py:135
+#: src/presentation/bot/handlers/premium.py:142
 msgid "This payment is not in our records."
 msgstr "ይህ ክፍያ በመዝገባችን ውስጥ የለም።"
 
-#: src/presentation/bot/handlers/premium.py:146
+#: src/presentation/bot/handlers/premium.py:156
 msgid "✅ Payment confirmed."
 msgstr "✅ ክፍያ ተረጋግጧል።"
 
-#: src/presentation/bot/handlers/premium.py:151
+#: src/presentation/bot/handlers/premium.py:161
 #, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
@@ -385,38 +390,44 @@ msgstr ""
 "{expires}\n"
 "አሁን /feed የ >= {threshold} ግምገማ ያላቸውን መገለጫዎች ያሳያል።"
 
-#: src/presentation/bot/handlers/settings.py:49
+#: src/presentation/bot/handlers/settings.py:62
 msgid "<b>Settings</b>"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:50
+#: src/presentation/bot/handlers/settings.py:63
 #, python-brace-format
 msgid "Show me: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:56
+#: src/presentation/bot/handlers/settings.py:69
 #, python-brace-format
 msgid "Min rating: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:62
+#: src/presentation/bot/handlers/settings.py:75
 msgid "Min rating: premium only (use /premium)"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:101
+#: src/presentation/bot/handlers/settings.py:78
+#, python-brace-format
+msgid "Language: {current}"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:124
 msgid "No profile yet. Use /create first."
 msgstr "የሚስተካከል መገለጫ የለም። መጀመሪያ /create ተጠቀም።"
 
-#: src/presentation/bot/handlers/settings.py:132
-#: src/presentation/bot/handlers/settings.py:171
+#: src/presentation/bot/handlers/settings.py:160
+#: src/presentation/bot/handlers/settings.py:206
+#: src/presentation/bot/handlers/settings.py:260
 msgid "Updated"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:162
+#: src/presentation/bot/handlers/settings.py:195
 msgid "Premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/start.py:30
+#: src/presentation/bot/handlers/start.py:34
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
 "You don't have a profile yet - send /create to make one."
@@ -424,7 +435,7 @@ msgstr ""
 "<b>ወደ RateYou እንኳን ደህና መጣህ!</b>\n"
 "ገና መገለጫ የለህም - ለመፍጠር /create ላክ።"
 
-#: src/presentation/bot/handlers/start.py:36
+#: src/presentation/bot/handlers/start.py:40
 #, python-brace-format
 msgid ""
 "<b>Welcome back, {name}!</b>\n"

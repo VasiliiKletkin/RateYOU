@@ -36,6 +36,40 @@ SUPPORTED_LANGUAGES: tuple[str, ...] = (
 )
 DEFAULT_LANGUAGE = "en"
 
+# Each supported locale's display name in its own script — used as button
+# labels in the /settings language picker so a Russian user sees "Русский"
+# regardless of their current UI language. Order matches SUPPORTED_LANGUAGES.
+LANGUAGE_NATIVE_NAMES: dict[str, str] = {
+    "en": "English",
+    "ru": "Русский",
+    "es": "Español",
+    "pt": "Português",
+    "de": "Deutsch",
+    "fr": "Français",
+    "it": "Italiano",
+    "tr": "Türkçe",
+    "uk": "Українська",
+    "pl": "Polski",
+    "ar": "العربية",
+    "fa": "فارسی",
+    "id": "Bahasa Indonesia",
+    "vi": "Tiếng Việt",
+    "zh": "中文",
+    "hi": "हिन्दी",
+    "bn": "বাংলা",
+    "am": "አማርኛ",
+    "uz": "Oʻzbekcha",  # noqa: RUF001 — U+02BB is the canonical Uzbek apostrophe
+    "ko": "한국어",
+    "ja": "日本語",
+    "th": "ไทย",
+}
+
+
+def native_name(language: str) -> str:
+    """Returns the language's native label, falling back to the code itself."""
+    return LANGUAGE_NATIVE_NAMES.get(language, language)
+
+
 i18n = I18n(
     path=LOCALES_DIR,
     default_locale=DEFAULT_LANGUAGE,

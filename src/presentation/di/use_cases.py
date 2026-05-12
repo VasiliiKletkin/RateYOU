@@ -9,6 +9,7 @@ from src.application.discovery.search_preferences import (
 from src.application.discovery.skip_profile import SkipProfileUseCase
 from src.application.identity.get_user import GetUserByTelegramIdUseCase
 from src.application.identity.register_user import RegisterUserUseCase
+from src.application.identity.update_language import UpdateUserLanguageUseCase
 from src.application.payment.confirm_payment import ConfirmPaymentUseCase
 from src.application.payment.create_invoice import CreatePremiumInvoiceUseCase
 from src.application.payment.refund_payment import RefundPaymentUseCase
@@ -37,6 +38,7 @@ class UseCaseProvider(Provider):
     # Identity
     register_user = provide(RegisterUserUseCase)
     get_user_by_telegram_id = provide(GetUserByTelegramIdUseCase)
+    update_user_language = provide(UpdateUserLanguageUseCase)
 
     # Profile
     create_profile = provide(CreateProfileUseCase)

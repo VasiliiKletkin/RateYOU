@@ -15,14 +15,23 @@ from src.application.discovery.search_preferences import (
 )
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
+from src.application.identity.update_language import UpdateUserLanguageUseCase
 from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.domain.discovery.exceptions import InvalidMinRating
-from src.presentation.bot.i18n import normalize_language
-from src.presentation.bot.keyboards import settings_keyboard
+from src.presentation.bot.i18n import (
+    LANGUAGE_NATIVE_NAMES,
+    SUPPORTED_LANGUAGES,
+    i18n,
+    native_name,
+    normalize_language,
+)
+from src.presentation.bot.keyboards import language_keyboard, settings_keyboard
 
 _GENDER_PREFIX = "setpref"
 _RATING_PREFIX = "setrating"
+_LANGUAGE_PREFIX = "setlang"
+_OPEN_LANGUAGE = "openlang"
 
 router = Router(name="settings")
 
@@ -44,7 +53,10 @@ def _format_min_rating(value: int) -> str:
 
 
 def _render_body(
-    prefs: SearchPreferencesResponse, *, is_premium: bool
+    prefs: SearchPreferencesResponse,
+    *,
+    is_premium: bool,
+    language: str,
 ) -> str:
     lines = [
         _("<b>Settings</b>"),
@@ -62,6 +74,9 @@ def _render_body(
         lines.append(
             _("Min rating: premium only (use /premium)")
         )
+    lines.append(
+        _("Language: {current}").format(current=native_name(language))
+    )
     return "\n".join(lines)
 
 
@@ -70,6 +85,7 @@ async def _refresh(
     prefs: SearchPreferencesResponse,
     *,
     is_premium: bool,
+    language: str,
 ) -> None:
     """Edit the existing /settings card so taps don't pile up messages.
 
@@ -80,8 +96,11 @@ async def _refresh(
         return
     with suppress(TelegramAPIError):
         await callback.message.edit_text(
-            _render_body(prefs, is_premium=is_premium),
-            reply_markup=settings_keyboard(show_min_rating=is_premium),
+            _render_body(prefs, is_premium=is_premium, language=language),
+            reply_markup=settings_keyboard(
+                language_action=_OPEN_LANGUAGE,
+                show_min_rating=is_premium,
+            ),
         )
 
 
@@ -108,8 +127,10 @@ async def cmd_settings(
     prefs = await get_prefs.execute(user.id)
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await message.answer(
-        _render_body(prefs, is_premium=is_premium),
-        reply_markup=settings_keyboard(show_min_rating=is_premium),
+        _render_body(prefs, is_premium=is_premium, language=user.language),
+        reply_markup=settings_keyboard(
+            language_action=_OPEN_LANGUAGE, show_min_rating=is_premium
+        ),
     )
 
 
@@ -137,7 +158,9 @@ async def on_set_gender(
     prefs = await update_gender.execute(user.id, preference)
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await callback.answer(_("Updated"))
-    await _refresh(callback, prefs, is_premium=is_premium)
+    await _refresh(
+        callback, prefs, is_premium=is_premium, language=user.language
+    )
 
 
 @router.callback_query(F.data.startswith(f"{_RATING_PREFIX}:"))
@@ -170,7 +193,9 @@ async def on_set_min_rating(
         # keyboard from before an expiry could still send it.
         prefs = await get_prefs.execute(user.id)
         await callback.answer(_("Premium only"), show_alert=True)
-        await _refresh(callback, prefs, is_premium=is_premium)
+        await _refresh(
+            callback, prefs, is_premium=is_premium, language=user.language
+        )
         return
 
     try:
@@ -179,4 +204,70 @@ async def on_set_min_rating(
         await callback.answer(_("Invalid choice"))
         return
     await callback.answer(_("Updated"))
-    await _refresh(callback, prefs, is_premium=is_premium)
+    await _refresh(
+        callback, prefs, is_premium=is_premium, language=user.language
+    )
+
+
+@router.callback_query(F.data == _OPEN_LANGUAGE)
+async def on_open_language_picker(callback: CallbackQuery) -> None:
+    """Swap the settings keyboard out for the language grid in-place."""
+    if not isinstance(callback.message, Message):
+        await callback.answer()
+        return
+    with suppress(TelegramAPIError):
+        await callback.message.edit_reply_markup(
+            reply_markup=language_keyboard(
+                SUPPORTED_LANGUAGES,
+                LANGUAGE_NATIVE_NAMES,
+                prefix=_LANGUAGE_PREFIX,
+            )
+        )
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith(f"{_LANGUAGE_PREFIX}:"))
+async def on_set_language(
+    callback: CallbackQuery,
+    register_user: FromDishka[RegisterUserUseCase],
+    update_user_language: FromDishka[UpdateUserLanguageUseCase],
+    get_prefs: FromDishka[GetSearchPreferencesUseCase],
+    get_my_premium: FromDishka[GetMyPremiumUseCase],
+) -> None:
+    if callback.data is None or callback.from_user is None:
+        await callback.answer()
+        return
+    chosen = callback.data.removeprefix(f"{_LANGUAGE_PREFIX}:")
+    if chosen not in SUPPORTED_LANGUAGES:
+        await callback.answer(_("Invalid choice"))
+        return
+
+    user = await register_user.execute(
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            # Don't overwrite the user's explicit pick with the Telegram code
+            # — they're choosing manually right now.
+            language=None,
+        )
+    )
+    updated = await update_user_language.execute(user.id, chosen)
+    prefs = await get_prefs.execute(user.id)
+    is_premium = (await get_my_premium.execute(user.id)) is not None
+
+    # Render the confirmation in the newly chosen locale so the refreshed
+    # card matches what the user just picked.
+    with i18n.use_locale(updated.language):
+        await callback.answer(_("Updated"))
+        if isinstance(callback.message, Message):
+            with suppress(TelegramAPIError):
+                await callback.message.edit_text(
+                    _render_body(
+                        prefs,
+                        is_premium=is_premium,
+                        language=updated.language,
+                    ),
+                    reply_markup=settings_keyboard(
+                        language_action=_OPEN_LANGUAGE,
+                        show_min_rating=is_premium,
+                    ),
+                )
