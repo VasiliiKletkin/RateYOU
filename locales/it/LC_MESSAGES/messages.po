@@ -34,17 +34,17 @@ msgstr "♂️ Uomo"
 #: src/presentation/bot/handlers/settings.py:55
 #: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
-msgstr ""
+msgstr "♀️ Donne"
 
 #: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
-msgstr ""
+msgstr "👥 Tutti"
 
 #: src/presentation/bot/handlers/settings.py:61
 #: src/presentation/bot/keyboards.py:110
 msgid "Any"
-msgstr ""
+msgstr "Qualsiasi"
 
 #: src/presentation/bot/keyboards.py:174
 msgid "⏭ Skip"
@@ -149,7 +149,7 @@ msgstr "Scelta non valida"
 
 #: src/presentation/bot/handlers/create_profile.py:129
 msgid "Who would you like to rate?"
-msgstr ""
+msgstr "Chi vuoi valutare?"
 
 #: src/presentation/bot/handlers/create_profile.py:153
 msgid "Share your location — it's used to find nearby profiles:"
@@ -280,7 +280,7 @@ msgstr "Valuta questo profilo:"
 #: src/presentation/bot/handlers/feed.py:104
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
-msgstr ""
+msgstr "⭐ Qualcuno ti ha appena valutato: {score}/10"
 
 #: src/presentation/bot/handlers/feed.py:126
 msgid "You need a profile of your own first. Send /create to make one."
@@ -343,6 +343,9 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
+"<b>Premium</b> sblocca il filtro di valutazione minima in /settings.\n"
+"\n"
+"Scegli un livello:"
 
 #: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
@@ -380,26 +383,26 @@ msgstr ""
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
 msgid "👤 Show me: {current}"
-msgstr ""
+msgstr "👤 Mostrami: {current}"
 
 #: src/presentation/bot/handlers/settings.py:72
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
-msgstr ""
+msgstr "⭐ Valutazione min.: {current}"
 
 #: src/presentation/bot/handlers/settings.py:76
 msgid "⭐ Min rating: premium only"
-msgstr ""
+msgstr "⭐ Valutazione min.: solo premium"
 
 #: src/presentation/bot/handlers/settings.py:77
 #, python-brace-format
 msgid "🌐 Language: {current}"
-msgstr ""
+msgstr "🌐 Lingua: {current}"
 
 #: src/presentation/bot/handlers/settings.py:106
 #: src/presentation/bot/handlers/settings.py:145
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>Impostazioni</b>"
 
 #: src/presentation/bot/handlers/settings.py:139
 msgid "No profile yet. Use /create first."
@@ -408,13 +411,13 @@ msgstr "Nessun profilo da modificare. Usa prima /create."
 #: src/presentation/bot/handlers/settings.py:176
 #: src/presentation/bot/handlers/settings.py:253
 msgid "Premium only"
-msgstr ""
+msgstr "Solo premium"
 
 #: src/presentation/bot/handlers/settings.py:218
 #: src/presentation/bot/handlers/settings.py:264
 #: src/presentation/bot/handlers/settings.py:301
 msgid "Updated"
-msgstr ""
+msgstr "Salvato"
 
 #: src/presentation/bot/handlers/start.py:34
 msgid ""

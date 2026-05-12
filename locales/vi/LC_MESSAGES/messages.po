@@ -36,17 +36,17 @@ msgstr "♂️ Nam"
 #: src/presentation/bot/handlers/settings.py:55
 #: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
-msgstr ""
+msgstr "♀️ Nữ"
 
 #: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
-msgstr ""
+msgstr "👥 Mọi người"
 
 #: src/presentation/bot/handlers/settings.py:61
 #: src/presentation/bot/keyboards.py:110
 msgid "Any"
-msgstr ""
+msgstr "Bất kỳ"
 
 #: src/presentation/bot/keyboards.py:174
 msgid "⏭ Skip"
@@ -151,7 +151,7 @@ msgstr "Lựa chọn không hợp lệ"
 
 #: src/presentation/bot/handlers/create_profile.py:129
 msgid "Who would you like to rate?"
-msgstr ""
+msgstr "Bạn muốn đánh giá ai?"
 
 #: src/presentation/bot/handlers/create_profile.py:153
 msgid "Share your location — it's used to find nearby profiles:"
@@ -282,7 +282,7 @@ msgstr "Đánh giá hồ sơ này:"
 #: src/presentation/bot/handlers/feed.py:104
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
-msgstr ""
+msgstr "⭐ Có người vừa đánh giá bạn: {score}/10"
 
 #: src/presentation/bot/handlers/feed.py:126
 msgid "You need a profile of your own first. Send /create to make one."
@@ -343,6 +343,9 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
+"<b>Premium</b> mở khóa bộ lọc điểm tối thiểu trong /settings.\n"
+"\n"
+"Chọn một gói:"
 
 #: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
@@ -380,26 +383,26 @@ msgstr ""
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
 msgid "👤 Show me: {current}"
-msgstr ""
+msgstr "👤 Hiển thị: {current}"
 
 #: src/presentation/bot/handlers/settings.py:72
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
-msgstr ""
+msgstr "⭐ Điểm tối thiểu: {current}"
 
 #: src/presentation/bot/handlers/settings.py:76
 msgid "⭐ Min rating: premium only"
-msgstr ""
+msgstr "⭐ Điểm tối thiểu: chỉ premium"
 
 #: src/presentation/bot/handlers/settings.py:77
 #, python-brace-format
 msgid "🌐 Language: {current}"
-msgstr ""
+msgstr "🌐 Ngôn ngữ: {current}"
 
 #: src/presentation/bot/handlers/settings.py:106
 #: src/presentation/bot/handlers/settings.py:145
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>Cài đặt</b>"
 
 #: src/presentation/bot/handlers/settings.py:139
 msgid "No profile yet. Use /create first."
@@ -408,13 +411,13 @@ msgstr "Không có hồ sơ để sửa. Dùng /create trước."
 #: src/presentation/bot/handlers/settings.py:176
 #: src/presentation/bot/handlers/settings.py:253
 msgid "Premium only"
-msgstr ""
+msgstr "Chỉ premium"
 
 #: src/presentation/bot/handlers/settings.py:218
 #: src/presentation/bot/handlers/settings.py:264
 #: src/presentation/bot/handlers/settings.py:301
 msgid "Updated"
-msgstr ""
+msgstr "Đã lưu"
 
 #: src/presentation/bot/handlers/start.py:34
 msgid ""

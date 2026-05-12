@@ -36,17 +36,17 @@ msgstr "♂️ ወንድ"
 #: src/presentation/bot/handlers/settings.py:55
 #: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
-msgstr ""
+msgstr "♀️ ሴቶች"
 
 #: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
-msgstr ""
+msgstr "👥 ሁሉም"
 
 #: src/presentation/bot/handlers/settings.py:61
 #: src/presentation/bot/keyboards.py:110
 msgid "Any"
-msgstr ""
+msgstr "ማንኛውም"
 
 #: src/presentation/bot/keyboards.py:174
 msgid "⏭ Skip"
@@ -151,7 +151,7 @@ msgstr "ልክ ያልሆነ ምርጫ"
 
 #: src/presentation/bot/handlers/create_profile.py:129
 msgid "Who would you like to rate?"
-msgstr ""
+msgstr "ማንን መገምገም ትፈልጋለህ?"
 
 #: src/presentation/bot/handlers/create_profile.py:153
 msgid "Share your location — it's used to find nearby profiles:"
@@ -282,7 +282,7 @@ msgstr "ይህን መገለጫ ገምግም፦"
 #: src/presentation/bot/handlers/feed.py:104
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
-msgstr ""
+msgstr "⭐ አንድ ሰው አሁን ገመገመህ: {score}/10"
 
 #: src/presentation/bot/handlers/feed.py:126
 msgid "You need a profile of your own first. Send /create to make one."
@@ -345,6 +345,9 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
+"<b>ፕሪሚየም</b> በ /settings ውስጥ ዝቅተኛ ግምገማ ማጣሪያን ይከፍታል።\n"
+"\n"
+"ደረጃ ምረጥ፦"
 
 #: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
@@ -382,26 +385,26 @@ msgstr ""
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
 msgid "👤 Show me: {current}"
-msgstr ""
+msgstr "👤 አሳይ: {current}"
 
 #: src/presentation/bot/handlers/settings.py:72
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
-msgstr ""
+msgstr "⭐ ዝቅተኛ ግምገማ: {current}"
 
 #: src/presentation/bot/handlers/settings.py:76
 msgid "⭐ Min rating: premium only"
-msgstr ""
+msgstr "⭐ ዝቅተኛ ግምገማ: ፕሪሚየም ብቻ"
 
 #: src/presentation/bot/handlers/settings.py:77
 #, python-brace-format
 msgid "🌐 Language: {current}"
-msgstr ""
+msgstr "🌐 ቋንቋ: {current}"
 
 #: src/presentation/bot/handlers/settings.py:106
 #: src/presentation/bot/handlers/settings.py:145
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>ቅንብሮች</b>"
 
 #: src/presentation/bot/handlers/settings.py:139
 msgid "No profile yet. Use /create first."
@@ -410,13 +413,13 @@ msgstr "የሚስተካከል መገለጫ የለም። መጀመሪያ /create 
 #: src/presentation/bot/handlers/settings.py:176
 #: src/presentation/bot/handlers/settings.py:253
 msgid "Premium only"
-msgstr ""
+msgstr "ፕሪሚየም ብቻ"
 
 #: src/presentation/bot/handlers/settings.py:218
 #: src/presentation/bot/handlers/settings.py:264
 #: src/presentation/bot/handlers/settings.py:301
 msgid "Updated"
-msgstr ""
+msgstr "ተቀምጧል"
 
 #: src/presentation/bot/handlers/start.py:34
 msgid ""

@@ -36,17 +36,17 @@ msgstr "♂️ 남성"
 #: src/presentation/bot/handlers/settings.py:55
 #: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
-msgstr ""
+msgstr "♀️ 여성"
 
 #: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
-msgstr ""
+msgstr "👥 모두"
 
 #: src/presentation/bot/handlers/settings.py:61
 #: src/presentation/bot/keyboards.py:110
 msgid "Any"
-msgstr ""
+msgstr "상관없음"
 
 #: src/presentation/bot/keyboards.py:174
 msgid "⏭ Skip"
@@ -151,7 +151,7 @@ msgstr "잘못된 선택이에요"
 
 #: src/presentation/bot/handlers/create_profile.py:129
 msgid "Who would you like to rate?"
-msgstr ""
+msgstr "누구를 평가하고 싶나요?"
 
 #: src/presentation/bot/handlers/create_profile.py:153
 msgid "Share your location — it's used to find nearby profiles:"
@@ -282,7 +282,7 @@ msgstr "이 프로필을 평가해 주세요:"
 #: src/presentation/bot/handlers/feed.py:104
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
-msgstr ""
+msgstr "⭐ 누군가 방금 당신을 평가했어요: {score}/10"
 
 #: src/presentation/bot/handlers/feed.py:126
 msgid "You need a profile of your own first. Send /create to make one."
@@ -343,6 +343,9 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
+"<b>프리미엄</b>은 /settings 에서 최소 평점 필터를 풀어줘요.\n"
+"\n"
+"등급을 선택하세요:"
 
 #: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
@@ -380,26 +383,26 @@ msgstr ""
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
 msgid "👤 Show me: {current}"
-msgstr ""
+msgstr "👤 보여주기: {current}"
 
 #: src/presentation/bot/handlers/settings.py:72
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
-msgstr ""
+msgstr "⭐ 최소 평점: {current}"
 
 #: src/presentation/bot/handlers/settings.py:76
 msgid "⭐ Min rating: premium only"
-msgstr ""
+msgstr "⭐ 최소 평점: 프리미엄 전용"
 
 #: src/presentation/bot/handlers/settings.py:77
 #, python-brace-format
 msgid "🌐 Language: {current}"
-msgstr ""
+msgstr "🌐 언어: {current}"
 
 #: src/presentation/bot/handlers/settings.py:106
 #: src/presentation/bot/handlers/settings.py:145
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>설정</b>"
 
 #: src/presentation/bot/handlers/settings.py:139
 msgid "No profile yet. Use /create first."
@@ -408,13 +411,13 @@ msgstr "수정할 프로필이 없어요. 먼저 /create 를 사용해 주세요
 #: src/presentation/bot/handlers/settings.py:176
 #: src/presentation/bot/handlers/settings.py:253
 msgid "Premium only"
-msgstr ""
+msgstr "프리미엄 전용"
 
 #: src/presentation/bot/handlers/settings.py:218
 #: src/presentation/bot/handlers/settings.py:264
 #: src/presentation/bot/handlers/settings.py:301
 msgid "Updated"
-msgstr ""
+msgstr "저장됨"
 
 #: src/presentation/bot/handlers/start.py:34
 msgid ""

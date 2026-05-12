@@ -36,17 +36,17 @@ msgstr "♂️ ชาย"
 #: src/presentation/bot/handlers/settings.py:55
 #: src/presentation/bot/keyboards.py:55
 msgid "♀️ Women"
-msgstr ""
+msgstr "♀️ ผู้หญิง"
 
 #: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:60
 msgid "👥 Everyone"
-msgstr ""
+msgstr "👥 ทุกคน"
 
 #: src/presentation/bot/handlers/settings.py:61
 #: src/presentation/bot/keyboards.py:110
 msgid "Any"
-msgstr ""
+msgstr "ใดก็ได้"
 
 #: src/presentation/bot/keyboards.py:174
 msgid "⏭ Skip"
@@ -151,7 +151,7 @@ msgstr "ตัวเลือกไม่ถูกต้อง"
 
 #: src/presentation/bot/handlers/create_profile.py:129
 msgid "Who would you like to rate?"
-msgstr ""
+msgstr "อยากให้คะแนนใคร?"
 
 #: src/presentation/bot/handlers/create_profile.py:153
 msgid "Share your location — it's used to find nearby profiles:"
@@ -282,7 +282,7 @@ msgstr "ให้คะแนนโปรไฟล์นี้:"
 #: src/presentation/bot/handlers/feed.py:104
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
-msgstr ""
+msgstr "⭐ มีคนเพิ่งให้คะแนนคุณ: {score}/10"
 
 #: src/presentation/bot/handlers/feed.py:126
 msgid "You need a profile of your own first. Send /create to make one."
@@ -343,6 +343,9 @@ msgid ""
 "\n"
 "Pick a tier:"
 msgstr ""
+"<b>พรีเมียม</b> เปิดตัวกรองคะแนนขั้นต่ำใน /settings\n"
+"\n"
+"เลือกแพ็กเกจ:"
 
 #: src/presentation/bot/handlers/premium.py:106
 msgid "Unknown tier"
@@ -380,26 +383,26 @@ msgstr ""
 #: src/presentation/bot/handlers/settings.py:68
 #, python-brace-format
 msgid "👤 Show me: {current}"
-msgstr ""
+msgstr "👤 แสดง: {current}"
 
 #: src/presentation/bot/handlers/settings.py:72
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
-msgstr ""
+msgstr "⭐ คะแนนขั้นต่ำ: {current}"
 
 #: src/presentation/bot/handlers/settings.py:76
 msgid "⭐ Min rating: premium only"
-msgstr ""
+msgstr "⭐ คะแนนขั้นต่ำ: เฉพาะพรีเมียม"
 
 #: src/presentation/bot/handlers/settings.py:77
 #, python-brace-format
 msgid "🌐 Language: {current}"
-msgstr ""
+msgstr "🌐 ภาษา: {current}"
 
 #: src/presentation/bot/handlers/settings.py:106
 #: src/presentation/bot/handlers/settings.py:145
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>การตั้งค่า</b>"
 
 #: src/presentation/bot/handlers/settings.py:139
 msgid "No profile yet. Use /create first."
@@ -408,13 +411,13 @@ msgstr "ไม่มีโปรไฟล์ให้แก้ไข ใช้ /
 #: src/presentation/bot/handlers/settings.py:176
 #: src/presentation/bot/handlers/settings.py:253
 msgid "Premium only"
-msgstr ""
+msgstr "เฉพาะพรีเมียม"
 
 #: src/presentation/bot/handlers/settings.py:218
 #: src/presentation/bot/handlers/settings.py:264
 #: src/presentation/bot/handlers/settings.py:301
 msgid "Updated"
-msgstr ""
+msgstr "บันทึกแล้ว"
 
 #: src/presentation/bot/handlers/start.py:34
 msgid ""
