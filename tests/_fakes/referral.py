@@ -1,18 +1,18 @@
-"""Tiny stand-ins for the Referral context, used by use case tests that don't
-exercise the referral flow.
+"""Tiny stand-ins for the Referral context, used by use case tests that
+don't exercise the referral flow.
 
-The use case under test gets a real `ReferralRewardService` wired with these
-empty fakes — since no Referral row exists for the rater/owner, the service
-returns immediately and never touches the user or subscription repos. This
-keeps the test focused on the use case's own behavior without dragging the
-referral context into every fixture.
+The use case under test gets a real `ReferralRewardService` wired with
+these empty fakes — since no referred-by user exists, the service
+short-circuits and never touches subscriptions. Keeps the test focused
+on the use case's own behavior without dragging the referral context
+into every fixture.
 """
 
 from dataclasses import dataclass, field
 from datetime import datetime
 
 from src.domain.identity.entities import User
-from src.domain.identity.value_objects import ReferralCode, TelegramId
+from src.domain.identity.value_objects import TelegramId
 from src.domain.referral.entities import Referral
 from src.domain.referral.services import ReferralRewardService
 from src.domain.shared.identifiers import UserId
@@ -26,20 +26,11 @@ class EmptyReferralRepo:
     async def add(self, referral: Referral) -> None:
         self.referrals.append(referral)
 
-    async def get_by_referee(self, referee_id: UserId) -> Referral | None:
-        for r in self.referrals:
-            if r.referee_id == referee_id:
-                return r
-        return None
+    async def exists_for_referee(self, referee_id: UserId) -> bool:
+        return any(r.referee_id == referee_id for r in self.referrals)
 
-    async def list_by_referrer(self, referrer_id: UserId) -> list[Referral]:
-        return [r for r in self.referrals if r.referrer_id == referrer_id]
-
-    async def update(self, referral: Referral) -> None:
-        for idx, existing in enumerate(self.referrals):
-            if existing.id == referral.id:
-                self.referrals[idx] = referral
-                return
+    async def count_for_referrer(self, referrer_id: UserId) -> int:
+        return sum(1 for r in self.referrals if r.referrer_id == referrer_id)
 
 
 @dataclass
@@ -55,8 +46,8 @@ class EmptyUserRepo:
     async def get_by_telegram_id(self, telegram_id: TelegramId) -> User | None:
         return None
 
-    async def get_by_referral_code(self, code: ReferralCode) -> User | None:
-        return None
+    async def count_referees_for(self, referrer_id: UserId) -> int:
+        return 0
 
     async def update(self, user: User) -> None:
         self.users[user.id] = user
@@ -88,9 +79,8 @@ class EmptySubscriptionRepo:
 
 
 def make_noop_referral_service() -> ReferralRewardService:
-    """Real service wired with empty fakes. With no PENDING referral for any
-    referee, every `mark_*` call short-circuits before touching subscriptions
-    or users."""
+    """Real service wired with empty fakes. With no User in the repo the
+    service short-circuits on `get_by_id` before touching subscriptions."""
     return ReferralRewardService(
         referral_repo=EmptyReferralRepo(),
         user_repo=EmptyUserRepo(),

@@ -21,6 +21,7 @@ from src.application.rating.get_profile_score import GetProfileScoreUseCase
 from src.application.rating.list_incoming_ratings import ListIncomingRatingsUseCase
 from src.application.rating.rate_user import RateUserUseCase
 from src.application.rating.withdraw_rating import WithdrawRatingUseCase
+from src.application.referral.get_stats import GetReferralStatsUseCase
 from src.application.subscription.activate_premium import ActivatePremiumUseCase
 from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.application.subscription.list_tiers import ListTiersUseCase
@@ -71,3 +72,6 @@ class UseCaseProvider(Provider):
     create_premium_invoice = provide(CreatePremiumInvoiceUseCase)
     confirm_payment = provide(ConfirmPaymentUseCase)
     refund_payment = provide(RefundPaymentUseCase)
+
+    # Referral
+    get_referral_stats = provide(GetReferralStatsUseCase)

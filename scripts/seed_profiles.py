@@ -343,12 +343,14 @@ async def amain(args: argparse.Namespace) -> int:
         log.error("Provide UNSPLASH_ACCESS_KEY env var or --unsplash-key.")
         return 2
 
-    total = len(CITIES) * PROFILES_PER_CITY
+    full_total = len(CITIES) * PROFILES_PER_CITY
+    total = min(full_total, args.limit) if args.limit else full_total
     log.info(
-        "Target: %d profiles (%d cities x %d each)",
+        "Target: %d profiles (full plan: %d cities x %d each = %d)",
         total,
         len(CITIES),
         PROFILES_PER_CITY,
+        full_total,
     )
 
     settings = get_settings()
@@ -444,6 +446,12 @@ def main() -> None:
         type=str,
         default=None,
         help="Unsplash API access key. Falls back to $UNSPLASH_ACCESS_KEY.",
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Cap total profiles to seed (handy for smoke-testing on N).",
     )
     args = parser.parse_args()
     sys.exit(asyncio.run(amain(args)))

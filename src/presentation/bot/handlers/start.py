@@ -11,8 +11,6 @@ from src.presentation.bot.i18n import normalize_language
 
 router = Router(name="start")
 
-_REFERRAL_PAYLOAD_PREFIX = "ref_"
-
 
 @router.message(CommandStart())
 async def on_start(
@@ -27,7 +25,7 @@ async def on_start(
         RegisterUserRequest(
             telegram_id=message.from_user.id,
             language=normalize_language(message.from_user.language_code),
-            referral_code=_extract_referral_code(command.args),
+            referrer_telegram_id=_extract_referrer_telegram_id(command.args),
         )
     )
     profile = await get_my_profile.execute(user.id)
@@ -47,13 +45,17 @@ async def on_start(
         )
 
 
-def _extract_referral_code(payload: str | None) -> str | None:
-    """Pulls the 8-char code out of a `ref_<code>` start payload.
+def _extract_referrer_telegram_id(payload: str | None) -> int | None:
+    """Parses a `/start <telegram_id>` payload.
 
-    Returns None if the payload is missing, doesn't carry the `ref_` prefix,
-    or has the wrong length. Validation of the alphabet is deferred to the
-    `ReferralCode` value object in the use case.
+    Returns the integer ID if the payload is a positive decimal number.
+    Returns None for missing / malformed payloads — the use case is then
+    free to register the user without a referrer link.
     """
-    if not payload or not payload.startswith(_REFERRAL_PAYLOAD_PREFIX):
+    if not payload:
         return None
-    return payload.removeprefix(_REFERRAL_PAYLOAD_PREFIX) or None
+    try:
+        value = int(payload)
+    except ValueError:
+        return None
+    return value if value > 0 else None

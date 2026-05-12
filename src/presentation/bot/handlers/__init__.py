@@ -6,6 +6,7 @@ from src.presentation.bot.handlers import (
     feed,
     my_ratings,
     premium,
+    refer,
     settings,
     start,
 )
@@ -19,5 +20,6 @@ def all_routers() -> list[Router]:
         feed.router,
         premium.router,
         my_ratings.router,
+        refer.router,
         settings.router,
     ]

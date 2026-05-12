@@ -1,9 +1,9 @@
 """create referrals table
 
-Tracks one referrer→referee invitation lifecycle (PENDING → QUALIFIED →
-REWARDED). UNIQUE on `referee_id` is the primary anti-abuse fence: each
-user can only be referred once, regardless of how many `/start ref_<code>`
-payloads target them.
+Append-only ledger of paid-out referrals (one row per successful invite,
+i.e. when the referee created their profile and both parties received
+their BONUS SubscriptionGrant). UNIQUE on `referee_id` is the primary
+anti-abuse fence: each user can be referred at most once.
 
 Revision ID: c8d3e1f7a9b6
 Revises: b5e7f2c4a91d
@@ -28,22 +28,7 @@ def upgrade() -> None:
         sa.Column('id', sa.Uuid(), nullable=False),
         sa.Column('referrer_id', sa.Uuid(), nullable=False),
         sa.Column('referee_id', sa.Uuid(), nullable=False),
-        sa.Column('status', sa.String(length=16), nullable=False),
-        sa.Column(
-            'profile_created',
-            sa.Boolean(),
-            server_default='false',
-            nullable=False,
-        ),
-        sa.Column(
-            'first_rating_given',
-            sa.Boolean(),
-            server_default='false',
-            nullable=False,
-        ),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
-        sa.Column('qualified_at', sa.DateTime(timezone=True), nullable=True),
-        sa.Column('rewarded_at', sa.DateTime(timezone=True), nullable=True),
         sa.ForeignKeyConstraint(
             ['referrer_id'], ['users.id'], ondelete='CASCADE'
         ),
@@ -56,12 +41,8 @@ def upgrade() -> None:
     op.create_index(
         'ix_referrals_referrer_id', 'referrals', ['referrer_id']
     )
-    op.create_index(
-        'ix_referrals_status', 'referrals', ['status']
-    )
 
 
 def downgrade() -> None:
-    op.drop_index('ix_referrals_status', table_name='referrals')
     op.drop_index('ix_referrals_referrer_id', table_name='referrals')
     op.drop_table('referrals')

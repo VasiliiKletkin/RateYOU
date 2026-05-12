@@ -26,9 +26,10 @@ class CreateProfileUseCase:
     context. One profile per owner is enforced via exists_for_owner check
     and a UNIQUE constraint at the DB level.
 
-    After successful creation, signals the Referral context so a PENDING
-    referral whose referee just got a profile can advance. For users without
-    a referral the signal is a cheap no-op.
+    After successful creation, signals the Referral context to issue the
+    referral reward (if this owner was invited by someone via a
+    `/start <telegram_id>` deep link). For users who arrived directly the
+    signal is a cheap no-op.
     """
 
     profile_repo: IProfileRepository

@@ -14,7 +14,6 @@ from src.domain.rating.services import RatingFulfillmentService
 from src.domain.rating.value_objects import RatingId
 from src.domain.shared.identifiers import UserId
 from src.infrastructure.events.in_memory_bus import InMemoryEventBus
-from tests._fakes.referral import make_noop_referral_service
 
 
 @dataclass
@@ -92,7 +91,6 @@ def _make_use_case(
     bus.subscribe(RatingGiven, handler.handle)
     return RateUserUseCase(
         fulfillment_service=service,
-        referral_service=make_noop_referral_service(),
         event_bus=bus,
         uow=uow,
     )

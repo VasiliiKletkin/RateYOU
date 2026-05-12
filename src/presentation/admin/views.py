@@ -14,11 +14,10 @@ class UserAdmin(ModelView):
         "ban_reason",
         "banned_at",
         "language",
-        "referral_code",
         "referred_by_user_id",
         "created_at",
     ]
-    searchable_fields = ["telegram_id", "referral_code"]
+    searchable_fields = ["telegram_id"]
     sortable_fields = ["created_at", "telegram_id"]
 
     # Users are created via the bot's RegisterUserUseCase, not from admin.
@@ -197,22 +196,16 @@ class TransactionAdmin(ModelView):
 class ReferralAdmin(ModelView):
     label = "Referrals"
     icon = "fa fa-user-plus"
-    # Append-only ledger of referrer→referee invitations. State machine:
-    # PENDING → QUALIFIED → REWARDED. Bonus grants land in
-    # `subscription_grants` with source=BONUS once a referral hits REWARDED.
+    # Append-only: each row marks one paid-out referral (referee created
+    # their profile and BONUS SubscriptionGrants were issued to both sides).
+    # The row's existence is the «rewarded» state — no status column.
     fields = [
         "id",
         "referrer",
         "referee",
-        "status",
-        "profile_created",
-        "first_rating_given",
         "created_at",
-        "qualified_at",
-        "rewarded_at",
     ]
-    searchable_fields = ["status"]
-    sortable_fields = ["created_at", "qualified_at", "rewarded_at"]
+    sortable_fields = ["created_at"]
     fields_default_sort = [("created_at", True)]  # DESC
 
     def can_create(self, request: Request) -> bool:

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from src.domain.identity.exceptions import InvalidBanReason, UserIsBanned
-from src.domain.identity.value_objects import ReferralCode, Role, TelegramId
+from src.domain.identity.value_objects import Role, TelegramId
 from src.domain.shared.identifiers import UserId
 
 
@@ -13,17 +13,16 @@ class User:
     Models who can act in the system. Profile data (photos, bio, etc.)
     lives in the Profile bounded context, not here.
 
-    `referral_code` is issued once at registration and never rotated — it's
-    the user's permanent share token. `referred_by_user_id` is set ONLY at
-    registration time (from a `/start ref_<code>` deep link) and is treated
-    as immutable thereafter — the Referral bounded context relies on this
-    to prevent retroactive referrer-switching.
+    `referred_by_user_id` is set ONLY at registration time (from a
+    `/start <referrer_telegram_id>` deep link) and treated as immutable
+    thereafter — the Referral context relies on this to prevent
+    retroactive referrer switching. The user's own referral handle is
+    their `telegram_id` — shared via `/refer` as part of the start link.
     """
 
     id: UserId
     telegram_id: TelegramId
     created_at: datetime
-    referral_code: ReferralCode
     referred_by_user_id: UserId | None = None
     role: Role = Role.USER
     is_banned: bool = False
@@ -48,7 +47,6 @@ class User:
             telegram_id=telegram_id,
             language=language,
             created_at=now,
-            referral_code=ReferralCode.new(),
             referred_by_user_id=referred_by,
         )
 

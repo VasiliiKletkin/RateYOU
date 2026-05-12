@@ -21,11 +21,8 @@ class UserORM(Base):
     # Short ISO 639-1 code. Server default lets the column be added in-place
     # without a backfill; existing users get "en" until they next /start.
     language: Mapped[str] = mapped_column(String(8), server_default="en")
-    # 8-char base62 string, issued at registration. UNIQUE so deep links
-    # `/start ref_<code>` resolve to exactly one user.
-    referral_code: Mapped[str] = mapped_column(String(8), unique=True)
-    # Set ONCE at register time from a `/start ref_<code>` payload; never
-    # mutated thereafter. Nullable for users who arrived directly.
+    # Set ONCE at register time from a `/start <referrer_telegram_id>` payload;
+    # never mutated thereafter. Nullable for users who arrived directly.
     referred_by_user_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )

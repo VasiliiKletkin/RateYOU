@@ -9,10 +9,11 @@ class RegisterUserRequest:
     # reaching the use case. `None` means "leave the user's stored language
     # untouched" — handy for callers that don't have a Telegram update.
     language: str | None = None
-    # Optional 8-char base62 referral code from `/start ref_<code>` payload.
-    # The use case silently ignores malformed codes, codes that don't match
-    # any user, and self-referral; the registration always succeeds.
-    referral_code: str | None = None
+    # Optional referrer Telegram ID parsed from the `/start <id>` deep-link
+    # payload. The use case silently ignores values that don't match a known
+    # user or that point at the new user themselves; registration always
+    # succeeds.
+    referrer_telegram_id: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
