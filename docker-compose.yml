@@ -87,6 +87,38 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
 
+  # One-shot container for dev tooling: alembic, pytest, ruff, mypy, pybabel.
+  # `profiles: [dev]` keeps it out of `docker compose up`; the Makefile drives
+  # it exclusively through `docker compose run --rm dev <command>`. Bind mounts
+  # let host edits show up without rebuilding the image.
+  dev:
+    build:
+      context: .
+      target: dev
+    image: rateyou-dev
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./migrations:/app/migrations
+      - ./locales:/app/locales
+      - ./scripts:/app/scripts
+      - ./alembic.ini:/app/alembic.ini:ro
+      - ./pyproject.toml:/app/pyproject.toml:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+
 volumes:
   postgres_data:
   redis_data:

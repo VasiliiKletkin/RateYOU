@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-13 00:56+0300\n"
+"POT-Creation-Date: 2026-05-13 16:37+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -18,43 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/presentation/bot/commands.py:15
+#: src/presentation/bot/commands.py:16
 msgid "Start the bot"
 msgstr ""
 
-#: src/presentation/bot/commands.py:16
+#: src/presentation/bot/commands.py:17
 #, fuzzy
 msgid "Create your profile"
 msgstr "Đánh giá hồ sơ này:"
 
-#: src/presentation/bot/commands.py:17
+#: src/presentation/bot/commands.py:18
 msgid "Edit your profile"
 msgstr ""
 
-#: src/presentation/bot/commands.py:18
+#: src/presentation/bot/commands.py:19
 #, fuzzy
 msgid "Rate other profiles"
 msgstr "Đánh giá hồ sơ này:"
 
-#: src/presentation/bot/commands.py:19
+#: src/presentation/bot/commands.py:20
 msgid "Rating preferences"
 msgstr ""
 
-#: src/presentation/bot/commands.py:20
+#: src/presentation/bot/commands.py:21
 #, fuzzy
 msgid "Premium subscription"
 msgstr "Chỉ premium"
 
-#: src/presentation/bot/commands.py:22
+#: src/presentation/bot/commands.py:23
 #, fuzzy
 msgid "Who rated me (premium)"
 msgstr "🌟 Ai đã đánh giá tôi"
 
-#: src/presentation/bot/commands.py:25
+#: src/presentation/bot/commands.py:26
 msgid "Invite friends and earn premium"
 msgstr ""
 
-#: src/presentation/bot/commands.py:27
+#: src/presentation/bot/commands.py:28
 msgid "Cancel current action"
 msgstr ""
 
@@ -380,13 +380,30 @@ msgstr "🌟 Những người gần đây đánh giá bạn:"
 msgid "Anonymous"
 msgstr "Ẩn danh"
 
-#: src/presentation/bot/handlers/premium.py:34
-#, python-brace-format
-msgid "Expires in {days} day."
-msgid_plural "Expires in {days} days."
+#: src/presentation/bot/handlers/premium.py:43
+#, fuzzy, python-brace-format
+msgid "Expires within a minute."
+msgstr "Hết hạn sau {days} ngày."
+
+#: src/presentation/bot/handlers/premium.py:49
+#, fuzzy, python-brace-format
+msgid "Expires in {n} minute."
+msgid_plural "Expires in {n} minutes."
 msgstr[0] "Hết hạn sau {days} ngày."
 
-#: src/presentation/bot/handlers/premium.py:61
+#: src/presentation/bot/handlers/premium.py:57
+#, fuzzy, python-brace-format
+msgid "Expires in {n} hour."
+msgid_plural "Expires in {n} hours."
+msgstr[0] "Hết hạn sau {days} ngày."
+
+#: src/presentation/bot/handlers/premium.py:64
+#, fuzzy, python-brace-format
+msgid "Expires in {n} day."
+msgid_plural "Expires in {n} days."
+msgstr[0] "Hết hạn sau {days} ngày."
+
+#: src/presentation/bot/handlers/premium.py:91
 #, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
@@ -401,7 +418,7 @@ msgstr ""
 "\n"
 "Chọn gói để gia hạn hoặc nâng cấp:"
 
-#: src/presentation/bot/handlers/premium.py:71
+#: src/presentation/bot/handlers/premium.py:101
 msgid ""
 "<b>Premium</b> unlocks the minimum-rating filter in /settings.\n"
 "\n"
@@ -411,27 +428,27 @@ msgstr ""
 "\n"
 "Chọn một gói:"
 
-#: src/presentation/bot/handlers/premium.py:111
+#: src/presentation/bot/handlers/premium.py:141
 msgid "Unknown tier"
 msgstr "Gói không xác định"
 
-#: src/presentation/bot/handlers/premium.py:114
+#: src/presentation/bot/handlers/premium.py:144
 msgid "Invoice sent — pay in the chat"
 msgstr "Đã gửi hóa đơn — thanh toán trong chat"
 
-#: src/presentation/bot/handlers/premium.py:136
+#: src/presentation/bot/handlers/premium.py:166
 msgid "Unknown payment payload."
 msgstr "Dữ liệu thanh toán không xác định."
 
-#: src/presentation/bot/handlers/premium.py:147
+#: src/presentation/bot/handlers/premium.py:177
 msgid "This payment is not in our records."
 msgstr "Khoản thanh toán này không có trong hồ sơ của chúng tôi."
 
-#: src/presentation/bot/handlers/premium.py:161
+#: src/presentation/bot/handlers/premium.py:191
 msgid "✅ Payment confirmed."
 msgstr "✅ Đã xác nhận thanh toán."
 
-#: src/presentation/bot/handlers/premium.py:166
+#: src/presentation/bot/handlers/premium.py:196
 #, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"

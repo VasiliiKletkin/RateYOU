@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from aiogram import F, Router
@@ -28,13 +29,42 @@ from src.presentation.bot.keyboards import tiers_keyboard
 router = Router(name="premium")
 
 
-def _expires_phrase(days: int) -> str:
-    """Pluralised 'Expires in N day(s)' — `ngettext` picks the right form."""
+def _expires_phrase(expires_at: datetime) -> str:
+    """Human-readable countdown to ``expires_at``.
+
+    Picks the largest sensible unit so a 1-day bonus doesn't read as
+    "Expires in 0 days". ``ngettext`` handles plural forms per locale
+    (Russian has three; English two).
+    """
+    remaining = expires_at - datetime.now(UTC)
+    total_seconds = int(remaining.total_seconds())
+
+    if total_seconds <= 0:
+        return _("Expires within a minute.")
+
+    total_minutes = total_seconds // 60
+    if total_minutes < 60:
+        n = max(total_minutes, 1)
+        return ngettext(
+            "Expires in {n} minute.",
+            "Expires in {n} minutes.",
+            n,
+        ).format(n=n)
+
+    total_hours = total_minutes // 60
+    if total_hours < 24:
+        return ngettext(
+            "Expires in {n} hour.",
+            "Expires in {n} hours.",
+            total_hours,
+        ).format(n=total_hours)
+
+    total_days = total_hours // 24
     return ngettext(
-        "Expires in {days} day.",
-        "Expires in {days} days.",
-        days,
-    ).format(days=days)
+        "Expires in {n} day.",
+        "Expires in {n} days.",
+        total_days,
+    ).format(n=total_days)
 
 
 @router.message(Command("premium"))
@@ -64,7 +94,7 @@ async def cmd_premium(
             "Pick a tier to renew or upgrade:"
         ).format(
             tier=current.tier.upper(),
-            expires=_expires_phrase(current.days_remaining),
+            expires=_expires_phrase(current.expires_at),
         )
     else:
         header = _(
@@ -169,6 +199,6 @@ async def on_successful_payment(
             "Pick your minimum rating filter in /settings."
         ).format(
             tier=premium.tier.upper(),
-            expires=_expires_phrase(premium.days_remaining),
+            expires=_expires_phrase(premium.expires_at),
         )
     )

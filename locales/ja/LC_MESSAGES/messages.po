@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-13 00:56+0300\n"
+"POT-Creation-Date: 2026-05-13 16:37+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -18,43 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/presentation/bot/commands.py:15
+#: src/presentation/bot/commands.py:16
 msgid "Start the bot"
 msgstr ""
 
-#: src/presentation/bot/commands.py:16
+#: src/presentation/bot/commands.py:17
 #, fuzzy
 msgid "Create your profile"
 msgstr "このプロフィールを評価してください:"
 
-#: src/presentation/bot/commands.py:17
+#: src/presentation/bot/commands.py:18
 msgid "Edit your profile"
 msgstr ""
 
-#: src/presentation/bot/commands.py:18
+#: src/presentation/bot/commands.py:19
 #, fuzzy
 msgid "Rate other profiles"
 msgstr "このプロフィールを評価してください:"
 
-#: src/presentation/bot/commands.py:19
+#: src/presentation/bot/commands.py:20
 msgid "Rating preferences"
 msgstr ""
 
-#: src/presentation/bot/commands.py:20
+#: src/presentation/bot/commands.py:21
 #, fuzzy
 msgid "Premium subscription"
 msgstr "プレミアム限定"
 
-#: src/presentation/bot/commands.py:22
+#: src/presentation/bot/commands.py:23
 #, fuzzy
 msgid "Who rated me (premium)"
 msgstr "🌟 誰が私を評価したか"
 
-#: src/presentation/bot/commands.py:25
+#: src/presentation/bot/commands.py:26
 msgid "Invite friends and earn premium"
 msgstr ""
 
-#: src/presentation/bot/commands.py:27
+#: src/presentation/bot/commands.py:28
 msgid "Cancel current action"
 msgstr ""
 
@@ -380,13 +380,30 @@ msgstr "🌟 最近あなたを評価した人:"
 msgid "Anonymous"
 msgstr "匿名"
 
-#: src/presentation/bot/handlers/premium.py:34
-#, python-brace-format
-msgid "Expires in {days} day."
-msgid_plural "Expires in {days} days."
+#: src/presentation/bot/handlers/premium.py:43
+#, fuzzy, python-brace-format
+msgid "Expires within a minute."
+msgstr "あと{days}日で期限切れです。"
+
+#: src/presentation/bot/handlers/premium.py:49
+#, fuzzy, python-brace-format
+msgid "Expires in {n} minute."
+msgid_plural "Expires in {n} minutes."
 msgstr[0] "あと{days}日で期限切れです。"
 
-#: src/presentation/bot/handlers/premium.py:61
+#: src/presentation/bot/handlers/premium.py:57
+#, fuzzy, python-brace-format
+msgid "Expires in {n} hour."
+msgid_plural "Expires in {n} hours."
+msgstr[0] "あと{days}日で期限切れです。"
+
+#: src/presentation/bot/handlers/premium.py:64
+#, fuzzy, python-brace-format
+msgid "Expires in {n} day."
+msgid_plural "Expires in {n} days."
+msgstr[0] "あと{days}日で期限切れです。"
+
+#: src/presentation/bot/handlers/premium.py:91
 #, python-brace-format
 msgid ""
 "<b>Your premium: {tier}</b>\n"
@@ -401,7 +418,7 @@ msgstr ""
 "\n"
 "更新またはアップグレードするプランを選んでください:"
 
-#: src/presentation/bot/handlers/premium.py:71
+#: src/presentation/bot/handlers/premium.py:101
 msgid ""
 "<b>Premium</b> unlocks the minimum-rating filter in /settings.\n"
 "\n"
@@ -411,27 +428,27 @@ msgstr ""
 "\n"
 "プランを選んでください:"
 
-#: src/presentation/bot/handlers/premium.py:111
+#: src/presentation/bot/handlers/premium.py:141
 msgid "Unknown tier"
 msgstr "不明なプランです"
 
-#: src/presentation/bot/handlers/premium.py:114
+#: src/presentation/bot/handlers/premium.py:144
 msgid "Invoice sent — pay in the chat"
 msgstr "請求書を送りました — チャットでお支払いください"
 
-#: src/presentation/bot/handlers/premium.py:136
+#: src/presentation/bot/handlers/premium.py:166
 msgid "Unknown payment payload."
 msgstr "不明な支払いデータです。"
 
-#: src/presentation/bot/handlers/premium.py:147
+#: src/presentation/bot/handlers/premium.py:177
 msgid "This payment is not in our records."
 msgstr "この支払いの記録がありません。"
 
-#: src/presentation/bot/handlers/premium.py:161
+#: src/presentation/bot/handlers/premium.py:191
 msgid "✅ Payment confirmed."
 msgstr "✅ 支払いを確認しました。"
 
-#: src/presentation/bot/handlers/premium.py:166
+#: src/presentation/bot/handlers/premium.py:196
 #, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
