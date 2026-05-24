@@ -1,0 +1,182 @@
+# Прод-стек, полностью самостоятельный. Запускать так:
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Все значения берутся из .env. На проде .env должен содержать как
+# минимум переменные ниже — иначе compose сразу ругнётся на пустые
+# подстановки `${...}`.
+#
+# .env (на проде):
+#   # ─── App
+#   ENVIRONMENT=prod
+#   LOG_LEVEL=INFO
+#
+#   # ─── CI/CD image (из GHCR, собирается github actions)
+#   IMAGE=ghcr.io/<owner>/<repo>:latest
+#
+#   # ─── Bot
+#   BOT_TOKEN=<токен @BotFather>
+#   BOT_USE_WEBHOOK=true
+#   BOT_WEBHOOK_BASE_URL=https://${BOT_DOMAIN}
+#   BOT_WEBHOOK_SECRET=<openssl rand -hex 32>
+#
+#   # ─── Routing (для nginx-proxy + acme-companion)
+#   BOT_DOMAIN=bot.example.com
+#   ADMIN_DOMAIN=admin.example.com
+#   LETSENCRYPT_EMAIL=you@example.com
+#
+#   # ─── Postgres
+#   # ВАЖНО: внутри docker-сети хост = имя сервиса
+#   POSTGRES_HOST=postgres
+#   POSTGRES_PORT=5432
+#   POSTGRES_DB=rateyou
+#   POSTGRES_USER=rateyou
+#   POSTGRES_PASSWORD=<openssl rand -base64 32>
+#
+#   # ─── Redis
+#   REDIS_HOST=redis
+#   REDIS_PORT=6379
+#   REDIS_DB=0
+#
+#   # ─── Admin (starlette-admin)
+#   ADMIN_USERNAME=admin
+#   ADMIN_PASSWORD=<openssl rand -base64 24>
+#   ADMIN_SECRET_KEY=<openssl rand -hex 32>
+#
+#   # ─── Sentry
+#   SENTRY_DSN=<DSN прод-проекта>
+#   SENTRY_TRACES_SAMPLE_RATE=0.1
+
+services:
+  postgres:
+    image: postgis/postgis:17-3.5
+    platform: linux/amd64
+    container_name: rateyou-postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: rateyou-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: ${IMAGE}
+    container_name: rateyou-migrate
+    command: python -m alembic upgrade head
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  bot:
+    image: ${IMAGE}
+    container_name: rateyou-bot
+    command: python -m src.presentation.bot.main
+    env_file:
+      - .env
+    environment:
+      # Метки маршрутизации для nginx-proxy/acme-companion. Сами значения
+      # подставляются из .env через docker compose interpolation.
+      VIRTUAL_HOST: ${BOT_DOMAIN}
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: ${BOT_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  admin:
+    image: ${IMAGE}
+    container_name: rateyou-admin
+    command: python -m src.presentation.admin.main
+    env_file:
+      - .env
+    environment:
+      VIRTUAL_HOST: ${ADMIN_DOMAIN}
+      VIRTUAL_PORT: 8000
+      LETSENCRYPT_HOST: ${ADMIN_DOMAIN}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # nginx-proxy слушает 80/443 и автоматически собирает upstream-конфиги
+  # для всех контейнеров с VIRTUAL_HOST в env, на основе данных из Docker
+  # socket. Перегенерирует vhost.d/* при появлении/удалении контейнеров.
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.6
+    container_name: rateyou-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DEFAULT_HOST: ${ADMIN_DOMAIN}
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx_certs:/etc/nginx/certs:ro
+      - nginx_vhost:/etc/nginx/vhost.d
+      - nginx_html:/usr/share/nginx/html
+      - nginx_dhparam:/etc/nginx/dhparam
+    labels:
+      com.github.nginx-proxy.nginx: "true"
+
+  # При появлении контейнера с LETSENCRYPT_HOST:
+  # 1. запрашивает сертификат у Let's Encrypt (HTTP-01 через nginx-proxy);
+  # 2. кладёт его в nginx_certs;
+  # 3. дёргает nginx-proxy на reload;
+  # 4. раз в час проверяет, не пора ли обновлять (за 30 дней до истечения).
+  acme-companion:
+    image: nginxproxy/acme-companion:2.5
+    container_name: rateyou-acme
+    restart: unless-stopped
+    depends_on:
+      - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
+      # Раскомментируй на время отладки: staging-CA не имеет жёстких
+      # лимитов на запросы и не выдаёт «настоящие» сертификаты —
+      # браузеры будут ругаться, но Telegram-API ругаться не будет.
+      # Боевой LE: 5 ошибочных попыток в неделю на домен, легко влететь.
+      # ACME_CA_URI: https://acme-staging-v02.api.letsencrypt.org/directory
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx_certs:/etc/nginx/certs
+      - nginx_vhost:/etc/nginx/vhost.d
+      - nginx_html:/usr/share/nginx/html
+      - nginx_dhparam:/etc/nginx/dhparam
+      - nginx_acme:/etc/acme.sh
+
+volumes:
+  postgres_data:
+  redis_data:
+  nginx_certs:
+  nginx_vhost:
+  nginx_html:
+  nginx_dhparam:
+  nginx_acme:
