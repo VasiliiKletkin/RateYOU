@@ -6,15 +6,19 @@
 # Триггеры: push в main (авто) и workflow_dispatch (кнопка в Actions UI).
 # Concurrency не даёт двум деплоям ехать одновременно.
 #
-# Требуемые GitHub Secrets (Settings → Secrets and variables → Actions):
-#   SSH_HOST       — IP или DNS сервера
-#   SSH_USER       — пользователь (обычно deploy)
+# Конфигурация — на уровне environment "production":
+#
+# Environment SECRETS (чувствительные, не видны в UI):
 #   SSH_KEY        — приватный SSH-ключ (полный текст id_ed25519)
-#   SSH_PORT       — порт SSH (опционально, дефолт 22)
-#   DEPLOY_PATH    — куда положить compose, напр. /home/deploy/RateYou
 #   GHCR_PAT       — Personal Access Token c read:packages, нужен серверу
 #                    для docker pull из приватного GHCR. Если репо публичный
 #                    и образ открыт — можно оставить пустым.
+#
+# Environment VARIABLES (нечувствительные, видны в UI):
+#   SSH_HOST       — IP или DNS сервера
+#   SSH_USER       — пользователь (обычно deploy)
+#   SSH_PORT       — порт SSH (опционально, дефолт 22)
+#   DEPLOY_PATH    — куда положить compose, напр. /home/deploy/RateYou
 
 name: Build and deploy
 
@@ -89,23 +93,23 @@ jobs:
       - name: Trust server host key
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.SSH_PORT || 22 }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ vars.SSH_PORT || 22 }} -H ${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy compose file to server
         run: |
-          scp -P ${{ secrets.SSH_PORT || 22 }} \
+          scp -P ${{ vars.SSH_PORT || 22 }} \
             docker-compose.prod.yml \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/docker-compose.prod.yml
+            ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:${{ vars.DEPLOY_PATH }}/docker-compose.prod.yml
 
       - name: Pull image and restart on server
         env:
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           GHCR_USER: ${{ github.actor }}
         run: |
-          ssh -p ${{ secrets.SSH_PORT || 22 }} \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          ssh -p ${{ vars.SSH_PORT || 22 }} \
+            ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} \
             "set -e; \
-             cd ${{ secrets.DEPLOY_PATH }}; \
+             cd ${{ vars.DEPLOY_PATH }}; \
              echo '$GHCR_PAT' | docker login ghcr.io -u '$GHCR_USER' --password-stdin; \
              docker compose -f docker-compose.prod.yml pull; \
              docker compose -f docker-compose.prod.yml up -d; \
