@@ -9,7 +9,8 @@
 # Конфигурация — на уровне environment "production":
 #
 # Environment SECRETS (чувствительные, не видны в UI):
-#   SSH_KEY        — приватный SSH-ключ (полный текст id_ed25519)
+#   SSH_KEY        — приватный SSH-ключ, base64-encoded (одной строкой).
+#                    На маке: `base64 -i ~/.ssh/github-actions | pbcopy`
 #   GHCR_PAT       — Personal Access Token c read:packages, нужен серверу
 #                    для docker pull из приватного GHCR. Если репо публичный
 #                    и образ открыт — можно оставить пустым.
@@ -85,19 +86,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Setup SSH key
+        env:
+          SSH_KEY_B64: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Падаем сразу, если ключ битый, с понятным сообщением:
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
 
       - name: Trust server host key
         run: |
-          mkdir -p ~/.ssh
           ssh-keyscan -p ${{ vars.SSH_PORT || 22 }} -H ${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy compose file to server
         run: |
-          scp -P ${{ vars.SSH_PORT || 22 }} \
+          scp -i ~/.ssh/deploy_key -P ${{ vars.SSH_PORT || 22 }} \
             docker-compose.prod.yml \
             ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:${{ vars.DEPLOY_PATH }}/docker-compose.prod.yml
 
@@ -106,7 +112,7 @@ jobs:
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           GHCR_USER: ${{ github.actor }}
         run: |
-          ssh -p ${{ vars.SSH_PORT || 22 }} \
+          ssh -i ~/.ssh/deploy_key -p ${{ vars.SSH_PORT || 22 }} \
             ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} \
             "set -e; \
              cd ${{ vars.DEPLOY_PATH }}; \
