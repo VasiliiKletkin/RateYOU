@@ -1,52 +1,3 @@
-# Прод-стек, полностью самостоятельный. Запускать так:
-#   docker compose -f docker-compose.prod.yml up -d --build
-#
-# Все значения берутся из .env. На проде .env должен содержать как
-# минимум переменные ниже — иначе compose сразу ругнётся на пустые
-# подстановки `${...}`.
-#
-# .env (на проде):
-#   # ─── App
-#   ENVIRONMENT=prod
-#   LOG_LEVEL=INFO
-#
-#   # ─── CI/CD image
-#   Имя образа зашито прямо в services (ghcr.io/vasiliikletkin/rateyou:latest),
-#   его собирает и пушит github actions. Отдельная переменная IMAGE не нужна.
-#
-#   # ─── Bot
-#   BOT_TOKEN=<токен @BotFather>
-#   BOT_USE_WEBHOOK=true
-#   BOT_WEBHOOK_BASE_URL=https://${BOT_DOMAIN}
-#   BOT_WEBHOOK_SECRET=<openssl rand -hex 32>
-#
-#   # ─── Routing (для nginx-proxy + acme-companion)
-#   BOT_DOMAIN=bot.example.com
-#   ADMIN_DOMAIN=admin.example.com
-#   LETSENCRYPT_EMAIL=you@example.com
-#
-#   # ─── Postgres
-#   # ВАЖНО: внутри docker-сети хост = имя сервиса
-#   POSTGRES_HOST=postgres
-#   POSTGRES_PORT=5432
-#   POSTGRES_DB=rateyou
-#   POSTGRES_USER=rateyou
-#   POSTGRES_PASSWORD=<openssl rand -base64 32>
-#
-#   # ─── Redis
-#   REDIS_HOST=redis
-#   REDIS_PORT=6379
-#   REDIS_DB=0
-#
-#   # ─── Admin (starlette-admin)
-#   ADMIN_USERNAME=admin
-#   ADMIN_PASSWORD=<openssl rand -base64 24>
-#   ADMIN_SECRET_KEY=<openssl rand -hex 32>
-#
-#   # ─── Sentry
-#   SENTRY_DSN=<DSN прод-проекта>
-#   SENTRY_TRACES_SAMPLE_RATE=0.1
-
 services:
   postgres:
     image: postgis/postgis:17-3.5
@@ -58,9 +9,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      # -U/-d обязательны: без них pg_isready ходит под ролью root (её нет),
-      # и postgres спамит "FATAL: role root does not exist" в лог каждые 5с.
-      # $$ — экранирование, чтобы переменную развернул шелл в контейнере.
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
