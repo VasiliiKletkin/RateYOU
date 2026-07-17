@@ -71,11 +71,11 @@ def main() -> None:
     settings = get_settings()
     logging.basicConfig(level=settings.log_level.value)
     init_sentry(settings, component="admin")
-    # За nginx-proxy TLS терминируется на прокси, до admin доходит обычный HTTP.
-    # proxy_headers + forwarded_allow_ips="*" заставляют uvicorn доверять
-    # X-Forwarded-Proto/-For от прокси, иначе Starlette-Admin строит ссылки на
-    # статику как http:// и браузер блокирует их (mixed content) на HTTPS-странице.
-    # "*" безопасно: порт 8000 наружу не публикуется, до admin достаёт только прокси.
+    # Behind nginx-proxy, TLS terminates at the proxy and admin receives plain
+    # HTTP. proxy_headers + forwarded_allow_ips="*" make uvicorn trust the
+    # X-Forwarded-Proto/-For headers; otherwise Starlette-Admin builds http://
+    # asset URLs that the browser blocks as mixed content on the HTTPS page.
+    # "*" is safe here: port 8000 isn't published, only the proxy reaches admin.
     uvicorn.run(
         create_app(),
         host="0.0.0.0",
