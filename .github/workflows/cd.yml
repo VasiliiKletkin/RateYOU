@@ -1,0 +1,132 @@
+# CD — сборка образа и деплой на VPS.
+#
+# Пайплайн из трёх последовательных этапов (каждый ждёт предыдущий):
+#   1. checks — те же проверки, что и на PR (линт + типы + тесты).
+#                Если они красные — сборки и деплоя не будет.
+#   2. build  — собирает prod-стейдж из Dockerfile и пушит в GHCR
+#                (ghcr.io/<owner>/<repo>) с тегами :latest и :sha-<commit>.
+#   3. deploy — по SSH на сервер: обновляет docker-compose.prod.yml и делает
+#                `docker compose pull && up -d`. Миграции прогоняет сам compose
+#                (сервис `migrate` с condition: service_completed_successfully).
+#
+# Триггеры: push в main (авто) и кнопка "Run workflow" в Actions (workflow_dispatch).
+# concurrency не даёт двум деплоям ехать одновременно.
+#
+# ── Что настроить в GitHub → Settings → Environments → "prod" ──────────────
+#
+# Secrets (скрыты в UI):
+#   SSH_KEY   — приватный SSH-ключ в base64, одной строкой.
+#               Мак: `base64 -i ~/.ssh/github-actions | pbcopy`
+#   GHCR_PAT  — PAT с правом read:packages, нужен серверу для pull приватного
+#               образа из GHCR. Для публичного образа можно оставить пустым.
+#
+# Variables (видны в UI):
+#   SSH_HOST     — IP или DNS сервера
+#   SSH_USER     — пользователь (обычно deploy)
+#   SSH_PORT     — порт SSH (опционально, по умолчанию 22)
+#   DEPLOY_PATH  — куда класть compose, напр. /home/deploy/RateYou
+#
+# На сервере в DEPLOY_PATH/.env должно быть IMAGE=ghcr.io/<owner>/<repo>:latest
+# — именно этот тег тянет `docker compose pull`.
+
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  # ── 1. Проверки ────────────────────────────────────────────────────────────
+  checks:
+    uses: ./.github/workflows/checks.yml
+
+  # ── 2. Сборка и публикация образа в GHCR ───────────────────────────────────
+  build:
+    name: Build & push
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write            # нужно для push в GHCR через GITHUB_TOKEN
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Имя образа задаём явно = ghcr.io/<owner>/rateyou (не зависит от имени
+      # репозитория). GHCR требует нижний регистр, поэтому owner приводим
+      # через ${...,,}. Хочешь другое имя — поменяй "rateyou" здесь и в
+      # серверном .env (переменная IMAGE).
+      - name: Compute image name
+        id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/rateyou" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push (prod stage)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: prod
+          push: true
+          # :latest        — что тянет сервер по умолчанию;
+          # :sha-<commit>  — для пиннинга/отката на конкретный коммит.
+          tags: |
+            ${{ steps.image.outputs.name }}:latest
+            ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
+          # GHA-cache переиспользует слои прошлой сборки.
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── 3. Деплой на сервер ─────────────────────────────────────────────────────
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment: prod            # отсюда берутся secrets/variables ниже
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare SSH key
+        env:
+          SSH_KEY_B64: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Падаем сразу с понятной ошибкой, если ключ битый.
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null
+
+      - name: Trust server host key
+        run: |
+          ssh-keyscan -p "${{ vars.SSH_PORT || 22 }}" -H "${{ vars.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Copy compose file to server
+        run: |
+          scp -i ~/.ssh/deploy_key -P "${{ vars.SSH_PORT || 22 }}" \
+            docker-compose.prod.yml \
+            "${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:${{ vars.DEPLOY_PATH }}/docker-compose.prod.yml"
+
+      - name: Pull image and restart on server
+        env:
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          GHCR_USER: ${{ github.actor }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "${{ vars.SSH_PORT || 22 }}" \
+            "${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}" \
+            "set -e; \
+             cd '${{ vars.DEPLOY_PATH }}'; \
+             echo '$GHCR_PAT' | docker login ghcr.io -u '$GHCR_USER' --password-stdin; \
+             docker compose -f docker-compose.prod.yml pull; \
+             docker compose -f docker-compose.prod.yml up -d; \
+             docker image prune -f"

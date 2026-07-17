@@ -1,0 +1,135 @@
+# Переиспользуемый workflow с проверками качества кода.
+#
+# Вызывается через `uses: ./.github/workflows/checks.yml` из:
+#   - ci.yml  — на каждый pull request;
+#   - cd.yml  — как gate перед сборкой и деплоем в прод.
+#
+# Два независимых job'а бегут параллельно:
+#   lint — ruff (линт + формат) и mypy (типы);
+#   test — pytest против настоящих Postgres (PostGIS) и Redis.
+#
+# Ничего секретного здесь не нужно: тесты используют одноразовые
+# dummy-значения (см. env в job `test`).
+
+name: Checks
+
+on:
+  workflow_call:
+
+# Единая версия Python и Poetry для всех job'ов — как в Dockerfile.
+env:
+  PYTHON_VERSION: "3.13"
+  POETRY_VERSION: "2.2.1"
+
+jobs:
+  lint:
+    name: Lint & types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pipx install "poetry==${{ env.POETRY_VERSION }}"
+
+      - name: Use in-project virtualenv (.venv)
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache virtualenv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-py${{ env.PYTHON_VERSION }}-${{ hashFiles('poetry.lock') }}
+
+      - name: Install dependencies (with dev group)
+        run: poetry install --no-root --with dev
+
+      - name: Ruff — lint
+        run: poetry run ruff check src/ tests/
+
+      - name: Ruff — format check
+        run: poetry run ruff format --check src/ tests/
+
+      - name: Mypy — type check
+        run: poetry run mypy src/ tests/
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    # Настоящие зависимости как sidecar-контейнеры. Postgres обязательно
+    # с PostGIS: profiles.location — Geography(Point, SRID 4326), а начальная
+    # миграция делает `CREATE EXTENSION postgis`.
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: rateyou
+          POSTGRES_PASSWORD: rateyou
+          POSTGRES_DB: rateyou            # maintenance-БД; тестовую rateyou_test создаёт conftest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U rateyou"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    # Переменные, которые читает pydantic-settings при импорте.
+    # Значения одноразовые — .env в CI нет, ничего боевого не требуется.
+    # POSTGRES_DB здесь = rateyou_test: pytest-env всё равно форсит это же
+    # значение, а alembic-подпроцесс из conftest наследует его из окружения.
+    env:
+      ENVIRONMENT: dev
+      BOT_TOKEN: "123456:TEST"
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: rateyou_test
+      POSTGRES_USER: rateyou
+      POSTGRES_PASSWORD: rateyou
+      REDIS_HOST: localhost
+      REDIS_PORT: "6379"
+      REDIS_DB: "0"
+      ADMIN_PASSWORD: test
+      ADMIN_SECRET_KEY: test-secret-key-at-least-32-characters-long
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pipx install "poetry==${{ env.POETRY_VERSION }}"
+
+      - name: Use in-project virtualenv (.venv)
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache virtualenv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-py${{ env.PYTHON_VERSION }}-${{ hashFiles('poetry.lock') }}
+
+      - name: Install dependencies (with dev group)
+        run: poetry install --no-root --with dev
+
+      # conftest сам создаёт rateyou_test и гонит `alembic upgrade head`
+      # перед первым тестом — отдельного шага миграций не нужно.
+      - name: Run tests
+        run: poetry run pytest

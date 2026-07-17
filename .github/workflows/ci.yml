@@ -1,0 +1,12 @@
+# CI — гоняется на каждый pull request в любую ветку.
+# Ничего не деплоит: только линт, типы и тесты. Красный CI блокирует merge
+# (если в настройках репо включить branch protection на job "Checks").
+
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  checks:
+    uses: ./.github/workflows/checks.yml

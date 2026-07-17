@@ -10,8 +10,9 @@
 #   ENVIRONMENT=prod
 #   LOG_LEVEL=INFO
 #
-#   # ─── CI/CD image (из GHCR, собирается github actions)
-#   IMAGE=ghcr.io/<owner>/<repo>:latest
+#   # ─── CI/CD image
+#   Имя образа зашито прямо в services (ghcr.io/vasiliikletkin/rateyou:latest),
+#   его собирает и пушит github actions. Отдельная переменная IMAGE не нужна.
 #
 #   # ─── Bot
 #   BOT_TOKEN=<токен @BotFather>
@@ -75,7 +76,7 @@ services:
       retries: 5
 
   migrate:
-    image: ${IMAGE}
+    image: ghcr.io/vasiliikletkin/rateyou:latest
     container_name: rateyou-migrate
     command: python -m alembic upgrade head
     env_file:
@@ -86,7 +87,7 @@ services:
     restart: "no"
 
   bot:
-    image: ${IMAGE}
+    image: ghcr.io/vasiliikletkin/rateyou:latest
     container_name: rateyou-bot
     command: python -m src.presentation.bot.main
     env_file:
@@ -108,7 +109,7 @@ services:
     restart: unless-stopped
 
   admin:
-    image: ${IMAGE}
+    image: ghcr.io/vasiliikletkin/rateyou:latest
     container_name: rateyou-admin
     command: python -m src.presentation.admin.main
     env_file:
