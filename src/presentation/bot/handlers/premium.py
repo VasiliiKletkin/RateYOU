@@ -97,17 +97,11 @@ async def cmd_premium(
             expires=_expires_phrase(current.expires_at),
         )
     else:
-        header = _(
-            "<b>Premium</b> unlocks the minimum-rating filter "
-            "in /settings.\n\n"
-            "Pick a tier:"
-        )
+        header = _("<b>Premium</b> unlocks the minimum-rating filter in /settings.\n\nPick a tier:")
 
     await message.answer(
         header,
-        reply_markup=tiers_keyboard(
-            tiers, show_my_ratings_button=current is not None
-        ),
+        reply_markup=tiers_keyboard(tiers, show_my_ratings_button=current is not None),
     )
 
 

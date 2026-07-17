@@ -53,9 +53,7 @@ class FakeSubscriptionRepository:
             and g.is_active_at(now)
         ]
 
-    async def find_by_transaction(
-        self, transaction_id: TransactionId
-    ) -> Subscription | None:
+    async def find_by_transaction(self, transaction_id: TransactionId) -> Subscription | None:
         for g in self.grants:
             if g.transaction_id == transaction_id:
                 return g
@@ -145,9 +143,7 @@ async def test_confirm_unknown_transaction_raises() -> None:
     )
 
     with pytest.raises(TransactionNotFound):
-        await use_case.execute(
-            ConfirmPaymentRequest(transaction_id=uuid4(), external_id="x")
-        )
+        await use_case.execute(ConfirmPaymentRequest(transaction_id=uuid4(), external_id="x"))
 
 
 async def test_confirm_with_existing_purchase_revokes_old_grant() -> None:
@@ -172,9 +168,7 @@ async def test_confirm_with_existing_purchase_revokes_old_grant() -> None:
     new_tx = _make_pending_transaction(tx_repo, payer, tier="gold")
     use_case = _make_use_case(tx_repo, sub_repo, FakeUoW())
 
-    await use_case.execute(
-        ConfirmPaymentRequest(transaction_id=new_tx.id.value, external_id="x")
-    )
+    await use_case.execute(ConfirmPaymentRequest(transaction_id=new_tx.id.value, external_id="x"))
 
     # Two grants in ledger: old revoked, new active
     assert len(sub_repo.grants) == 2

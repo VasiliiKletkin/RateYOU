@@ -29,9 +29,7 @@ async def on_refer(
 
     # `RegisterUserUseCase` is idempotent — calling it here makes /refer
     # work even before the user has run /start.
-    user = await register_user.execute(
-        RegisterUserRequest(telegram_id=message.from_user.id)
-    )
+    user = await register_user.execute(RegisterUserRequest(telegram_id=message.from_user.id))
     stats = await stats_uc.execute(user.id)
     me = await bot.me()
     link = f"https://t.me/{me.username}?start={message.from_user.id}"

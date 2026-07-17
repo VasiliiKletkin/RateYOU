@@ -73,9 +73,7 @@ def _main_keyboard(
         )
     else:
         rating_label = _("⭐ Min rating: premium only")
-    language_label = _("🌐 Language: {current}").format(
-        current=native_name(language)
-    )
+    language_label = _("🌐 Language: {current}").format(current=native_name(language))
     return settings_main_keyboard(
         gender_label=gender_label,
         rating_label=rating_label,
@@ -103,15 +101,11 @@ async def _refresh_main(
     with suppress(TelegramAPIError):
         await callback.message.edit_text(
             _("<b>Settings</b>"),
-            reply_markup=_main_keyboard(
-                prefs, is_premium=is_premium, language=language
-            ),
+            reply_markup=_main_keyboard(prefs, is_premium=is_premium, language=language),
         )
 
 
-async def _swap_keyboard(
-    callback: CallbackQuery, markup: InlineKeyboardMarkup
-) -> None:
+async def _swap_keyboard(callback: CallbackQuery, markup: InlineKeyboardMarkup) -> None:
     if not isinstance(callback.message, Message):
         return
     with suppress(TelegramAPIError):
@@ -139,17 +133,13 @@ async def cmd_settings(
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await message.answer(
         _("<b>Settings</b>"),
-        reply_markup=_main_keyboard(
-            prefs, is_premium=is_premium, language=user.language
-        ),
+        reply_markup=_main_keyboard(prefs, is_premium=is_premium, language=user.language),
     )
 
 
 @router.callback_query(F.data == _OPEN_GENDER)
 async def on_open_gender_picker(callback: CallbackQuery) -> None:
-    await _swap_keyboard(
-        callback, gender_preference_keyboard(prefix=_GENDER_PREFIX)
-    )
+    await _swap_keyboard(callback, gender_preference_keyboard(prefix=_GENDER_PREFIX))
     await callback.answer()
 
 
@@ -212,9 +202,7 @@ async def on_set_gender(
     prefs = await update_gender.execute(user.id, preference)
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await callback.answer(_("Updated"))
-    await _refresh_main(
-        callback, prefs, is_premium=is_premium, language=user.language
-    )
+    await _refresh_main(callback, prefs, is_premium=is_premium, language=user.language)
 
 
 @router.callback_query(F.data.startswith(f"{_RATING_PREFIX}:"))
@@ -247,9 +235,7 @@ async def on_set_min_rating(
         # keyboard from before an expiry could still send it.
         prefs = await get_prefs.execute(user.id)
         await callback.answer(_("Premium only"), show_alert=True)
-        await _refresh_main(
-            callback, prefs, is_premium=is_premium, language=user.language
-        )
+        await _refresh_main(callback, prefs, is_premium=is_premium, language=user.language)
         return
 
     try:
@@ -258,9 +244,7 @@ async def on_set_min_rating(
         await callback.answer(_("Invalid choice"))
         return
     await callback.answer(_("Updated"))
-    await _refresh_main(
-        callback, prefs, is_premium=is_premium, language=user.language
-    )
+    await _refresh_main(callback, prefs, is_premium=is_premium, language=user.language)
 
 
 @router.callback_query(F.data.startswith(f"{_LANGUAGE_PREFIX}:"))
@@ -297,6 +281,4 @@ async def on_set_language(
     # card matches what the user just chose.
     with i18n.use_locale(updated.language.value):
         await callback.answer(_("Updated"))
-        await _refresh_main(
-            callback, prefs, is_premium=is_premium, language=updated.language
-        )
+        await _refresh_main(callback, prefs, is_premium=is_premium, language=updated.language)

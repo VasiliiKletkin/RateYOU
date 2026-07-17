@@ -56,9 +56,7 @@ class RepositoryProvider(Provider):
         return DiscoveryRepository(session=session)
 
     @provide
-    def search_preferences_repo(
-        self, session: AsyncSession
-    ) -> ISearchPreferencesRepository:
+    def search_preferences_repo(self, session: AsyncSession) -> ISearchPreferencesRepository:
         return SearchPreferencesRepository(session=session)
 
     @provide

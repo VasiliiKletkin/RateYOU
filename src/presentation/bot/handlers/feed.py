@@ -122,9 +122,7 @@ async def cmd_feed(
         )
     )
     if (await get_my_profile.execute(user.id)) is None:
-        await message.answer(
-            _("You need a profile of your own first. Send /create to make one.")
-        )
+        await message.answer(_("You need a profile of your own first. Send /create to make one."))
         return
     await _show_next_or_done(message, user.id, get_next)
 
@@ -162,9 +160,7 @@ async def on_rate(
 
     try:
         await rate_user.execute(
-            RateUserRequest(
-                rater_id=user.id, rated_id=rated_user_id, score=score
-            )
+            RateUserRequest(rater_id=user.id, rated_id=rated_user_id, score=score)
         )
     except CannotRateSelf:
         await callback.answer(_("Can't rate yourself"), show_alert=True)

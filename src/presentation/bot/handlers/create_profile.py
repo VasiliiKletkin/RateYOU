@@ -136,9 +136,7 @@ async def process_gender(callback: CallbackQuery, state: FSMContext) -> None:
     F.data.startswith("genderpref:"),
     CreateProfile.waiting_for_gender_preference,
 )
-async def process_gender_preference(
-    callback: CallbackQuery, state: FSMContext
-) -> None:
+async def process_gender_preference(callback: CallbackQuery, state: FSMContext) -> None:
     if callback.data is None:
         await callback.answer()
         return
@@ -180,9 +178,7 @@ async def process_location_invalid(message: Message) -> None:
 async def skip_bio(message: Message, state: FSMContext) -> None:
     await state.update_data(bio="", photos=[])
     await state.set_state(CreateProfile.waiting_for_photo)
-    await message.answer(
-        _("Send up to {max} photos:").format(max=Photos.MAX_COUNT)
-    )
+    await message.answer(_("Send up to {max} photos:").format(max=Photos.MAX_COUNT))
 
 
 @router.message(CreateProfile.waiting_for_bio)
@@ -197,9 +193,7 @@ async def process_bio(message: Message, state: FSMContext) -> None:
         return
     await state.update_data(bio=bio.value, photos=[])
     await state.set_state(CreateProfile.waiting_for_photo)
-    await message.answer(
-        _("Send up to {max} photos:").format(max=Photos.MAX_COUNT)
-    )
+    await message.answer(_("Send up to {max} photos:").format(max=Photos.MAX_COUNT))
 
 
 async def _finalize_create(
@@ -244,9 +238,7 @@ async def _finalize_create(
     # Persist the gender preference into the SearchPreferences aggregate.
     # `update_gender_preference` is idempotent (creates the row with defaults
     # if missing) so we don't need to differentiate first-time vs re-create.
-    await update_gender_preference.execute(
-        user.id, data["gender_preference"]
-    )
+    await update_gender_preference.execute(user.id, data["gender_preference"])
 
     await state.clear()
     await message.answer(

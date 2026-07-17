@@ -103,9 +103,7 @@ async def test_first_rating_creates_and_updates_summary() -> None:
     use_case = _make_use_case(ratings, summaries, uow)
     rater, rated = uuid4(), uuid4()
 
-    response = await use_case.execute(
-        RateUserRequest(rater_id=rater, rated_id=rated, score=7)
-    )
+    response = await use_case.execute(RateUserRequest(rater_id=rater, rated_id=rated, score=7))
 
     assert response.score == 7
     assert len(ratings.ratings) == 1
@@ -137,12 +135,8 @@ async def test_re_rating_replaces_score() -> None:
     use_case = _make_use_case(ratings, summaries, uow)
     rater, rated = uuid4(), uuid4()
 
-    first = await use_case.execute(
-        RateUserRequest(rater_id=rater, rated_id=rated, score=3)
-    )
-    second = await use_case.execute(
-        RateUserRequest(rater_id=rater, rated_id=rated, score=9)
-    )
+    first = await use_case.execute(RateUserRequest(rater_id=rater, rated_id=rated, score=3))
+    second = await use_case.execute(RateUserRequest(rater_id=rater, rated_id=rated, score=9))
 
     assert first.id == second.id
     assert second.score == 9
@@ -160,8 +154,6 @@ async def test_cannot_rate_self() -> None:
     same = uuid4()
 
     with pytest.raises(CannotRateSelf):
-        await use_case.execute(
-            RateUserRequest(rater_id=same, rated_id=same, score=10)
-        )
+        await use_case.execute(RateUserRequest(rater_id=same, rated_id=same, score=10))
 
     assert uow.committed is False

@@ -31,9 +31,7 @@ def test_create_purchase_sets_fields_and_expiry() -> None:
 
 def test_create_bonus_uses_bonus_tier_and_no_transaction() -> None:
     now = datetime.now(UTC)
-    grant = Subscription.create_bonus(
-        owner_id=UserId.new(), duration_days=3, now=now
-    )
+    grant = Subscription.create_bonus(owner_id=UserId.new(), duration_days=3, now=now)
 
     assert grant.tier == Tier.BONUS
     assert grant.source == SubscriptionSource.BONUS
@@ -44,8 +42,11 @@ def test_create_bonus_uses_bonus_tier_and_no_transaction() -> None:
 def test_is_active_at_returns_false_when_expired() -> None:
     now = datetime.now(UTC)
     grant = Subscription.create_purchase(
-        UserId.new(), Tier.BRONZE, duration_days=7,
-        transaction_id=None, now=now,
+        UserId.new(),
+        Tier.BRONZE,
+        duration_days=7,
+        transaction_id=None,
+        now=now,
     )
 
     assert grant.is_active_at(now + timedelta(days=8)) is False
@@ -54,8 +55,11 @@ def test_is_active_at_returns_false_when_expired() -> None:
 def test_is_active_at_returns_false_when_revoked() -> None:
     now = datetime.now(UTC)
     grant = Subscription.create_purchase(
-        UserId.new(), Tier.GOLD, duration_days=30,
-        transaction_id=None, now=now,
+        UserId.new(),
+        Tier.GOLD,
+        duration_days=30,
+        transaction_id=None,
+        now=now,
     )
     grant.revoke(now=now)
 
@@ -76,7 +80,11 @@ def test_status_picks_highest_priority_tier_among_active() -> None:
     now = datetime.now(UTC)
     owner = UserId.new()
     bronze = Subscription.create_purchase(
-        owner, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
+        owner,
+        Tier.BRONZE,
+        duration_days=7,
+        transaction_id=None,
+        now=now,
     )
     bonus = Subscription.create_bonus(owner, duration_days=3, now=now)
 
@@ -93,11 +101,19 @@ def test_status_ignores_revoked_grants() -> None:
     now = datetime.now(UTC)
     owner = UserId.new()
     revoked_gold = Subscription.create_purchase(
-        owner, Tier.GOLD, duration_days=30, transaction_id=None, now=now,
+        owner,
+        Tier.GOLD,
+        duration_days=30,
+        transaction_id=None,
+        now=now,
     )
     revoked_gold.revoke(now=now)
     live_bronze = Subscription.create_purchase(
-        owner, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
+        owner,
+        Tier.BRONZE,
+        duration_days=7,
+        transaction_id=None,
+        now=now,
     )
 
     status = SubscriptionStatus.from_grants([revoked_gold, live_bronze], now)
@@ -111,8 +127,11 @@ def test_status_ignores_expired_grants() -> None:
     long_ago = now - timedelta(days=60)
     owner = UserId.new()
     expired = Subscription.create_purchase(
-        owner, Tier.GOLD, duration_days=30,
-        transaction_id=None, now=long_ago,
+        owner,
+        Tier.GOLD,
+        duration_days=30,
+        transaction_id=None,
+        now=long_ago,
     )
     fresh_bonus = Subscription.create_bonus(owner, duration_days=3, now=now)
 

@@ -13,9 +13,7 @@ class ProfileORM(Base, CreatedAtMixin, UpdatedAtMixin):
     __tablename__ = "profiles"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
-    owner_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id"), unique=True, index=True
-    )
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), unique=True, index=True)
     name: Mapped[str] = mapped_column(String(50))
     age: Mapped[int]
     gender: Mapped[Gender] = mapped_column(Enum(Gender))
@@ -57,8 +55,7 @@ class ProfileORM(Base, CreatedAtMixin, UpdatedAtMixin):
         if not self.photos:
             return "—"
         return "\n".join(
-            f"[{p.position}] {p.file_id}"
-            for p in sorted(self.photos, key=lambda x: x.position)
+            f"[{p.position}] {p.file_id}" for p in sorted(self.photos, key=lambda x: x.position)
         )
 
 

@@ -8,17 +8,11 @@ from src.infrastructure.db.models.base import Base, CreatedAtMixin, UpdatedAtMix
 
 class RatingORM(Base, CreatedAtMixin, UpdatedAtMixin):
     __tablename__ = "ratings"
-    __table_args__ = (
-        UniqueConstraint("rater_id", "rated_id", name="uq_ratings_rater_rated"),
-    )
+    __table_args__ = (UniqueConstraint("rater_id", "rated_id", name="uq_ratings_rater_rated"),)
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
-    rater_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), index=True
-    )
-    rated_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), index=True
-    )
+    rater_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    rated_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     score: Mapped[int]
 
 

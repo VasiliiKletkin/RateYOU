@@ -16,9 +16,7 @@ class PaymentGatewayRegistry:
     gateways: list[IPaymentGateway]
 
     def __post_init__(self) -> None:
-        self._by_provider: dict[Provider, IPaymentGateway] = {
-            g.provider: g for g in self.gateways
-        }
+        self._by_provider: dict[Provider, IPaymentGateway] = {g.provider: g for g in self.gateways}
 
     def get(self, provider: Provider) -> IPaymentGateway:
         try:

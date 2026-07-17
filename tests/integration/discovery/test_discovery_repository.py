@@ -85,8 +85,8 @@ async def test_returns_other_users_profile(session: AsyncSession) -> None:
     result = await repo.find_next(default_feed_spec(viewer.id), _MOSCOW)
 
     assert result is not None
-    assert result.profile.id ==other_profile.id
-    assert result.profile.owner_id ==other.id
+    assert result.profile.id == other_profile.id
+    assert result.profile.owner_id == other.id
 
 
 async def test_excludes_hidden_profiles(session: AsyncSession) -> None:
@@ -130,8 +130,8 @@ async def test_returns_remaining_candidate_after_rating_one(session: AsyncSessio
     result = await repo.find_next(default_feed_spec(viewer.id), _MOSCOW)
 
     assert result is not None
-    assert result.profile.id ==unrated_profile.id
-    assert result.profile.owner_id ==unrated.id
+    assert result.profile.id == unrated_profile.id
+    assert result.profile.owner_id == unrated.id
 
 
 async def test_min_rating_filters_low_rated_profiles(session: AsyncSession) -> None:
@@ -158,7 +158,7 @@ async def test_min_rating_filters_low_rated_profiles(session: AsyncSession) -> N
     )
 
     assert result is not None
-    assert result.profile.id ==high_profile.id
+    assert result.profile.id == high_profile.id
 
 
 async def test_min_rating_excludes_profiles_with_no_summary(session: AsyncSession) -> None:
@@ -198,7 +198,7 @@ async def test_min_rating_zero_still_requires_summary(session: AsyncSession) -> 
     )
 
     assert result is not None
-    assert result.profile.id ==rated_profile.id
+    assert result.profile.id == rated_profile.id
 
 
 async def test_exclude_owner_ids_filters_them_out(session: AsyncSession) -> None:
@@ -211,8 +211,7 @@ async def test_exclude_owner_ids_filters_them_out(session: AsyncSession) -> None
 
     repo = DiscoveryRepository(session=session)
     result = await repo.find_next(
-        default_feed_spec(viewer.id)
-        & ProfileOwnerNotIn(user_ids=(excluded_owner.id,)),
+        default_feed_spec(viewer.id) & ProfileOwnerNotIn(user_ids=(excluded_owner.id,)),
         _MOSCOW,
     )
 

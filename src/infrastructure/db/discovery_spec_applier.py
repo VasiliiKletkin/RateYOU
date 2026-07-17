@@ -55,7 +55,5 @@ class DiscoverySpecApplier:
         if isinstance(spec, ProfileOwnerNotIn):
             if not spec.user_ids:
                 return stmt
-            return stmt.where(
-                ProfileORM.owner_id.not_in([uid.value for uid in spec.user_ids])
-            )
+            return stmt.where(ProfileORM.owner_id.not_in([uid.value for uid in spec.user_ids]))
         raise ValueError(f"Unknown specification: {type(spec).__name__}")

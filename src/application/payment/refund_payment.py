@@ -31,13 +31,9 @@ class RefundPaymentUseCase:
     uow: UnitOfWork
 
     async def execute(self, request: RefundPaymentRequest) -> None:
-        transaction = await self.transaction_repo.get_by_id(
-            TransactionId(request.transaction_id)
-        )
+        transaction = await self.transaction_repo.get_by_id(TransactionId(request.transaction_id))
         if transaction is None:
-            raise TransactionNotFound(
-                f"Transaction {request.transaction_id} not found"
-            )
+            raise TransactionNotFound(f"Transaction {request.transaction_id} not found")
         if not transaction.can_refund():
             raise InvalidStatusTransition(
                 f"Cannot refund transaction in status {transaction.status}"
@@ -46,9 +42,7 @@ class RefundPaymentUseCase:
 
         payer = await self.user_repo.get_by_id(transaction.payer_id)
         if payer is None:
-            raise TransactionNotFound(
-                f"Payer {transaction.payer_id.value} not found for refund"
-            )
+            raise TransactionNotFound(f"Payer {transaction.payer_id.value} not found for refund")
 
         gateway = self.gateways.get(transaction.provider)
         await gateway.refund(

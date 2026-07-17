@@ -59,8 +59,4 @@ class ProfileOwnerNotIn(Specification):
 
 def default_feed_spec(viewer_id: UserId) -> Specification:
     """Baseline composition: visible + not own + not already rated."""
-    return (
-        ProfileIsVisible()
-        & ProfileNotOwnedBy(viewer_id)
-        & ProfileNotRatedBy(viewer_id)
-    )
+    return ProfileIsVisible() & ProfileNotOwnedBy(viewer_id) & ProfileNotRatedBy(viewer_id)

@@ -32,10 +32,6 @@ class ReferralORM(Base, CreatedAtMixin):
         nullable=False,
         unique=True,
     )
-    referrer: Mapped[UserORM] = relationship(
-        UserORM, foreign_keys=[referrer_id]
-    )
+    referrer: Mapped[UserORM] = relationship(UserORM, foreign_keys=[referrer_id])
     referee: Mapped[UserORM] = relationship(UserORM, foreign_keys=[referee_id])
-    rewarded_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), default=None
-    )
+    rewarded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)

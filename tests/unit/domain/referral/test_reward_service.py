@@ -38,11 +38,7 @@ class FakeReferralRepo:
         return sum(1 for r in self.referrals if r.referrer_id == referrer_id)
 
     async def count_rewarded_for_referrer(self, referrer_id: UserId) -> int:
-        return sum(
-            1
-            for r in self.referrals
-            if r.referrer_id == referrer_id and r.is_rewarded
-        )
+        return sum(1 for r in self.referrals if r.referrer_id == referrer_id and r.is_rewarded)
 
 
 @dataclass
@@ -170,10 +166,7 @@ async def test_first_referral_grants_one_day_to_each_side() -> None:
     assert owners == {referrer.id, referee.id}
     assert all(g.source == SubscriptionSource.BONUS for g in subs.grants)
     assert all(g.tier == Tier.BONUS for g in subs.grants)
-    assert all(
-        (g.expires_at - g.starts_at).days == PER_REFERRAL_REWARD_DAYS
-        for g in subs.grants
-    )
+    assert all((g.expires_at - g.starts_at).days == PER_REFERRAL_REWARD_DAYS for g in subs.grants)
 
 
 async def test_banned_referrer_only_referee_paid() -> None:
@@ -215,9 +208,7 @@ async def test_third_referral_fires_milestone_bonus() -> None:
     referrer_grants = [g for g in subs.grants if g.owner_id == referrer.id]
     assert len(referrer_grants) == MILESTONE_INTERVAL + 1
     days = sorted((g.expires_at - g.starts_at).days for g in referrer_grants)
-    expected = sorted(
-        [PER_REFERRAL_REWARD_DAYS] * MILESTONE_INTERVAL + [MILESTONE_BONUS_DAYS]
-    )
+    expected = sorted([PER_REFERRAL_REWARD_DAYS] * MILESTONE_INTERVAL + [MILESTONE_BONUS_DAYS])
     assert days == expected
 
 
@@ -259,8 +250,6 @@ async def test_sixth_referral_triggers_second_milestone() -> None:
     # 6 base + 2 milestones (at #3 and #6)
     assert len(referrer_grants) == 6 + 2
     milestone_grants = [
-        g
-        for g in referrer_grants
-        if (g.expires_at - g.starts_at).days == MILESTONE_BONUS_DAYS
+        g for g in referrer_grants if (g.expires_at - g.starts_at).days == MILESTONE_BONUS_DAYS
     ]
     assert len(milestone_grants) == 2

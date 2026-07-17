@@ -55,9 +55,7 @@ async def _run_polling(bot: Bot, dp: Dispatcher) -> None:
 
 async def _run_webhook(bot: Bot, dp: Dispatcher, settings: Settings) -> None:
     if not settings.bot.webhook_base_url:
-        raise RuntimeError(
-            "BOT_USE_WEBHOOK is true but BOT_WEBHOOK_BASE_URL is empty"
-        )
+        raise RuntimeError("BOT_USE_WEBHOOK is true but BOT_WEBHOOK_BASE_URL is empty")
 
     secret = (
         settings.bot.webhook_secret.get_secret_value()

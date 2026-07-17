@@ -19,12 +19,8 @@ def _build_commands() -> list[BotCommand]:
         BotCommand(command="feed", description=_("Rate other profiles")),
         BotCommand(command="settings", description=_("Rating preferences")),
         BotCommand(command="premium", description=_("Premium subscription")),
-        BotCommand(
-            command="my_ratings", description=_("Who rated me (premium)")
-        ),
-        BotCommand(
-            command="refer", description=_("Invite friends and earn premium")
-        ),
+        BotCommand(command="my_ratings", description=_("Who rated me (premium)")),
+        BotCommand(command="refer", description=_("Invite friends and earn premium")),
         BotCommand(command="cancel", description=_("Cancel current action")),
     ]
 
@@ -49,6 +45,4 @@ async def register_commands(bot: Bot, i18n: I18n) -> None:
         if lang is Language.EN:
             continue
         with i18n.context(), i18n.use_locale(lang.value):
-            await bot.set_my_commands(
-                _build_commands(), language_code=lang.value
-            )
+            await bot.set_my_commands(_build_commands(), language_code=lang.value)

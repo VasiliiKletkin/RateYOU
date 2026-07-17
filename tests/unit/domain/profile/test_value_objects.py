@@ -30,6 +30,7 @@ class TestName:
         with pytest.raises(InvalidName):
             Name("   ")
 
+
 class TestAge:
     def test_accepts_in_range(self) -> None:
         assert Age(18).value == 18
@@ -63,6 +64,7 @@ class TestBio:
 
     def test_accepts_normal(self) -> None:
         assert Bio("hello world").value == "hello world"
+
 
 class TestPhotoFileId:
     def test_accepts_telegram_file_id(self) -> None:

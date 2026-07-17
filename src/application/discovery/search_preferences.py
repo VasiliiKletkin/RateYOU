@@ -46,9 +46,7 @@ class UpdateGenderPreferenceUseCase:
     prefs_repo: ISearchPreferencesRepository
     uow: UnitOfWork
 
-    async def execute(
-        self, user_id: UUID, preference: str
-    ) -> SearchPreferencesResponse:
+    async def execute(self, user_id: UUID, preference: str) -> SearchPreferencesResponse:
         uid = UserId(user_id)
         now = datetime.now(UTC)
         pref = GenderPreference(preference)
@@ -71,9 +69,7 @@ class UpdateMinRatingUseCase:
     prefs_repo: ISearchPreferencesRepository
     uow: UnitOfWork
 
-    async def execute(
-        self, user_id: UUID, min_rating: int
-    ) -> SearchPreferencesResponse:
+    async def execute(self, user_id: UUID, min_rating: int) -> SearchPreferencesResponse:
         uid = UserId(user_id)
         now = datetime.now(UTC)
         value = MinRating(min_rating)

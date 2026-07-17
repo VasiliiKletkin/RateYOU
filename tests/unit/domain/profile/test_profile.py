@@ -54,9 +54,7 @@ def test_update_photos_changes_photos() -> None:
     now = datetime.now(UTC)
     p = _make_profile(now)
     later = now + timedelta(minutes=1)
-    new_photos = Photos(
-        items=(PhotoFileId("file-id-2"), PhotoFileId("file-id-3"))
-    )
+    new_photos = Photos(items=(PhotoFileId("file-id-2"), PhotoFileId("file-id-3")))
 
     p.update_photos(new_photos, now=later)
 

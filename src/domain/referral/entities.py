@@ -39,9 +39,7 @@ class Referral:
         now: datetime,
     ) -> "Referral":
         if referrer_id == referee_id:
-            raise SelfReferral(
-                f"User {referee_id.value} cannot refer themselves"
-            )
+            raise SelfReferral(f"User {referee_id.value} cannot refer themselves")
         return cls(
             id=ReferralId.new(),
             referrer_id=referrer_id,

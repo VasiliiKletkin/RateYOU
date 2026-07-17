@@ -32,9 +32,7 @@ def gender_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [
                 InlineKeyboardButton(text=_("♂️ Male"), callback_data="gender:male"),
-                InlineKeyboardButton(
-                    text=_("♀️ Female"), callback_data="gender:female"
-                ),
+                InlineKeyboardButton(text=_("♀️ Female"), callback_data="gender:female"),
             ],
         ]
     )
@@ -50,17 +48,11 @@ def gender_preference_keyboard(prefix: str = "genderpref") -> InlineKeyboardMark
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(
-                    text=_("♂️ Men"), callback_data=f"{prefix}:male"
-                ),
-                InlineKeyboardButton(
-                    text=_("♀️ Women"), callback_data=f"{prefix}:female"
-                ),
+                InlineKeyboardButton(text=_("♂️ Men"), callback_data=f"{prefix}:male"),
+                InlineKeyboardButton(text=_("♀️ Women"), callback_data=f"{prefix}:female"),
             ],
             [
-                InlineKeyboardButton(
-                    text=_("👥 Everyone"), callback_data=f"{prefix}:any"
-                ),
+                InlineKeyboardButton(text=_("👥 Everyone"), callback_data=f"{prefix}:any"),
             ],
         ]
     )
@@ -84,21 +76,9 @@ def settings_main_keyboard(
     """
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [
-                InlineKeyboardButton(
-                    text=gender_label, callback_data=gender_action
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text=rating_label, callback_data=rating_action
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text=language_label, callback_data=language_action
-                )
-            ],
+            [InlineKeyboardButton(text=gender_label, callback_data=gender_action)],
+            [InlineKeyboardButton(text=rating_label, callback_data=rating_action)],
+            [InlineKeyboardButton(text=language_label, callback_data=language_action)],
         ]
     )
 
@@ -108,21 +88,11 @@ def rating_picker_keyboard(prefix: str = "setrating") -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(
-                    text=_("Any"), callback_data=f"{prefix}:0"
-                ),
-                InlineKeyboardButton(
-                    text="6+", callback_data=f"{prefix}:6"
-                ),
-                InlineKeyboardButton(
-                    text="7+", callback_data=f"{prefix}:7"
-                ),
-                InlineKeyboardButton(
-                    text="8+", callback_data=f"{prefix}:8"
-                ),
-                InlineKeyboardButton(
-                    text="9+", callback_data=f"{prefix}:9"
-                ),
+                InlineKeyboardButton(text=_("Any"), callback_data=f"{prefix}:0"),
+                InlineKeyboardButton(text="6+", callback_data=f"{prefix}:6"),
+                InlineKeyboardButton(text="7+", callback_data=f"{prefix}:7"),
+                InlineKeyboardButton(text="8+", callback_data=f"{prefix}:8"),
+                InlineKeyboardButton(text="9+", callback_data=f"{prefix}:9"),
             ]
         ]
     )
@@ -161,21 +131,15 @@ def rating_keyboard(rated_user_id: UUID) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(
-                    text=str(i), callback_data=f"rate:{rated_user_id}:{i}"
-                )
+                InlineKeyboardButton(text=str(i), callback_data=f"rate:{rated_user_id}:{i}")
                 for i in range(0, 6)
             ],
             [
-                InlineKeyboardButton(
-                    text=str(i), callback_data=f"rate:{rated_user_id}:{i}"
-                )
+                InlineKeyboardButton(text=str(i), callback_data=f"rate:{rated_user_id}:{i}")
                 for i in range(6, 11)
             ],
             [
-                InlineKeyboardButton(
-                    text=_("⏭ Skip"), callback_data=f"skip:{rated_user_id}"
-                ),
+                InlineKeyboardButton(text=_("⏭ Skip"), callback_data=f"skip:{rated_user_id}"),
             ],
         ]
     )
@@ -186,23 +150,11 @@ def edit_menu_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [InlineKeyboardButton(text=_("Name"), callback_data="edit_field:name")],
             [InlineKeyboardButton(text=_("Age"), callback_data="edit_field:age")],
-            [
-                InlineKeyboardButton(
-                    text=_("Gender"), callback_data="edit_field:gender"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text=_("Location"), callback_data="edit_field:location"
-                )
-            ],
+            [InlineKeyboardButton(text=_("Gender"), callback_data="edit_field:gender")],
+            [InlineKeyboardButton(text=_("Location"), callback_data="edit_field:location")],
             [InlineKeyboardButton(text=_("Bio"), callback_data="edit_field:bio")],
             [InlineKeyboardButton(text=_("Photo"), callback_data="edit_field:photo")],
-            [
-                InlineKeyboardButton(
-                    text=_("✅ Done"), callback_data="edit_field:done"
-                )
-            ],
+            [InlineKeyboardButton(text=_("✅ Done"), callback_data="edit_field:done")],
         ]
     )
 
@@ -223,11 +175,7 @@ def tiers_keyboard(
     rows: list[list[InlineKeyboardButton]] = []
     if show_my_ratings_button:
         rows.append(
-            [
-                InlineKeyboardButton(
-                    text=_("🌟 Who rated me"), callback_data="show_my_ratings"
-                )
-            ]
+            [InlineKeyboardButton(text=_("🌟 Who rated me"), callback_data="show_my_ratings")]
         )
     rows.extend(
         [

@@ -35,9 +35,7 @@ class SubscriptionActivationService:
         now: datetime,
     ) -> Subscription:
         spec = get_tier_spec(tier)
-        for active in await self.subscription_repo.list_active_purchases_for(
-            owner_id, now
-        ):
+        for active in await self.subscription_repo.list_active_purchases_for(owner_id, now):
             active.revoke(now)
             await self.subscription_repo.update(active)
         grant = Subscription.create_purchase(

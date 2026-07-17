@@ -11,9 +11,7 @@ class TransactionORM(Base, CreatedAtMixin, UpdatedAtMixin):
     __tablename__ = "transactions"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
-    payer_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), index=True
-    )
+    payer_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     amount: Mapped[int]
     currency: Mapped[str] = mapped_column(String(8))
     provider: Mapped[Provider] = mapped_column(Enum(Provider))

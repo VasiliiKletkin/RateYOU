@@ -35,9 +35,7 @@ class Transaction:
     external_id: str | None
     created_at: datetime
     updated_at: datetime
-    _events: list[DomainEvent] = field(
-        default_factory=list, init=False, repr=False, compare=False
-    )
+    _events: list[DomainEvent] = field(default_factory=list, init=False, repr=False, compare=False)
 
     def pull_events(self) -> list[DomainEvent]:
         events, self._events = self._events, []
@@ -69,9 +67,7 @@ class Transaction:
 
     def mark_paid(self, external_id: str, now: datetime) -> None:
         if self.status != Status.PENDING:
-            raise InvalidStatusTransition(
-                f"Cannot mark {self.status} transaction as PAID"
-            )
+            raise InvalidStatusTransition(f"Cannot mark {self.status} transaction as PAID")
         self.status = Status.PAID
         self.external_id = external_id
         self.updated_at = now
@@ -86,17 +82,13 @@ class Transaction:
 
     def mark_failed(self, now: datetime) -> None:
         if self.status != Status.PENDING:
-            raise InvalidStatusTransition(
-                f"Cannot mark {self.status} transaction as FAILED"
-            )
+            raise InvalidStatusTransition(f"Cannot mark {self.status} transaction as FAILED")
         self.status = Status.FAILED
         self.updated_at = now
 
     def refund(self, now: datetime) -> None:
         if self.status != Status.PAID:
-            raise InvalidStatusTransition(
-                f"Cannot refund {self.status} transaction (must be PAID)"
-            )
+            raise InvalidStatusTransition(f"Cannot refund {self.status} transaction (must be PAID)")
         self.status = Status.REFUNDED
         self.updated_at = now
         self._events.append(

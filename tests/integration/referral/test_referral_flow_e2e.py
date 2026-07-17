@@ -93,9 +93,7 @@ async def test_referee_profile_creation_pays_both_sides(
     assert pending.is_rewarded is False
 
     # Create profile -> reward fires.
-    await _create_profile_uc(session).execute(
-        _make_profile_request(response.id, "Petya", 4002)
-    )
+    await _create_profile_uc(session).execute(_make_profile_request(response.id, "Petya", 4002))
 
     after = await referral_repo.get_by_referee(referee_id)
     assert after is not None
@@ -131,9 +129,7 @@ async def test_third_referral_grants_milestone_bonus(
     referrer_grants = await subs.list_for(inviter.id)
     assert len(referrer_grants) == MILESTONE_INTERVAL + 1
     milestones = [
-        g
-        for g in referrer_grants
-        if (g.expires_at - g.starts_at).days == MILESTONE_BONUS_DAYS
+        g for g in referrer_grants if (g.expires_at - g.starts_at).days == MILESTONE_BONUS_DAYS
     ]
     assert len(milestones) == 1
 
@@ -154,18 +150,12 @@ async def test_referral_stats_reflects_invitations_and_registrations(
 
     # Two referees register, but only one completes a profile.
     r1 = await _register_uc(session).execute(
-        RegisterUserRequest(
-            telegram_id=4201, referrer_telegram_id=inviter.telegram_id.value
-        )
+        RegisterUserRequest(telegram_id=4201, referrer_telegram_id=inviter.telegram_id.value)
     )
     await _register_uc(session).execute(
-        RegisterUserRequest(
-            telegram_id=4202, referrer_telegram_id=inviter.telegram_id.value
-        )
+        RegisterUserRequest(telegram_id=4202, referrer_telegram_id=inviter.telegram_id.value)
     )
-    await _create_profile_uc(session).execute(
-        _make_profile_request(r1.id, "P1", 4201)
-    )
+    await _create_profile_uc(session).execute(_make_profile_request(r1.id, "P1", 4201))
 
     stats = await stats_uc.execute(inviter.id.value)
     assert stats.invitations == 2

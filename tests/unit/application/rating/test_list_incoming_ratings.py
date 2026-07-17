@@ -36,9 +36,7 @@ class FakeRatingRepo:
     # Unused-but-required protocol methods (kept thin: tests don't exercise them)
     async def add(self, rating: Rating) -> None: ...
     async def get_by_id(self, rating_id: RatingId) -> Rating | None: ...
-    async def get_by_rater_and_rated(
-        self, rater_id: UserId, rated_id: UserId
-    ) -> Rating | None: ...
+    async def get_by_rater_and_rated(self, rater_id: UserId, rated_id: UserId) -> Rating | None: ...
     async def update(self, rating: Rating) -> None: ...
     async def delete(self, rating: Rating) -> None: ...
     async def compute_stats_for(self, rated_id: UserId) -> tuple[float, int]:
@@ -57,6 +55,7 @@ class FakeProfileRepo:
     async def get_by_id(self, profile_id: ProfileId) -> Profile | None: ...
     async def exists_for_owner(self, owner_id: UserId) -> bool:
         return False
+
     async def update(self, profile: Profile) -> None: ...
 
 
@@ -81,9 +80,7 @@ class FakeSubscriptionRepo:
             and g.is_active_at(now)
         ]
 
-    async def find_by_transaction(
-        self, transaction_id: TransactionId
-    ) -> Subscription | None:
+    async def find_by_transaction(self, transaction_id: TransactionId) -> Subscription | None:
         return None
 
     async def update(self, grant: Subscription) -> None:
@@ -218,9 +215,7 @@ async def test_rater_without_profile_returns_none_name() -> None:
     rater = UserId(uuid4())
     now = datetime.now(UTC)
 
-    ratings_repo = FakeRatingRepo(
-        ratings=[_make_rating(rater, viewer, 9, now)]
-    )
+    ratings_repo = FakeRatingRepo(ratings=[_make_rating(rater, viewer, 9, now)])
     subs = FakeSubscriptionRepo()
     await subs.add(_active_sub(viewer))
 
@@ -242,8 +237,7 @@ async def test_limit_caps_returned_items() -> None:
     viewer = UserId(viewer_uuid)
     now = datetime.now(UTC)
     ratings = [
-        _make_rating(UserId(uuid4()), viewer, i, now - timedelta(minutes=i))
-        for i in range(1, 11)
+        _make_rating(UserId(uuid4()), viewer, i, now - timedelta(minutes=i)) for i in range(1, 11)
     ]
     subs = FakeSubscriptionRepo()
     await subs.add(_active_sub(viewer))

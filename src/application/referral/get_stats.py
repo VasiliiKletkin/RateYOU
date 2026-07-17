@@ -22,13 +22,9 @@ class GetReferralStatsUseCase:
     async def execute(self, owner_id: UUID) -> ReferralStatsResponse:
         owner = UserId(owner_id)
         invitations = await self.referral_repo.count_total_for_referrer(owner)
-        registrations = await self.referral_repo.count_rewarded_for_referrer(
-            owner
-        )
+        registrations = await self.referral_repo.count_rewarded_for_referrer(owner)
         # `next_milestone` rounds up to the next multiple of MILESTONE_INTERVAL.
-        next_milestone_at = (
-            (registrations // MILESTONE_INTERVAL) + 1
-        ) * MILESTONE_INTERVAL
+        next_milestone_at = ((registrations // MILESTONE_INTERVAL) + 1) * MILESTONE_INTERVAL
         return ReferralStatsResponse(
             invitations=invitations,
             registrations=registrations,

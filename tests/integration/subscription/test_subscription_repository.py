@@ -54,10 +54,18 @@ async def test_list_active_purchases_for_excludes_revoked_expired_and_bonus(
     now = datetime.now(UTC)
 
     active_purchase = Subscription.create_purchase(
-        user.id, Tier.GOLD, duration_days=30, transaction_id=None, now=now,
+        user.id,
+        Tier.GOLD,
+        duration_days=30,
+        transaction_id=None,
+        now=now,
     )
     revoked_purchase = Subscription.create_purchase(
-        user.id, Tier.SILVER, duration_days=30, transaction_id=None, now=now,
+        user.id,
+        Tier.SILVER,
+        duration_days=30,
+        transaction_id=None,
+        now=now,
     )
     revoked_purchase.revoke(now=now)
     expired_purchase = Subscription.create_purchase(
@@ -68,7 +76,9 @@ async def test_list_active_purchases_for_excludes_revoked_expired_and_bonus(
         now=now - timedelta(days=30),
     )
     bonus = Subscription.create_bonus(
-        owner_id=user.id, duration_days=3, now=now,
+        owner_id=user.id,
+        duration_days=3,
+        now=now,
     )
     for g in (active_purchase, revoked_purchase, expired_purchase, bonus):
         await repo.add(g)
@@ -84,7 +94,11 @@ async def test_update_persists_revoke(session: AsyncSession) -> None:
     repo = SubscriptionRepository(session=session)
     now = datetime.now(UTC)
     grant = Subscription.create_purchase(
-        user.id, Tier.BRONZE, duration_days=7, transaction_id=None, now=now,
+        user.id,
+        Tier.BRONZE,
+        duration_days=7,
+        transaction_id=None,
+        now=now,
     )
     await repo.add(grant)
 

@@ -32,9 +32,7 @@ class FakeSubscriptionRepository:
             and g.is_active_at(now)
         ]
 
-    async def find_by_transaction(
-        self, transaction_id: TransactionId
-    ) -> Subscription | None:
+    async def find_by_transaction(self, transaction_id: TransactionId) -> Subscription | None:
         for g in self.grants:
             if g.transaction_id == transaction_id:
                 return g
@@ -68,11 +66,7 @@ def _make_use_case(
 
 
 def _active_for(repo: FakeSubscriptionRepository, owner: UUID) -> list[Subscription]:
-    return [
-        g
-        for g in repo.grants
-        if g.owner_id.value == owner and not g.is_revoked
-    ]
+    return [g for g in repo.grants if g.owner_id.value == owner and not g.is_revoked]
 
 
 async def test_first_activation_creates_grant() -> None:
@@ -81,9 +75,7 @@ async def test_first_activation_creates_grant() -> None:
     use_case = _make_use_case(repo, uow)
     owner = uuid4()
 
-    response = await use_case.execute(
-        ActivatePremiumRequest(owner_id=owner, tier="bronze")
-    )
+    response = await use_case.execute(ActivatePremiumRequest(owner_id=owner, tier="bronze"))
 
     assert response.owner_id == owner
     assert response.tier == "bronze"
@@ -101,9 +93,7 @@ async def test_re_activation_revokes_old_purchase_and_creates_new() -> None:
     owner = uuid4()
 
     await use_case.execute(ActivatePremiumRequest(owner_id=owner, tier="bronze"))
-    response = await use_case.execute(
-        ActivatePremiumRequest(owner_id=owner, tier="gold")
-    )
+    response = await use_case.execute(ActivatePremiumRequest(owner_id=owner, tier="gold"))
 
     assert response.tier == "gold"
     assert response.days_remaining >= 29
@@ -126,12 +116,8 @@ async def test_bonus_grants_are_not_revoked_by_purchase() -> None:
     await repo.add(bonus)
     use_case = _make_use_case(repo, FakeUoW())
 
-    await use_case.execute(
-        ActivatePremiumRequest(owner_id=owner.value, tier="silver")
-    )
+    await use_case.execute(ActivatePremiumRequest(owner_id=owner.value, tier="silver"))
 
     # Bonus survives; only purchase grant created
-    assert any(
-        g.source == SubscriptionSource.BONUS and not g.is_revoked for g in repo.grants
-    )
+    assert any(g.source == SubscriptionSource.BONUS and not g.is_revoked for g in repo.grants)
     assert any(g.source == SubscriptionSource.PURCHASE for g in repo.grants)

@@ -35,15 +35,11 @@ async def test_activate_creates_grant_in_db(session: AsyncSession) -> None:
     user = await _seed_user(session, 6001)
     use_case = _make_use_case(session)
 
-    response = await use_case.execute(
-        ActivatePremiumRequest(owner_id=user.id.value, tier="silver")
-    )
+    response = await use_case.execute(ActivatePremiumRequest(owner_id=user.id.value, tier="silver"))
 
     assert response.tier == "silver"
 
-    get_uc = GetMyPremiumUseCase(
-        subscription_repo=SubscriptionRepository(session=session)
-    )
+    get_uc = GetMyPremiumUseCase(subscription_repo=SubscriptionRepository(session=session))
     current = await get_uc.execute(user.id.value)
     assert current is not None
     assert current.tier == "silver"
@@ -53,12 +49,8 @@ async def test_re_activation_revokes_old_purchase(session: AsyncSession) -> None
     user = await _seed_user(session, 6002)
     use_case = _make_use_case(session)
 
-    await use_case.execute(
-        ActivatePremiumRequest(owner_id=user.id.value, tier="bronze")
-    )
-    response = await use_case.execute(
-        ActivatePremiumRequest(owner_id=user.id.value, tier="gold")
-    )
+    await use_case.execute(ActivatePremiumRequest(owner_id=user.id.value, tier="bronze"))
+    response = await use_case.execute(ActivatePremiumRequest(owner_id=user.id.value, tier="gold"))
 
     assert response.tier == "gold"
 
@@ -75,8 +67,6 @@ async def test_get_premium_returns_none_for_user_without_grants(
     session: AsyncSession,
 ) -> None:
     user = await _seed_user(session, 6003)
-    get_uc = GetMyPremiumUseCase(
-        subscription_repo=SubscriptionRepository(session=session)
-    )
+    get_uc = GetMyPremiumUseCase(subscription_repo=SubscriptionRepository(session=session))
 
     assert await get_uc.execute(user.id.value) is None

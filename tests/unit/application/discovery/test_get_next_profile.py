@@ -206,9 +206,7 @@ async def test_returns_none_when_no_candidate() -> None:
 
 async def test_no_subscription_omits_threshold_spec() -> None:
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
-    use_case = _make_use_case(
-        discovery, FakeSubscriptionRepository(), FakeSkipRegistry()
-    )
+    use_case = _make_use_case(discovery, FakeSubscriptionRepository(), FakeSkipRegistry())
 
     await use_case.execute(uuid4())
 
@@ -367,9 +365,7 @@ async def test_revoked_subscription_omits_threshold_spec() -> None:
 
 async def test_no_skipped_omits_exclude_spec() -> None:
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
-    use_case = _make_use_case(
-        discovery, FakeSubscriptionRepository(), FakeSkipRegistry(skipped=[])
-    )
+    use_case = _make_use_case(discovery, FakeSubscriptionRepository(), FakeSkipRegistry(skipped=[]))
 
     await use_case.execute(uuid4())
 

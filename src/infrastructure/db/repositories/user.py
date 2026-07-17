@@ -21,9 +21,7 @@ class UserRepository:
         await self.session.flush()
 
     async def get_by_id(self, user_id: UserId) -> User | None:
-        result = await self.session.execute(
-            select(UserORM).where(UserORM.id == user_id.value)
-        )
+        result = await self.session.execute(select(UserORM).where(UserORM.id == user_id.value))
         orm = result.scalar_one_or_none()
         return orm_to_user(orm) if orm is not None else None
 

@@ -31,9 +31,7 @@ class SearchPreferences:
             updated_at=now,
         )
 
-    def change_gender_preference(
-        self, preference: GenderPreference, now: datetime
-    ) -> None:
+    def change_gender_preference(self, preference: GenderPreference, now: datetime) -> None:
         self.gender_preference = preference
         self.updated_at = now
 

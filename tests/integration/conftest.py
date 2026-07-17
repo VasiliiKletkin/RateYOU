@@ -32,9 +32,7 @@ async def _create_database_if_missing(pg: PostgresConfig) -> None:
         database="postgres",
     )
     try:
-        exists = await admin.fetchval(
-            "SELECT 1 FROM pg_database WHERE datname = $1", pg.db
-        )
+        exists = await admin.fetchval("SELECT 1 FROM pg_database WHERE datname = $1", pg.db)
         if exists is None:
             await admin.execute(f'CREATE DATABASE "{pg.db}"')
     finally:

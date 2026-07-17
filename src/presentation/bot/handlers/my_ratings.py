@@ -25,12 +25,7 @@ async def _send_my_ratings(
     try:
         response = await list_use_case.execute(user_id)
     except PremiumRequired:
-        await send(
-            _(
-                "🔒 This is a premium feature.\n"
-                "Use /premium to subscribe."
-            )
-        )
+        await send(_("🔒 This is a premium feature.\nUse /premium to subscribe."))
         return
 
     if not response.items:

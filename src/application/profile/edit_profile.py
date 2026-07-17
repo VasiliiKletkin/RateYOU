@@ -41,14 +41,10 @@ class EditProfileUseCase:
             profile.update_bio(Bio(request.bio), now)
 
         if request.photo_file_ids is not None:
-            profile.update_photos(
-                Photos.from_strings(list(request.photo_file_ids)), now
-            )
+            profile.update_photos(Photos.from_strings(list(request.photo_file_ids)), now)
 
         if request.location is not None:
-            profile.update_location(
-                Location(lat=request.location[0], lon=request.location[1]), now
-            )
+            profile.update_location(Location(lat=request.location[0], lon=request.location[1]), now)
 
         await self.profile_repo.update(profile)
         await self.uow.commit()

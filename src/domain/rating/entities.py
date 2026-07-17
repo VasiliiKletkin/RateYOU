@@ -26,9 +26,7 @@ class Rating:
     score: Score
     created_at: datetime
     updated_at: datetime
-    _events: list[DomainEvent] = field(
-        default_factory=list, init=False, repr=False, compare=False
-    )
+    _events: list[DomainEvent] = field(default_factory=list, init=False, repr=False, compare=False)
 
     def pull_events(self) -> list[DomainEvent]:
         events, self._events = self._events, []

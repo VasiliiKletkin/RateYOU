@@ -20,9 +20,7 @@ class CreatedAtMixin:
     it's a server-side `now()` baked into the DDL.
     """
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class UpdatedAtMixin:

@@ -111,13 +111,9 @@ class Photos:
 
     def __post_init__(self) -> None:
         if len(self.items) < self.MIN_COUNT:
-            raise InvalidPhotos(
-                f"At least {self.MIN_COUNT} photo required, got {len(self.items)}"
-            )
+            raise InvalidPhotos(f"At least {self.MIN_COUNT} photo required, got {len(self.items)}")
         if len(self.items) > self.MAX_COUNT:
-            raise InvalidPhotos(
-                f"Max {self.MAX_COUNT} photos, got {len(self.items)}"
-            )
+            raise InvalidPhotos(f"Max {self.MAX_COUNT} photos, got {len(self.items)}")
 
     @classmethod
     def from_strings(cls, file_ids: list[str]) -> "Photos":

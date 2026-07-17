@@ -21,18 +21,14 @@ class ReferralRepository:
         await self.session.flush()
 
     async def get_by_referee(self, referee_id: UserId) -> Referral | None:
-        stmt = select(ReferralORM).where(
-            ReferralORM.referee_id == referee_id.value
-        )
+        stmt = select(ReferralORM).where(ReferralORM.referee_id == referee_id.value)
         orm = (await self.session.execute(stmt)).scalar_one_or_none()
         return orm_to_referral(orm) if orm is not None else None
 
     async def update(self, referral: Referral) -> None:
         existing = await self.session.get(ReferralORM, referral.id.value)
         if existing is None:
-            raise ValueError(
-                f"Referral {referral.id.value} not found for update"
-            )
+            raise ValueError(f"Referral {referral.id.value} not found for update")
         existing.rewarded_at = referral.rewarded_at
         await self.session.flush()
 

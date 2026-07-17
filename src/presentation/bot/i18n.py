@@ -99,15 +99,12 @@ class UserLanguageI18nMiddleware(I18nMiddleware):
         if container is not None:
             try:
                 user_repo = await container.get(IUserRepository)
-                user = await user_repo.get_by_telegram_id(
-                    TelegramId(tg_user.id)
-                )
+                user = await user_repo.get_by_telegram_id(TelegramId(tg_user.id))
             except Exception:
                 # DB unreachable / repo not yet wired — fall back rather
                 # than 500-ing every update.
                 log.warning(
-                    "i18n: stored language lookup failed; "
-                    "falling back to Telegram code",
+                    "i18n: stored language lookup failed; falling back to Telegram code",
                     exc_info=True,
                 )
                 user = None

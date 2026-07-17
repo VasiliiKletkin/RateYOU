@@ -11,9 +11,7 @@ def subscription_to_orm(grant: Subscription) -> SubscriptionORM:
         owner_id=grant.owner_id.value,
         tier=grant.tier,
         source=grant.source,
-        transaction_id=(
-            grant.transaction_id.value if grant.transaction_id is not None else None
-        ),
+        transaction_id=(grant.transaction_id.value if grant.transaction_id is not None else None),
         starts_at=grant.starts_at,
         expires_at=grant.expires_at,
         is_revoked=grant.is_revoked,

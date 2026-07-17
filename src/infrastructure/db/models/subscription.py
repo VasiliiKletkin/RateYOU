@@ -30,19 +30,13 @@ class SubscriptionORM(Base, CreatedAtMixin):
     )
     owner: Mapped[UserORM] = relationship(UserORM)
     tier: Mapped[Tier] = mapped_column(Enum(Tier), nullable=False)
-    source: Mapped[SubscriptionSource] = mapped_column(
-        Enum(SubscriptionSource), nullable=False
-    )
+    source: Mapped[SubscriptionSource] = mapped_column(Enum(SubscriptionSource), nullable=False)
     transaction_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("transactions.id", ondelete="SET NULL"), nullable=True
     )
     transaction: Mapped[TransactionORM | None] = relationship(TransactionORM)
-    starts_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
-    expires_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
+    starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     is_revoked: Mapped[bool] = mapped_column(default=False)
 
     __table_args__ = (

@@ -52,11 +52,7 @@ class FakeReferralRepo:
         return sum(1 for r in self.referrals if r.referrer_id == referrer_id)
 
     async def count_rewarded_for_referrer(self, referrer_id: UserId) -> int:
-        return sum(
-            1
-            for r in self.referrals
-            if r.referrer_id == referrer_id and r.is_rewarded
-        )
+        return sum(1 for r in self.referrals if r.referrer_id == referrer_id and r.is_rewarded)
 
 
 @dataclass
@@ -74,16 +70,12 @@ def _make_use_case(
     users: FakeUserRepository | None = None,
     referrals: FakeReferralRepo | None = None,
     uow: FakeUoW | None = None,
-) -> tuple[
-    RegisterUserUseCase, FakeUserRepository, FakeReferralRepo, FakeUoW
-]:
+) -> tuple[RegisterUserUseCase, FakeUserRepository, FakeReferralRepo, FakeUoW]:
     users = users or FakeUserRepository()
     referrals = referrals or FakeReferralRepo()
     uow = uow or FakeUoW()
     return (
-        RegisterUserUseCase(
-            user_repo=users, referral_repo=referrals, uow=uow
-        ),
+        RegisterUserUseCase(user_repo=users, referral_repo=referrals, uow=uow),
         users,
         referrals,
         uow,

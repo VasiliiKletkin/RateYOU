@@ -68,9 +68,7 @@ class ProfileRepository:
         await self._reconcile_photos(existing, profile)
         await self.session.flush()
 
-    async def _reconcile_photos(
-        self, existing: ProfileORM, profile: Profile
-    ) -> None:
+    async def _reconcile_photos(self, existing: ProfileORM, profile: Profile) -> None:
         """Replace-all strategy: drop everything, recreate with fresh positions.
 
         With ≤6 photos and an indexed FK, deleting+inserting beats diffing —

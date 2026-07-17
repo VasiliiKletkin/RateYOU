@@ -23,13 +23,9 @@ class ConfirmPaymentUseCase:
     uow: UnitOfWork
 
     async def execute(self, request: ConfirmPaymentRequest) -> None:
-        transaction = await self.transaction_repo.get_by_id(
-            TransactionId(request.transaction_id)
-        )
+        transaction = await self.transaction_repo.get_by_id(TransactionId(request.transaction_id))
         if transaction is None:
-            raise TransactionNotFound(
-                f"Transaction {request.transaction_id} not found"
-            )
+            raise TransactionNotFound(f"Transaction {request.transaction_id} not found")
 
         transaction.mark_paid(external_id=request.external_id, now=datetime.now(UTC))
         await self.transaction_repo.update(transaction)

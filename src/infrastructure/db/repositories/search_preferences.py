@@ -18,9 +18,7 @@ class SearchPreferencesRepository:
 
     async def get_for(self, user_id: UserId) -> SearchPreferences | None:
         result = await self.session.execute(
-            select(SearchPreferencesORM).where(
-                SearchPreferencesORM.user_id == user_id.value
-            )
+            select(SearchPreferencesORM).where(SearchPreferencesORM.user_id == user_id.value)
         )
         orm = result.scalar_one_or_none()
         return orm_to_search_preferences(orm) if orm is not None else None
@@ -30,13 +28,9 @@ class SearchPreferencesRepository:
         await self.session.flush()
 
     async def update(self, prefs: SearchPreferences) -> None:
-        existing = await self.session.get(
-            SearchPreferencesORM, prefs.user_id.value
-        )
+        existing = await self.session.get(SearchPreferencesORM, prefs.user_id.value)
         if existing is None:
-            raise ValueError(
-                f"SearchPreferences for {prefs.user_id.value} not found for update"
-            )
+            raise ValueError(f"SearchPreferences for {prefs.user_id.value} not found for update")
         existing.gender_preference = prefs.gender_preference
         existing.min_rating = prefs.min_rating.value
         existing.updated_at = prefs.updated_at

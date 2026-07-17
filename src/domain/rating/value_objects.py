@@ -24,6 +24,4 @@ class Score:
 
     def __post_init__(self) -> None:
         if not (self.MIN <= self.value <= self.MAX):
-            raise InvalidScore(
-                f"Score must be between {self.MIN} and {self.MAX}, got {self.value}"
-            )
+            raise InvalidScore(f"Score must be between {self.MIN} and {self.MAX}, got {self.value}")

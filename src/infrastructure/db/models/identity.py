@@ -16,9 +16,5 @@ class UserORM(Base, CreatedAtMixin):
     role: Mapped[Role] = mapped_column(Enum(Role), default=Role.USER)
     is_banned: Mapped[bool] = mapped_column(default=False)
     ban_reason: Mapped[str | None] = mapped_column(String(500), default=None)
-    banned_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), default=None
-    )
-    language: Mapped[Language] = mapped_column(
-        Enum(Language), default=Language.EN
-    )
+    banned_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+    language: Mapped[Language] = mapped_column(Enum(Language), default=Language.EN)

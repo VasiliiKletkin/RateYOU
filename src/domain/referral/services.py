@@ -39,9 +39,7 @@ class ReferralRewardService:
     user_repo: IUserRepository
     subscription_repo: ISubscriptionRepository
 
-    async def mark_profile_created(
-        self, referee_id: UserId, now: datetime
-    ) -> None:
+    async def mark_profile_created(self, referee_id: UserId, now: datetime) -> None:
         referral = await self.referral_repo.get_by_referee(referee_id)
         if referral is None or referral.is_rewarded:
             return
@@ -72,9 +70,7 @@ class ReferralRewardService:
 
         # Milestone bonus: a second grant fires when the rewarded count
         # crosses a multiple of `MILESTONE_INTERVAL`.
-        count = await self.referral_repo.count_rewarded_for_referrer(
-            referral.referrer_id
-        )
+        count = await self.referral_repo.count_rewarded_for_referrer(referral.referrer_id)
         if count > 0 and count % MILESTONE_INTERVAL == 0:
             await self.subscription_repo.add(
                 Subscription.create_bonus(

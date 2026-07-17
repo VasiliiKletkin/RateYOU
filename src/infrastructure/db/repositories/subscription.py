@@ -50,18 +50,14 @@ class SubscriptionRepository:
         self,
         transaction_id: TransactionId,
     ) -> Subscription | None:
-        stmt = select(SubscriptionORM).where(
-            SubscriptionORM.transaction_id == transaction_id.value
-        )
+        stmt = select(SubscriptionORM).where(SubscriptionORM.transaction_id == transaction_id.value)
         orm = (await self.session.execute(stmt)).scalar_one_or_none()
         return orm_to_subscription(orm) if orm is not None else None
 
     async def update(self, grant: Subscription) -> None:
         existing = await self.session.get(SubscriptionORM, grant.id.value)
         if existing is None:
-            raise ValueError(
-                f"Subscription {grant.id.value} not found for update"
-            )
+            raise ValueError(f"Subscription {grant.id.value} not found for update")
         existing.tier = grant.tier
         existing.source = grant.source
         existing.transaction_id = (

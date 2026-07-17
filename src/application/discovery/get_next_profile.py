@@ -61,18 +61,10 @@ class GetNextProfileForRatingUseCase:
         if prefs is not None and prefs.gender_preference != GenderPreference.ANY:
             # ANY disables the filter; the other two enums map 1:1 to Gender
             # so the lookup is safe.
-            spec = spec & ProfileHasGender(
-                Gender(prefs.gender_preference.value)
-            )
+            spec = spec & ProfileHasGender(Gender(prefs.gender_preference.value))
 
-        if (
-            prefs is not None
-            and prefs.min_rating.is_active
-            and await self._is_premium(viewer)
-        ):
-            spec = spec & ProfileAverageRatingAtLeast(
-                float(prefs.min_rating.value)
-            )
+        if prefs is not None and prefs.min_rating.is_active and await self._is_premium(viewer):
+            spec = spec & ProfileAverageRatingAtLeast(float(prefs.min_rating.value))
 
         skipped = await self.skip_registry.get_skipped(viewer)
         if skipped:
