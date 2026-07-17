@@ -15,10 +15,10 @@
 # ── Что настроить в GitHub → Settings → Environments → "prod" ──────────────
 #
 # Secrets (скрыты в UI):
-#   SSH_KEY   — приватный SSH-ключ в base64, одной строкой.
-#               Мак: `base64 -i ~/.ssh/github-actions | pbcopy`
-#   GHCR_PAT  — PAT с правом read:packages, нужен серверу для pull приватного
-#               образа из GHCR. Для публичного образа можно оставить пустым.
+#   SSH_SECRET_KEY — приватный SSH-ключ в base64, одной строкой.
+#               Linux: `base64 -w0 ~/.ssh/rateyou-deploy`
+#   GHCR_SECRET_TOKEN — PAT с правом read:packages, нужен серверу для pull
+#               приватного образа из GHCR. Для публичного образа можно опустить.
 #
 # Variables (видны в UI):
 #   SSH_HOST     — IP или DNS сервера
@@ -99,7 +99,7 @@ jobs:
 
       - name: Prepare SSH key
         env:
-          SSH_KEY_B64: ${{ secrets.SSH_KEY }}
+          SSH_KEY_B64: ${{ secrets.SSH_SECRET_KEY }}
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/deploy_key
@@ -119,7 +119,7 @@ jobs:
 
       - name: Pull image and restart on server
         env:
-          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          GHCR_PAT: ${{ secrets.GHCR_SECRET_TOKEN }}
           GHCR_USER: ${{ github.actor }}
         run: |
           ssh -i ~/.ssh/deploy_key -p "${{ vars.SSH_PORT || 22 }}" \
