@@ -58,7 +58,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      # -U/-d обязательны: без них pg_isready ходит под ролью root (её нет),
+      # и postgres спамит "FATAL: role root does not exist" в лог каждые 5с.
+      # $$ — экранирование, чтобы переменную развернул шелл в контейнере.
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 5
