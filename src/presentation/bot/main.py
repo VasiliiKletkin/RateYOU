@@ -44,7 +44,7 @@ def _register_middlewares(
 def _register_error_handler(dp: Dispatcher) -> None:
     @dp.errors()
     async def _on_error(event: ErrorEvent) -> None:
-        log.exception("Unhandled error in update %s", event.update.update_id)
+        log.exception(f"Unhandled error in update {event.update.update_id}")
         sentry_sdk.capture_exception(event.exception)
 
 
@@ -81,7 +81,7 @@ async def _run_webhook(bot: Bot, dp: Dispatcher, settings: Settings) -> None:
     await runner.setup()
     site = web.TCPSite(runner, host="0.0.0.0", port=WEBHOOK_PORT)
     await site.start()
-    log.info("Bot starting in webhook mode on :%d%s", WEBHOOK_PORT, WEBHOOK_PATH)
+    log.info(f"Bot starting in webhook mode on :{WEBHOOK_PORT}{WEBHOOK_PATH}")
 
     try:
         await asyncio.Event().wait()  # block forever; SIGTERM cancels

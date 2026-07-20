@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 def init_sentry(settings: Settings, component: str) -> None:
     """Initialize Sentry SDK. No-op in dev, or if SENTRY_DSN is not set."""
     if settings.environment is Environment.DEV or settings.sentry.dsn is None:
-        log.info("Sentry disabled (component=%s, env=%s)", component, settings.environment.value)
+        log.info(f"Sentry disabled (component={component}, env={settings.environment.value})")
         return
 
     sentry_sdk.init(
@@ -30,4 +30,4 @@ def init_sentry(settings: Settings, component: str) -> None:
         ],
     )
     sentry_sdk.set_tag("component", component)
-    log.info("Sentry initialized (component=%s, env=%s)", component, settings.environment.value)
+    log.info(f"Sentry initialized (component={component}, env={settings.environment.value})")
