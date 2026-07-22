@@ -16,6 +16,10 @@ class RegisterUserRequest:
     # user or that point at the new user themselves; registration always
     # succeeds.
     referrer_telegram_id: int | None = None
+    # Telegram @username, as reported by the current update. `None` means
+    # "caller doesn't know it" and leaves the stored value untouched — only
+    # callers holding a fresh `from_user` should pass it.
+    username: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

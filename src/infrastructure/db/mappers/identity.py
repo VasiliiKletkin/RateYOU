@@ -8,6 +8,7 @@ def user_to_orm(user: User) -> UserORM:
     return UserORM(
         id=user.id.value,
         telegram_id=user.telegram_id.value,
+        username=user.username,
         role=user.role,
         is_banned=user.is_banned,
         ban_reason=user.ban_reason,
@@ -21,6 +22,7 @@ def orm_to_user(orm: UserORM) -> User:
     return User(
         id=UserId(orm.id),
         telegram_id=TelegramId(orm.telegram_id),
+        username=orm.username,
         role=orm.role,
         is_banned=orm.is_banned,
         ban_reason=orm.ban_reason,

@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from src.application.rating.dto import IncomingRatingItem, IncomingRatingsResponse
+from src.domain.identity.repositories import IUserRepository
 from src.domain.profile.repositories import IProfileRepository
 from src.domain.rating.repositories import IRatingRepository
 from src.domain.shared.exceptions import PremiumRequired
@@ -21,11 +22,16 @@ class ListIncomingRatingsUseCase:
     Rater names come from each rater's Profile; raters without a profile
     are returned as `rater_name=None` so the presentation layer can pick
     a localized placeholder.
+
+    Contact handles come from the rater's User: the cached `@username` when
+    they have one, plus their `telegram_id` so the bot can still render a
+    clickable mention for the (many) accounts without a handle.
     """
 
     subscription_repo: ISubscriptionRepository
     rating_repo: IRatingRepository
     profile_repo: IProfileRepository
+    user_repo: IUserRepository
 
     async def execute(
         self,
@@ -43,11 +49,14 @@ class ListIncomingRatingsUseCase:
         items: list[IncomingRatingItem] = []
         for rating in ratings:
             profile = await self.profile_repo.get_by_owner_id(rating.rater_id)
+            rater = await self.user_repo.get_by_id(rating.rater_id)
             items.append(
                 IncomingRatingItem(
                     rater_name=profile.name.value if profile is not None else None,
                     score=rating.score.value,
                     rated_at=rating.created_at,
+                    rater_username=rater.username if rater is not None else None,
+                    rater_telegram_id=rater.telegram_id.value if rater is not None else None,
                 )
             )
 

@@ -8,6 +8,7 @@ class UserAdmin(ModelView):
     fields = [
         "id",
         "telegram_id",
+        "username",
         "role",
         "is_banned",
         "ban_reason",

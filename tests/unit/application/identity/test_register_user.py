@@ -113,6 +113,37 @@ async def test_register_is_idempotent() -> None:
     assert uow.committed is False
 
 
+async def test_register_stores_username_stripped_of_at_sign() -> None:
+    use_case, repo, _, _ = _make_use_case()
+
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, username="@anna_k"))
+
+    assert next(iter(repo.users.values())).username == "anna_k"
+
+
+async def test_returning_user_gets_username_refreshed() -> None:
+    use_case, repo, _, uow = _make_use_case()
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, username="old_handle"))
+    uow.committed = False
+
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, username="new_handle"))
+
+    assert next(iter(repo.users.values())).username == "new_handle"
+    assert uow.committed is True
+
+
+async def test_returning_user_without_username_keeps_stored_one() -> None:
+    """`username=None` means "caller doesn't know it" — never wipes the cached value."""
+    use_case, repo, _, uow = _make_use_case()
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, username="anna_k"))
+    uow.committed = False
+
+    await use_case.execute(RegisterUserRequest(telegram_id=12345))
+
+    assert next(iter(repo.users.values())).username == "anna_k"
+    assert uow.committed is False  # unchanged → no pointless write
+
+
 async def test_register_with_valid_referrer_creates_pending_referral() -> None:
     use_case, repo, referrals, _ = _make_use_case()
     inviter = _seed_user(repo, 111)

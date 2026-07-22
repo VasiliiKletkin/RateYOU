@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 
 from src.application.identity.dto import RegisterUserRequest, UserResponse
-from src.domain.identity.entities import User
+from src.domain.identity.entities import User, normalize_username
 from src.domain.identity.repositories import IUserRepository
 from src.domain.identity.value_objects import Language, TelegramId
 from src.domain.referral.entities import Referral
@@ -44,6 +44,18 @@ class RegisterUserUseCase:
             # branch below — never overwrites a returning user's preference.
             # Referrer payloads are also dropped: a returning user is not a
             # new referee.
+            #
+            # The @username is the exception: it belongs to Telegram, not to
+            # us, so refresh the cached copy whenever the caller hands us a
+            # fresh one. Written only on an actual change to keep /start free
+            # of pointless UPDATEs.
+            if (
+                request.username is not None
+                and normalize_username(request.username) != existing.username
+            ):
+                existing.set_username(request.username)
+                await self.user_repo.update(existing)
+                await self.uow.commit()
             return _to_response(existing)
 
         now = datetime.now(UTC)
@@ -55,6 +67,7 @@ class RegisterUserUseCase:
             telegram_id=telegram_id,
             now=now,
             language=request.language or Language.EN,
+            username=request.username,
         )
         await self.user_repo.add(user)
 

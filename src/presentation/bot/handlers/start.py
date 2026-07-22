@@ -26,6 +26,9 @@ async def on_start(
             telegram_id=message.from_user.id,
             language=normalize_language(message.from_user.language_code),
             referrer_telegram_id=_extract_referrer_telegram_id(command.args),
+            # /start is the one handler every user passes through, so it is
+            # where the cached @username gets (re)captured.
+            username=message.from_user.username,
         )
     )
     profile = await get_my_profile.execute(user.id)

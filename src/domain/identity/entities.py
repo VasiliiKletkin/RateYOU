@@ -6,6 +6,18 @@ from src.domain.identity.value_objects import Language, Role, TelegramId
 from src.domain.shared.identifiers import UserId
 
 
+def normalize_username(raw: str | None) -> str | None:
+    """Canonicalises a Telegram @username: no leading '@', blanks become None.
+
+    Telegram itself sends the handle without '@', but callers may pass either
+    form; storing one shape keeps generated t.me links predictable.
+    """
+    if raw is None:
+        return None
+    cleaned = raw.strip().lstrip("@")
+    return cleaned or None
+
+
 @dataclass
 class User:
     """Aggregate root of the Identity context.
@@ -22,6 +34,10 @@ class User:
     id: UserId
     telegram_id: TelegramId
     created_at: datetime
+    # Cached Telegram handle without the leading '@'. Optional — a large share
+    # of accounts have none. Refreshed on /start since users can change or
+    # drop it at any time; used to let raters be contacted from /my_ratings.
+    username: str | None = None
     role: Role = Role.USER
     is_banned: bool = False
     ban_reason: str | None = None
@@ -38,16 +54,22 @@ class User:
         telegram_id: TelegramId,
         now: datetime,
         language: Language = Language.EN,
+        username: str | None = None,
     ) -> "User":
         return cls(
             id=UserId.new(),
             telegram_id=telegram_id,
+            username=normalize_username(username),
             language=language,
             created_at=now,
         )
 
     def change_language(self, language: Language) -> None:
         self.language = language
+
+    def set_username(self, username: str | None) -> None:
+        """Refreshes the cached handle. Idempotent — safe to call on every /start."""
+        self.username = normalize_username(username)
 
     def ban(self, reason: str, now: datetime) -> None:
         if not reason.strip():
