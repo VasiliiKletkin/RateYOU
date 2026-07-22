@@ -129,6 +129,13 @@ jobs:
       - name: Install dependencies (with dev group)
         run: poetry install --no-root --with dev
 
+      # .mo файлы в .gitignore, а aiogram's I18n падает на импорте, если
+      # хоть одна локаль не скомпилирована. Dockerfile делает то же самое —
+      # без этого шага любой тест, тянущий src/presentation/bot, упадёт на
+      # сборе, а не на ассерте.
+      - name: Compile translations
+        run: poetry run pybabel compile -d locales
+
       # conftest сам создаёт rateyou_test и гонит `alembic upgrade head`
       # перед первым тестом — отдельного шага миграций не нужно.
       - name: Run tests
