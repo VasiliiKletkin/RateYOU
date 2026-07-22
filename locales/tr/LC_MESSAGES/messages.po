@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-13 16:37+0300\n"
+"POT-Creation-Date: 2026-07-23 00:34+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -45,16 +45,16 @@ msgstr ""
 msgid "Premium subscription"
 msgstr "Sadece premium"
 
-#: src/presentation/bot/commands.py:23
+#: src/presentation/bot/commands.py:22
 #, fuzzy
 msgid "Who rated me (premium)"
 msgstr "🌟 Beni kim puanladı"
 
-#: src/presentation/bot/commands.py:26
+#: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
 msgstr ""
 
-#: src/presentation/bot/commands.py:28
+#: src/presentation/bot/commands.py:24
 msgid "Cancel current action"
 msgstr ""
 
@@ -62,85 +62,85 @@ msgstr ""
 msgid "♂️ Male"
 msgstr "♂️ Erkek"
 
-#: src/presentation/bot/keyboards.py:36
+#: src/presentation/bot/keyboards.py:35
 msgid "♀️ Female"
 msgstr "♀️ Kadın"
 
 #: src/presentation/bot/handlers/settings.py:52
-#: src/presentation/bot/keyboards.py:54
+#: src/presentation/bot/keyboards.py:51
 msgid "♂️ Men"
 msgstr "♂️ Erkek"
 
 #: src/presentation/bot/handlers/settings.py:54
-#: src/presentation/bot/keyboards.py:57
+#: src/presentation/bot/keyboards.py:52
 msgid "♀️ Women"
 msgstr "♀️ Kadınlar"
 
 #: src/presentation/bot/handlers/settings.py:55
-#: src/presentation/bot/keyboards.py:62
+#: src/presentation/bot/keyboards.py:55
 msgid "👥 Everyone"
 msgstr "👥 Herkes"
 
 #: src/presentation/bot/handlers/settings.py:60
-#: src/presentation/bot/keyboards.py:112
+#: src/presentation/bot/keyboards.py:91
 msgid "Any"
 msgstr "Herhangi"
 
-#: src/presentation/bot/keyboards.py:177
+#: src/presentation/bot/keyboards.py:142
 msgid "⏭ Skip"
 msgstr "⏭ Atla"
 
-#: src/presentation/bot/keyboards.py:187
+#: src/presentation/bot/keyboards.py:151
 msgid "Name"
 msgstr "İsim"
 
-#: src/presentation/bot/keyboards.py:188
+#: src/presentation/bot/keyboards.py:152
 msgid "Age"
 msgstr "Yaş"
 
-#: src/presentation/bot/keyboards.py:191
+#: src/presentation/bot/keyboards.py:153
 msgid "Gender"
 msgstr "Cinsiyet"
 
-#: src/presentation/bot/keyboards.py:196
+#: src/presentation/bot/keyboards.py:154
 msgid "Location"
 msgstr "Konum"
 
-#: src/presentation/bot/keyboards.py:199
+#: src/presentation/bot/keyboards.py:155
 msgid "Bio"
 msgstr "Hakkımda"
 
-#: src/presentation/bot/keyboards.py:200
+#: src/presentation/bot/keyboards.py:156
 msgid "Photo"
 msgstr "Fotoğraf"
 
-#: src/presentation/bot/keyboards.py:203
+#: src/presentation/bot/keyboards.py:157
 msgid "✅ Done"
 msgstr "✅ Tamam"
 
-#: src/presentation/bot/keyboards.py:228
+#: src/presentation/bot/keyboards.py:195
 msgid "🌟 Who rated me"
 msgstr "🌟 Beni kim puanladı"
 
-#: src/presentation/bot/keyboards.py:235
+#: src/presentation/bot/keyboards.py:200
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} gün"
 
-#: src/presentation/bot/handlers/create_profile.py:50
+#: src/presentation/bot/handlers/create_profile.py:55
 msgid "Nothing to cancel."
 msgstr "İptal edilecek bir şey yok."
 
-#: src/presentation/bot/handlers/create_profile.py:53
+#: src/presentation/bot/handlers/create_profile.py:58
 msgid "Cancelled."
 msgstr "İptal edildi."
 
-#: src/presentation/bot/handlers/create_profile.py:72
-#: src/presentation/bot/handlers/create_profile.py:240
+#: src/presentation/bot/handlers/create_profile.py:77
+#: src/presentation/bot/handlers/create_profile.py:318
 msgid "You already have a profile."
 msgstr "Zaten bir profilin var."
 
-#: src/presentation/bot/handlers/create_profile.py:77
+#: src/presentation/bot/handlers/create_profile.py:82
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -148,86 +148,105 @@ msgstr ""
 "Profilini oluşturalım.\n"
 "Adın ne?"
 
-#: src/presentation/bot/handlers/create_profile.py:83
+#: src/presentation/bot/handlers/create_profile.py:88
 #: src/presentation/bot/handlers/edit_profile.py:166
 msgid "Please send text."
 msgstr "Lütfen metin gönder."
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:93
 #: src/presentation/bot/handlers/edit_profile.py:171
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ İsim 1-50 karakter olmalı ve boş olmamalı. Tekrar dene:"
 
-#: src/presentation/bot/handlers/create_profile.py:92
+#: src/presentation/bot/handlers/create_profile.py:97
 msgid "How old are you?"
 msgstr "Kaç yaşındasın?"
 
-#: src/presentation/bot/handlers/create_profile.py:98
+#: src/presentation/bot/handlers/create_profile.py:103
 #: src/presentation/bot/handlers/edit_profile.py:183
 msgid "Please send a number."
 msgstr "Lütfen bir sayı gönder."
 
-#: src/presentation/bot/handlers/create_profile.py:103
+#: src/presentation/bot/handlers/create_profile.py:108
 #: src/presentation/bot/handlers/edit_profile.py:189
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ Bu bir sayı değil. Tekrar dene:"
 
-#: src/presentation/bot/handlers/create_profile.py:106
+#: src/presentation/bot/handlers/create_profile.py:111
 #: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ Yaş 18 ile 100 arasında olmalı. Tekrar dene:"
 
-#: src/presentation/bot/handlers/create_profile.py:110
+#: src/presentation/bot/handlers/create_profile.py:115
 #: src/presentation/bot/handlers/edit_profile.py:138
 msgid "Pick gender:"
 msgstr "Cinsiyet seç:"
 
-#: src/presentation/bot/handlers/create_profile.py:123
-#: src/presentation/bot/handlers/create_profile.py:147
-#: src/presentation/bot/handlers/settings.py:203
-#: src/presentation/bot/handlers/settings.py:235
-#: src/presentation/bot/handlers/settings.py:258
-#: src/presentation/bot/handlers/settings.py:281
+#: src/presentation/bot/handlers/create_profile.py:128
+#: src/presentation/bot/handlers/create_profile.py:150
+#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/settings.py:193
+#: src/presentation/bot/handlers/settings.py:223
+#: src/presentation/bot/handlers/settings.py:244
+#: src/presentation/bot/handlers/settings.py:265
 msgid "Invalid choice"
 msgstr "Geçersiz seçim"
 
-#: src/presentation/bot/handlers/create_profile.py:129
+#: src/presentation/bot/handlers/create_profile.py:134
 msgid "Who would you like to rate?"
 msgstr "Kimi puanlamak istersin?"
 
-#: src/presentation/bot/handlers/create_profile.py:153
+#: src/presentation/bot/handlers/create_profile.py:156
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "Konumunu paylaş — yakındaki profilleri bulmak için kullanılır:"
 
-#: src/presentation/bot/handlers/create_profile.py:154
+#: src/presentation/bot/handlers/create_profile.py:158
+msgid "Or just type your city name."
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:159
 #: src/presentation/bot/handlers/edit_profile.py:148
 msgid "📍 Share location"
 msgstr "📍 Konumu paylaş"
 
-#: src/presentation/bot/handlers/create_profile.py:169
+#: src/presentation/bot/handlers/create_profile.py:174
+#: src/presentation/bot/handlers/create_profile.py:250
 msgid "Tell something about yourself (or /skip):"
 msgstr "Kendinden bahset (veya /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:176
+#: src/presentation/bot/handlers/create_profile.py:195
+#: src/presentation/bot/handlers/create_profile.py:257
 msgid "Please share a location to continue."
 msgstr "Devam etmek için lütfen konum paylaş."
 
-#: src/presentation/bot/handlers/create_profile.py:184
-#: src/presentation/bot/handlers/create_profile.py:201
+#: src/presentation/bot/handlers/create_profile.py:204
+msgid "Couldn't look that up right now — please share your location instead."
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:209
+msgid "No such place found. Check the spelling, or share your location."
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:220
+msgid "Pick your city:"
+msgstr ""
+
+#: src/presentation/bot/handlers/create_profile.py:264
+#: src/presentation/bot/handlers/create_profile.py:279
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "En fazla {max} fotoğraf gönder:"
 
-#: src/presentation/bot/handlers/create_profile.py:191
+#: src/presentation/bot/handlers/create_profile.py:270
 msgid "Please send text or /skip."
 msgstr "Lütfen metin gönder veya /skip."
 
-#: src/presentation/bot/handlers/create_profile.py:196
+#: src/presentation/bot/handlers/create_profile.py:275
 #: src/presentation/bot/handlers/edit_profile.py:235
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ Açıklama çok uzun (en fazla 500 karakter). Tekrar dene veya /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:254
+#: src/presentation/bot/handlers/create_profile.py:330
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -240,7 +259,7 @@ msgstr ""
 "Yaş: {age}\n"
 "Profilleri puanlamaya başlamak için /feed gönder."
 
-#: src/presentation/bot/handlers/create_profile.py:299
+#: src/presentation/bot/handlers/create_profile.py:380
 msgid "Please send a photo (not text)."
 msgstr "Lütfen fotoğraf gönder (metin değil)."
 
@@ -313,48 +332,48 @@ msgstr "Lütfen fotoğraf gönder."
 msgid "Please share a location."
 msgstr "Lütfen konum paylaş."
 
-#: src/presentation/bot/handlers/feed.py:55
+#: src/presentation/bot/handlers/feed.py:60
 msgid "No more profiles to rate. Come back later!"
 msgstr "Puanlanacak başka profil yok. Daha sonra tekrar gel!"
 
-#: src/presentation/bot/handlers/feed.py:82
+#: src/presentation/bot/handlers/feed.py:87
 msgid "Rate this profile:"
 msgstr "Bu profili puanla:"
 
-#: src/presentation/bot/handlers/feed.py:104
+#: src/presentation/bot/handlers/feed.py:109
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
 msgstr "⭐ Biri seni az önce puanladı: {score}/10"
 
-#: src/presentation/bot/handlers/feed.py:126
+#: src/presentation/bot/handlers/feed.py:130
 msgid "You need a profile of your own first. Send /create to make one."
 msgstr "Önce kendi profilin olmalı. Oluşturmak için /create gönder."
 
-#: src/presentation/bot/handlers/feed.py:147
-#: src/presentation/bot/handlers/feed.py:153
+#: src/presentation/bot/handlers/feed.py:150
+#: src/presentation/bot/handlers/feed.py:156
 msgid "Bad payload"
 msgstr "Geçersiz veri"
 
-#: src/presentation/bot/handlers/feed.py:170
+#: src/presentation/bot/handlers/feed.py:171
 msgid "Can't rate yourself"
 msgstr "Kendini puanlayamazsın"
 
-#: src/presentation/bot/handlers/feed.py:173
+#: src/presentation/bot/handlers/feed.py:174
 msgid "Bad score"
 msgstr "Geçersiz puan"
 
-#: src/presentation/bot/handlers/feed.py:176
+#: src/presentation/bot/handlers/feed.py:177
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "Puanlandı {score}/10 ✓"
 
-#: src/presentation/bot/handlers/feed.py:186
+#: src/presentation/bot/handlers/feed.py:187
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 Ortalaması: {avg}/10 ({count} puandan)"
 
-#: src/presentation/bot/handlers/feed.py:225
+#: src/presentation/bot/handlers/feed.py:226
 msgid "Skipped"
 msgstr "Atlandı"
 
@@ -366,20 +385,20 @@ msgstr ""
 "🔒 Bu bir premium özellik.\n"
 "Abone olmak için /premium kullan."
 
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_ratings.py:34
 msgid "No one has rated you yet."
 msgstr "Henüz seni kimse puanlamadı."
 
-#: src/presentation/bot/handlers/my_ratings.py:40
+#: src/presentation/bot/handlers/my_ratings.py:37
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 Seni son puanlayanlar:"
 
-#: src/presentation/bot/handlers/my_ratings.py:42
+#: src/presentation/bot/handlers/my_ratings.py:54
 msgid "Anonymous"
 msgstr "Anonim"
 
 #: src/presentation/bot/handlers/premium.py:43
-#, fuzzy, python-brace-format
+#, fuzzy
 msgid "Expires within a minute."
 msgstr "{days} gün içinde sona eriyor."
 
@@ -416,7 +435,7 @@ msgstr ""
 "\n"
 "Yenilemek veya yükseltmek için bir paket seç:"
 
-#: src/presentation/bot/handlers/premium.py:101
+#: src/presentation/bot/handlers/premium.py:100
 msgid ""
 "<b>Premium</b> unlocks the minimum-rating filter in /settings.\n"
 "\n"
@@ -426,27 +445,27 @@ msgstr ""
 "\n"
 "Bir paket seç:"
 
-#: src/presentation/bot/handlers/premium.py:141
+#: src/presentation/bot/handlers/premium.py:135
 msgid "Unknown tier"
 msgstr "Bilinmeyen paket"
 
-#: src/presentation/bot/handlers/premium.py:144
+#: src/presentation/bot/handlers/premium.py:138
 msgid "Invoice sent — pay in the chat"
 msgstr "Fatura gönderildi — sohbette öde"
 
-#: src/presentation/bot/handlers/premium.py:166
+#: src/presentation/bot/handlers/premium.py:160
 msgid "Unknown payment payload."
 msgstr "Bilinmeyen ödeme verisi."
 
-#: src/presentation/bot/handlers/premium.py:177
+#: src/presentation/bot/handlers/premium.py:171
 msgid "This payment is not in our records."
 msgstr "Bu ödeme kayıtlarımızda yok."
 
-#: src/presentation/bot/handlers/premium.py:191
+#: src/presentation/bot/handlers/premium.py:185
 msgid "✅ Payment confirmed."
 msgstr "✅ Ödeme onaylandı."
 
-#: src/presentation/bot/handlers/premium.py:196
+#: src/presentation/bot/handlers/premium.py:190
 #, python-brace-format
 msgid ""
 "<b>✅ Premium activated!</b>\n"
@@ -478,23 +497,23 @@ msgstr "⭐ Min. puan: sadece premium"
 msgid "🌐 Language: {current}"
 msgstr "🌐 Dil: {current}"
 
-#: src/presentation/bot/handlers/settings.py:105
-#: src/presentation/bot/handlers/settings.py:141
+#: src/presentation/bot/handlers/settings.py:103
+#: src/presentation/bot/handlers/settings.py:135
 msgid "<b>Settings</b>"
 msgstr "<b>Ayarlar</b>"
 
-#: src/presentation/bot/handlers/settings.py:172
-#: src/presentation/bot/handlers/settings.py:249
+#: src/presentation/bot/handlers/settings.py:162
+#: src/presentation/bot/handlers/settings.py:237
 msgid "Premium only"
 msgstr "Sadece premium"
 
-#: src/presentation/bot/handlers/settings.py:214
-#: src/presentation/bot/handlers/settings.py:260
-#: src/presentation/bot/handlers/settings.py:299
+#: src/presentation/bot/handlers/settings.py:204
+#: src/presentation/bot/handlers/settings.py:246
+#: src/presentation/bot/handlers/settings.py:283
 msgid "Updated"
 msgstr "Kaydedildi"
 
-#: src/presentation/bot/handlers/start.py:36
+#: src/presentation/bot/handlers/start.py:39
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
 "You don't have a profile yet - send /create to make one."
@@ -502,7 +521,7 @@ msgstr ""
 "<b>RateYou'ya hoş geldin!</b>\n"
 "Henüz bir profilin yok — oluşturmak için /create gönder."
 
-#: src/presentation/bot/handlers/start.py:42
+#: src/presentation/bot/handlers/start.py:45
 #, python-brace-format
 msgid ""
 "<b>Welcome back, {name}!</b>\n"

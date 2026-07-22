@@ -17,17 +17,20 @@ from src.application.profile.create_profile import CreateProfileUseCase
 from src.application.profile.dto import CreateProfileRequest
 from src.application.profile.get_profile import GetMyProfileUseCase
 from src.domain.profile.exceptions import (
+    GeocodingUnavailable,
     InvalidAge,
     InvalidBio,
     InvalidName,
     ProfileAlreadyExists,
 )
+from src.domain.profile.geocoder import IGeocoder
 from src.domain.profile.value_objects import Age, Bio, Name, Photos
 from src.presentation.bot.handlers.feed import show_next_or_done
-from src.presentation.bot.i18n import normalize_language
+from src.presentation.bot.i18n import i18n, normalize_language
 from src.presentation.bot.keyboards import (
     gender_keyboard,
     gender_preference_keyboard,
+    geocode_candidates_keyboard,
     share_location_keyboard,
 )
 from src.presentation.bot.states import CreateProfile
@@ -150,7 +153,9 @@ async def process_gender_preference(callback: CallbackQuery, state: FSMContext) 
     await state.set_state(CreateProfile.waiting_for_location)
     if isinstance(callback.message, Message):
         await callback.message.answer(
-            _("Share your location — it's used to find nearby profiles:"),
+            _("Share your location — it's used to find nearby profiles:")
+            + "\n"
+            + _("Or just type your city name."),
             reply_markup=share_location_keyboard(_("📍 Share location")),
         )
     await callback.answer()
@@ -169,6 +174,82 @@ async def process_location(message: Message, state: FSMContext) -> None:
         _("Tell something about yourself (or /skip):"),
         reply_markup=ReplyKeyboardRemove(),
     )
+
+
+# `~F.text.startswith("/")` keeps commands out: this router is registered
+# before feed/settings, so without it a /feed typed mid-flow would be sent
+# to the geocoder instead of falling through to the catch-all below.
+@router.message(F.text, ~F.text.startswith("/"), CreateProfile.waiting_for_location)
+async def process_location_typed(
+    message: Message,
+    state: FSMContext,
+    geocoder: FromDishka[IGeocoder],
+) -> None:
+    """Resolves a typed city name — the fallback when sharing location isn't an option.
+
+    Telegram Desktop can't send a location at all, so without this branch
+    those users can't finish /create.
+    """
+    query = (message.text or "").strip()
+    if not query:
+        await message.answer(_("Please share a location to continue."))
+        return
+
+    try:
+        # The active locale, not `from_user.language_code`: a user who picked
+        # a language in /settings should get place names in that language.
+        candidates = await geocoder.geocode(query, language=i18n.current_locale)
+    except GeocodingUnavailable:
+        await message.answer(
+            _("Couldn't look that up right now — please share your location instead.")
+        )
+        return
+
+    if not candidates:
+        await message.answer(_("No such place found. Check the spelling, or share your location."))
+        return
+
+    # Parked in FSM so the buttons only need to carry an index — Telegram
+    # caps callback data at 64 bytes.
+    await state.update_data(
+        geocode_candidates=[
+            {"label": c.label, "lat": c.location.lat, "lon": c.location.lon} for c in candidates
+        ]
+    )
+    await message.answer(
+        _("Pick your city:"),
+        reply_markup=geocode_candidates_keyboard([c.label for c in candidates]),
+    )
+
+
+@router.callback_query(
+    F.data.startswith("geopick:"),
+    CreateProfile.waiting_for_location,
+)
+async def process_location_picked(callback: CallbackQuery, state: FSMContext) -> None:
+    if callback.data is None:
+        await callback.answer()
+        return
+    candidates = (await state.get_data()).get("geocode_candidates") or []
+    try:
+        picked = candidates[int(callback.data.removeprefix("geopick:"))]
+    except (ValueError, IndexError):
+        # Stale buttons from an earlier search the user scrolled back to.
+        await callback.answer(_("Invalid choice"))
+        return
+
+    await state.update_data(
+        location_lat=picked["lat"],
+        location_lon=picked["lon"],
+        geocode_candidates=None,
+    )
+    await state.set_state(CreateProfile.waiting_for_bio)
+    await callback.answer()
+    if isinstance(callback.message, Message):
+        await callback.message.answer(
+            _("Tell something about yourself (or /skip):"),
+            reply_markup=ReplyKeyboardRemove(),
+        )
 
 
 @router.message(CreateProfile.waiting_for_location)

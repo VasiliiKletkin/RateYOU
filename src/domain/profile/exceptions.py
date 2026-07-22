@@ -36,3 +36,7 @@ class InvalidPhotos(ProfileError):
 
 class InvalidLocation(ProfileError):
     pass
+
+
+class GeocodingUnavailable(ProfileError):
+    """The geocoding service failed — distinct from "no such place found"."""

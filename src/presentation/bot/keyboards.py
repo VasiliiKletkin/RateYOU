@@ -159,6 +159,23 @@ def edit_menu_keyboard() -> InlineKeyboardMarkup:
     )
 
 
+def geocode_candidates_keyboard(
+    labels: list[str],
+    prefix: str = "geopick",
+) -> InlineKeyboardMarkup:
+    """One button per matched place, carrying its index in the FSM-stored list.
+
+    The index keeps callback data tiny (Telegram caps it at 64 bytes) and
+    avoids round-tripping floats through a string.
+    """
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=label, callback_data=f"{prefix}:{index}")]
+            for index, label in enumerate(labels)
+        ]
+    )
+
+
 def tiers_keyboard(
     tiers: list[TierInfoResponse],
     *,

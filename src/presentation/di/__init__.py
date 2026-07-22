@@ -4,6 +4,7 @@ from src.presentation.di.bot import BotProvider
 from src.presentation.di.db import DbProvider
 from src.presentation.di.discovery import DiscoveryProvider
 from src.presentation.di.events import EventsProvider
+from src.presentation.di.geocoding import GeocodingProvider
 from src.presentation.di.payment import PaymentProvider
 from src.presentation.di.redis import RedisProvider
 from src.presentation.di.repositories import RepositoryProvider
@@ -24,6 +25,7 @@ def all_providers() -> list[Provider]:
         BotProvider(),
         PaymentProvider(),
         DiscoveryProvider(),
+        GeocodingProvider(),
         DomainServiceProvider(),
         EventsProvider(),
         UseCaseProvider(),

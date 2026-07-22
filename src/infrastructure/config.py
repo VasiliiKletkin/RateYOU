@@ -70,6 +70,20 @@ class AdminConfig(BaseSettings):
     secret_key: SecretStr
 
 
+class GeocodingConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="GEOCODING_", env_file=".env", extra="ignore")
+
+    base_url: str = "https://nominatim.openstreetmap.org/search"
+    # Nominatim's usage policy requires a User-Agent identifying the app and
+    # a way to reach its operator; requests without one get blocked.
+    user_agent: str = "RateYouBot (https://github.com/VasiliiKletkin/RateYOU)"
+    timeout_seconds: float = 5.0
+    # Hits are cached long — city coordinates don't move. Misses expire fast
+    # so a typo today doesn't poison the result for a month.
+    cache_ttl_seconds: int = 30 * 24 * 3600
+    cache_miss_ttl_seconds: int = 3600
+
+
 class SentryConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="SENTRY_", env_file=".env", extra="ignore")
 
@@ -88,6 +102,7 @@ class Settings(BaseSettings):
     redis: RedisConfig = Field(default_factory=RedisConfig)
     admin: AdminConfig = Field(default_factory=AdminConfig)  # type: ignore[arg-type]
     sentry: SentryConfig = Field(default_factory=SentryConfig)
+    geocoding: GeocodingConfig = Field(default_factory=GeocodingConfig)
 
 
 @lru_cache
