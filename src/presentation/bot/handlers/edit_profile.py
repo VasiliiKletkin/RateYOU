@@ -14,16 +14,19 @@ from src.application.profile.dto import EditProfileRequest
 from src.application.profile.edit_profile import EditProfileUseCase
 from src.application.profile.get_profile import GetMyProfileUseCase
 from src.domain.profile.exceptions import (
+    GeocodingUnavailable,
     InvalidAge,
     InvalidBio,
     InvalidName,
     ProfileNotFound,
 )
+from src.domain.profile.geocoder import IGeocoder
 from src.domain.profile.value_objects import Age, Bio, Name, Photos
-from src.presentation.bot.i18n import normalize_language
+from src.presentation.bot.i18n import i18n, normalize_language
 from src.presentation.bot.keyboards import (
     edit_menu_keyboard,
     gender_keyboard,
+    geocode_candidates_keyboard,
     share_location_keyboard,
 )
 from src.presentation.bot.states import EditProfile
@@ -144,7 +147,7 @@ async def on_choose_field(callback: CallbackQuery, state: FSMContext) -> None:
         await callback.message.answer(prompts[field], reply_markup=gender_keyboard())
     elif field == "location":
         await callback.message.answer(
-            prompts[field],
+            prompts[field] + "\n" + _("Or just type your city name."),
             reply_markup=share_location_keyboard(_("📍 Share location")),
         )
     elif field == "photo":
@@ -281,6 +284,70 @@ async def process_edit_location(
         state,
         edit_profile,
         location=(message.location.latitude, message.location.longitude),
+    )
+
+
+# Mirrors the /create flow: typing a city is the only way through for users
+# whose client can't send a location (Telegram Desktop). Commands are excluded
+# so this router doesn't swallow /feed and friends registered after it.
+@router.message(F.text, ~F.text.startswith("/"), EditProfile.editing_location)
+async def process_edit_location_typed(
+    message: Message,
+    state: FSMContext,
+    geocoder: FromDishka[IGeocoder],
+) -> None:
+    query = (message.text or "").strip()
+    if not query:
+        await message.answer(_("Please share a location."))
+        return
+
+    try:
+        candidates = await geocoder.geocode(query, language=i18n.current_locale)
+    except GeocodingUnavailable:
+        await message.answer(
+            _("Couldn't look that up right now — please share your location instead.")
+        )
+        return
+
+    if not candidates:
+        await message.answer(_("No such place found. Check the spelling, or share your location."))
+        return
+
+    await state.update_data(
+        geocode_candidates=[
+            {"label": c.label, "lat": c.location.lat, "lon": c.location.lon} for c in candidates
+        ]
+    )
+    await message.answer(
+        _("Pick your city:"),
+        reply_markup=geocode_candidates_keyboard([c.label for c in candidates]),
+    )
+
+
+@router.callback_query(F.data.startswith("geopick:"), EditProfile.editing_location)
+async def process_edit_location_picked(
+    callback: CallbackQuery,
+    state: FSMContext,
+    edit_profile: FromDishka[EditProfileUseCase],
+) -> None:
+    if callback.data is None or not isinstance(callback.message, Message):
+        await callback.answer()
+        return
+    candidates = (await state.get_data()).get("geocode_candidates") or []
+    try:
+        picked = candidates[int(callback.data.removeprefix("geopick:"))]
+    except (ValueError, IndexError):
+        # Stale buttons from an earlier search the user scrolled back to.
+        await callback.answer(_("Invalid choice"))
+        return
+
+    await state.update_data(geocode_candidates=None)
+    await callback.answer()
+    await _apply_edit(
+        callback.message,
+        state,
+        edit_profile,
+        location=(picked["lat"], picked["lon"]),
     )
 
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:34+0300\n"
+"POT-Creation-Date: 2026-07-23 00:40+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -151,12 +151,12 @@ msgstr ""
 "이름이 어떻게 되세요?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
-#: src/presentation/bot/handlers/edit_profile.py:166
+#: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "텍스트로 보내주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:93
-#: src/presentation/bot/handlers/edit_profile.py:171
+#: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ 이름은 1~50자여야 해요. 다시 입력해 주세요:"
 
@@ -165,28 +165,29 @@ msgid "How old are you?"
 msgstr "나이가 어떻게 되세요?"
 
 #: src/presentation/bot/handlers/create_profile.py:103
-#: src/presentation/bot/handlers/edit_profile.py:183
+#: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "숫자로 보내주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:108
-#: src/presentation/bot/handlers/edit_profile.py:189
+#: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ 숫자가 아니에요. 다시 입력해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:111
-#: src/presentation/bot/handlers/edit_profile.py:192
+#: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ 나이는 18세에서 100세 사이여야 해요. 다시 입력해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:115
-#: src/presentation/bot/handlers/edit_profile.py:138
+#: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "성별을 선택해 주세요:"
 
 #: src/presentation/bot/handlers/create_profile.py:128
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/edit_profile.py:341
 #: src/presentation/bot/handlers/settings.py:193
 #: src/presentation/bot/handlers/settings.py:223
 #: src/presentation/bot/handlers/settings.py:244
@@ -203,11 +204,12 @@ msgid "Share your location — it's used to find nearby profiles:"
 msgstr "위치를 공유해 주세요 — 근처 프로필을 찾는 데 사용해요:"
 
 #: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:159
-#: src/presentation/bot/handlers/edit_profile.py:148
+#: src/presentation/bot/handlers/edit_profile.py:151
 msgid "📍 Share location"
 msgstr "📍 위치 공유"
 
@@ -222,14 +224,17 @@ msgid "Please share a location to continue."
 msgstr "계속하려면 위치를 공유해 주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/edit_profile.py:308
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/edit_profile.py:313
 msgid "No such place found. Check the spelling, or share your location."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/edit_profile.py:322
 msgid "Pick your city:"
 msgstr ""
 
@@ -244,7 +249,7 @@ msgid "Please send text or /skip."
 msgstr "텍스트로 보내거나 /skip 해주세요."
 
 #: src/presentation/bot/handlers/create_profile.py:275
-#: src/presentation/bot/handlers/edit_profile.py:235
+#: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ 소개가 너무 길어요 (최대 500자). 다시 입력하거나 /skip:"
 
@@ -265,72 +270,73 @@ msgstr ""
 msgid "Please send a photo (not text)."
 msgstr "사진을 보내주세요 (텍스트 말고요)."
 
-#: src/presentation/bot/handlers/edit_profile.py:60
+#: src/presentation/bot/handlers/edit_profile.py:63
 msgid "Session lost. Use /edit again."
 msgstr "세션이 끊겼어요. /edit 을 다시 사용해 주세요."
 
-#: src/presentation/bot/handlers/edit_profile.py:76
+#: src/presentation/bot/handlers/edit_profile.py:79
 msgid "Profile not found."
 msgstr "프로필을 찾을 수 없어요."
 
-#: src/presentation/bot/handlers/edit_profile.py:82
+#: src/presentation/bot/handlers/edit_profile.py:85
 msgid "Location updated."
 msgstr "위치를 업데이트했어요."
 
-#: src/presentation/bot/handlers/edit_profile.py:83
+#: src/presentation/bot/handlers/edit_profile.py:86
 msgid "Updated. Pick another field or [Done]:"
 msgstr "업데이트했어요. 다른 항목을 선택하거나 [완료]를 눌러주세요:"
 
-#: src/presentation/bot/handlers/edit_profile.py:103
+#: src/presentation/bot/handlers/edit_profile.py:106
 msgid "No profile to edit. Use /create first."
 msgstr "수정할 프로필이 없어요. 먼저 /create 를 사용해 주세요."
 
-#: src/presentation/bot/handlers/edit_profile.py:106
+#: src/presentation/bot/handlers/edit_profile.py:109
 msgid "Pick a field to edit:"
 msgstr "수정할 항목을 선택해 주세요:"
 
-#: src/presentation/bot/handlers/edit_profile.py:118
+#: src/presentation/bot/handlers/edit_profile.py:121
 msgid "Saved. /feed to keep rating."
 msgstr "저장했어요. 계속 평가하려면 /feed 하세요."
 
-#: src/presentation/bot/handlers/edit_profile.py:131
+#: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Unknown field"
 msgstr "알 수 없는 항목"
 
-#: src/presentation/bot/handlers/edit_profile.py:136
+#: src/presentation/bot/handlers/edit_profile.py:139
 msgid "Send new name:"
 msgstr "새 이름을 보내주세요:"
 
-#: src/presentation/bot/handlers/edit_profile.py:137
+#: src/presentation/bot/handlers/edit_profile.py:140
 msgid "Send new age (18-100):"
 msgstr "새 나이를 보내주세요 (18~100):"
 
-#: src/presentation/bot/handlers/edit_profile.py:139
+#: src/presentation/bot/handlers/edit_profile.py:142
 msgid "Share your new location:"
 msgstr "새 위치를 공유해 주세요:"
 
-#: src/presentation/bot/handlers/edit_profile.py:140
+#: src/presentation/bot/handlers/edit_profile.py:143
 msgid "Send new bio (or /skip to clear):"
 msgstr "새 소개를 보내주세요 (또는 /skip 으로 비우기):"
 
-#: src/presentation/bot/handlers/edit_profile.py:141
+#: src/presentation/bot/handlers/edit_profile.py:144
 #, python-brace-format
 msgid "Send up to {max} new photos:"
 msgstr "최대 {max}장의 새 사진을 보내주세요:"
 
-#: src/presentation/bot/handlers/edit_profile.py:208
+#: src/presentation/bot/handlers/edit_profile.py:211
 msgid "Invalid"
 msgstr "잘못된 값이에요"
 
-#: src/presentation/bot/handlers/edit_profile.py:230
+#: src/presentation/bot/handlers/edit_profile.py:233
 msgid "Please send text or /skip to clear."
 msgstr "텍스트로 보내거나 /skip 으로 비워주세요."
 
-#: src/presentation/bot/handlers/edit_profile.py:268
+#: src/presentation/bot/handlers/edit_profile.py:271
 msgid "Please send a photo."
 msgstr "사진을 보내주세요."
 
-#: src/presentation/bot/handlers/edit_profile.py:289
+#: src/presentation/bot/handlers/edit_profile.py:301
+#: src/presentation/bot/handlers/edit_profile.py:356
 msgid "Please share a location."
 msgstr "위치를 공유해 주세요."
 

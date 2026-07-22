@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:34+0300\n"
+"POT-Creation-Date: 2026-07-23 00:40+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: bn\n"
@@ -151,12 +151,12 @@ msgstr ""
 "তোমার নাম কী?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
-#: src/presentation/bot/handlers/edit_profile.py:166
+#: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "দয়া করে টেক্সট পাঠাও।"
 
 #: src/presentation/bot/handlers/create_profile.py:93
-#: src/presentation/bot/handlers/edit_profile.py:171
+#: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ নাম 1-50 অক্ষরের হতে হবে এবং খালি নয়। আবার চেষ্টা করো:"
 
@@ -165,28 +165,29 @@ msgid "How old are you?"
 msgstr "তোমার বয়স কত?"
 
 #: src/presentation/bot/handlers/create_profile.py:103
-#: src/presentation/bot/handlers/edit_profile.py:183
+#: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "দয়া করে একটি সংখ্যা পাঠাও।"
 
 #: src/presentation/bot/handlers/create_profile.py:108
-#: src/presentation/bot/handlers/edit_profile.py:189
+#: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ এটা সংখ্যা নয়। আবার চেষ্টা করো:"
 
 #: src/presentation/bot/handlers/create_profile.py:111
-#: src/presentation/bot/handlers/edit_profile.py:192
+#: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ বয়স 18 থেকে 100-এর মধ্যে হতে হবে। আবার চেষ্টা করো:"
 
 #: src/presentation/bot/handlers/create_profile.py:115
-#: src/presentation/bot/handlers/edit_profile.py:138
+#: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "লিঙ্গ নির্বাচন করো:"
 
 #: src/presentation/bot/handlers/create_profile.py:128
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/edit_profile.py:341
 #: src/presentation/bot/handlers/settings.py:193
 #: src/presentation/bot/handlers/settings.py:223
 #: src/presentation/bot/handlers/settings.py:244
@@ -203,11 +204,12 @@ msgid "Share your location — it's used to find nearby profiles:"
 msgstr "তোমার অবস্থান শেয়ার করো — এটি কাছাকাছি প্রোফাইল খুঁজতে ব্যবহার হয়:"
 
 #: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:159
-#: src/presentation/bot/handlers/edit_profile.py:148
+#: src/presentation/bot/handlers/edit_profile.py:151
 msgid "📍 Share location"
 msgstr "📍 অবস্থান শেয়ার করো"
 
@@ -222,14 +224,17 @@ msgid "Please share a location to continue."
 msgstr "চালিয়ে যেতে দয়া করে অবস্থান শেয়ার করো।"
 
 #: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/edit_profile.py:308
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/edit_profile.py:313
 msgid "No such place found. Check the spelling, or share your location."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/edit_profile.py:322
 msgid "Pick your city:"
 msgstr ""
 
@@ -244,7 +249,7 @@ msgid "Please send text or /skip."
 msgstr "দয়া করে টেক্সট পাঠাও বা /skip।"
 
 #: src/presentation/bot/handlers/create_profile.py:275
-#: src/presentation/bot/handlers/edit_profile.py:235
+#: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ বায়ো অনেক বড় (সর্বোচ্চ 500 অক্ষর)। আবার চেষ্টা করো বা /skip:"
 
@@ -265,72 +270,73 @@ msgstr ""
 msgid "Please send a photo (not text)."
 msgstr "দয়া করে ছবি পাঠাও (টেক্সট নয়)।"
 
-#: src/presentation/bot/handlers/edit_profile.py:60
+#: src/presentation/bot/handlers/edit_profile.py:63
 msgid "Session lost. Use /edit again."
 msgstr "সেশন হারিয়ে গেছে। আবার /edit ব্যবহার করো।"
 
-#: src/presentation/bot/handlers/edit_profile.py:76
+#: src/presentation/bot/handlers/edit_profile.py:79
 msgid "Profile not found."
 msgstr "প্রোফাইল পাওয়া যায়নি।"
 
-#: src/presentation/bot/handlers/edit_profile.py:82
+#: src/presentation/bot/handlers/edit_profile.py:85
 msgid "Location updated."
 msgstr "অবস্থান আপডেট হয়েছে।"
 
-#: src/presentation/bot/handlers/edit_profile.py:83
+#: src/presentation/bot/handlers/edit_profile.py:86
 msgid "Updated. Pick another field or [Done]:"
 msgstr "আপডেট হয়েছে। অন্য ফিল্ড নির্বাচন করো বা [হয়ে গেছে]:"
 
-#: src/presentation/bot/handlers/edit_profile.py:103
+#: src/presentation/bot/handlers/edit_profile.py:106
 msgid "No profile to edit. Use /create first."
 msgstr "এডিট করার মতো প্রোফাইল নেই। আগে /create ব্যবহার করো।"
 
-#: src/presentation/bot/handlers/edit_profile.py:106
+#: src/presentation/bot/handlers/edit_profile.py:109
 msgid "Pick a field to edit:"
 msgstr "এডিট করার জন্য ফিল্ড নির্বাচন করো:"
 
-#: src/presentation/bot/handlers/edit_profile.py:118
+#: src/presentation/bot/handlers/edit_profile.py:121
 msgid "Saved. /feed to keep rating."
 msgstr "সংরক্ষিত হয়েছে। রেটিং চালিয়ে যেতে /feed।"
 
-#: src/presentation/bot/handlers/edit_profile.py:131
+#: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Unknown field"
 msgstr "অজানা ফিল্ড"
 
-#: src/presentation/bot/handlers/edit_profile.py:136
+#: src/presentation/bot/handlers/edit_profile.py:139
 msgid "Send new name:"
 msgstr "নতুন নাম পাঠাও:"
 
-#: src/presentation/bot/handlers/edit_profile.py:137
+#: src/presentation/bot/handlers/edit_profile.py:140
 msgid "Send new age (18-100):"
 msgstr "নতুন বয়স পাঠাও (18-100):"
 
-#: src/presentation/bot/handlers/edit_profile.py:139
+#: src/presentation/bot/handlers/edit_profile.py:142
 msgid "Share your new location:"
 msgstr "তোমার নতুন অবস্থান শেয়ার করো:"
 
-#: src/presentation/bot/handlers/edit_profile.py:140
+#: src/presentation/bot/handlers/edit_profile.py:143
 msgid "Send new bio (or /skip to clear):"
 msgstr "নতুন বায়ো পাঠাও (বা পরিষ্কার করতে /skip):"
 
-#: src/presentation/bot/handlers/edit_profile.py:141
+#: src/presentation/bot/handlers/edit_profile.py:144
 #, python-brace-format
 msgid "Send up to {max} new photos:"
 msgstr "{max} পর্যন্ত নতুন ছবি পাঠাও:"
 
-#: src/presentation/bot/handlers/edit_profile.py:208
+#: src/presentation/bot/handlers/edit_profile.py:211
 msgid "Invalid"
 msgstr "অবৈধ"
 
-#: src/presentation/bot/handlers/edit_profile.py:230
+#: src/presentation/bot/handlers/edit_profile.py:233
 msgid "Please send text or /skip to clear."
 msgstr "দয়া করে টেক্সট পাঠাও বা পরিষ্কার করতে /skip।"
 
-#: src/presentation/bot/handlers/edit_profile.py:268
+#: src/presentation/bot/handlers/edit_profile.py:271
 msgid "Please send a photo."
 msgstr "দয়া করে একটি ছবি পাঠাও।"
 
-#: src/presentation/bot/handlers/edit_profile.py:289
+#: src/presentation/bot/handlers/edit_profile.py:301
+#: src/presentation/bot/handlers/edit_profile.py:356
 msgid "Please share a location."
 msgstr "দয়া করে একটি অবস্থান শেয়ার করো।"
 

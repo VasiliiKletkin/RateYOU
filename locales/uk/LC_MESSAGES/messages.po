@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:34+0300\n"
+"POT-Creation-Date: 2026-07-23 00:40+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uk\n"
@@ -150,12 +150,12 @@ msgstr ""
 "Як тебе звати?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
-#: src/presentation/bot/handlers/edit_profile.py:166
+#: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "Будь ласка, надішли текст."
 
 #: src/presentation/bot/handlers/create_profile.py:93
-#: src/presentation/bot/handlers/edit_profile.py:171
+#: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ Ім'я має бути 1-50 непорожніх символів. Спробуй ще раз:"
 
@@ -164,28 +164,29 @@ msgid "How old are you?"
 msgstr "Скільки тобі років?"
 
 #: src/presentation/bot/handlers/create_profile.py:103
-#: src/presentation/bot/handlers/edit_profile.py:183
+#: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "Будь ласка, надішли число."
 
 #: src/presentation/bot/handlers/create_profile.py:108
-#: src/presentation/bot/handlers/edit_profile.py:189
+#: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ Це не число. Спробуй ще раз:"
 
 #: src/presentation/bot/handlers/create_profile.py:111
-#: src/presentation/bot/handlers/edit_profile.py:192
+#: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ Вік має бути від 18 до 100. Спробуй ще раз:"
 
 #: src/presentation/bot/handlers/create_profile.py:115
-#: src/presentation/bot/handlers/edit_profile.py:138
+#: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "Обери стать:"
 
 #: src/presentation/bot/handlers/create_profile.py:128
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/edit_profile.py:341
 #: src/presentation/bot/handlers/settings.py:193
 #: src/presentation/bot/handlers/settings.py:223
 #: src/presentation/bot/handlers/settings.py:244
@@ -202,11 +203,12 @@ msgid "Share your location — it's used to find nearby profiles:"
 msgstr "Поділись локацією — вона використовується для пошуку анкет поруч:"
 
 #: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:159
-#: src/presentation/bot/handlers/edit_profile.py:148
+#: src/presentation/bot/handlers/edit_profile.py:151
 msgid "📍 Share location"
 msgstr "📍 Поділитися локацією"
 
@@ -221,14 +223,17 @@ msgid "Please share a location to continue."
 msgstr "Будь ласка, поділись локацією, щоб продовжити."
 
 #: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/edit_profile.py:308
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/edit_profile.py:313
 msgid "No such place found. Check the spelling, or share your location."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/edit_profile.py:322
 msgid "Pick your city:"
 msgstr ""
 
@@ -243,7 +248,7 @@ msgid "Please send text or /skip."
 msgstr "Будь ласка, надішли текст або /skip."
 
 #: src/presentation/bot/handlers/create_profile.py:275
-#: src/presentation/bot/handlers/edit_profile.py:235
+#: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ Опис задовгий (макс. 500 символів). Спробуй ще раз або /skip:"
 
@@ -264,72 +269,73 @@ msgstr ""
 msgid "Please send a photo (not text)."
 msgstr "Будь ласка, надішли фото (не текст)."
 
-#: src/presentation/bot/handlers/edit_profile.py:60
+#: src/presentation/bot/handlers/edit_profile.py:63
 msgid "Session lost. Use /edit again."
 msgstr "Сесію втрачено. Скористайся /edit знову."
 
-#: src/presentation/bot/handlers/edit_profile.py:76
+#: src/presentation/bot/handlers/edit_profile.py:79
 msgid "Profile not found."
 msgstr "Анкету не знайдено."
 
-#: src/presentation/bot/handlers/edit_profile.py:82
+#: src/presentation/bot/handlers/edit_profile.py:85
 msgid "Location updated."
 msgstr "Локацію оновлено."
 
-#: src/presentation/bot/handlers/edit_profile.py:83
+#: src/presentation/bot/handlers/edit_profile.py:86
 msgid "Updated. Pick another field or [Done]:"
 msgstr "Оновлено. Обери інше поле або [Готово]:"
 
-#: src/presentation/bot/handlers/edit_profile.py:103
+#: src/presentation/bot/handlers/edit_profile.py:106
 msgid "No profile to edit. Use /create first."
 msgstr "Немає анкети для редагування. Спочатку скористайся /create."
 
-#: src/presentation/bot/handlers/edit_profile.py:106
+#: src/presentation/bot/handlers/edit_profile.py:109
 msgid "Pick a field to edit:"
 msgstr "Обери поле для редагування:"
 
-#: src/presentation/bot/handlers/edit_profile.py:118
+#: src/presentation/bot/handlers/edit_profile.py:121
 msgid "Saved. /feed to keep rating."
 msgstr "Збережено. /feed, щоб продовжити оцінювання."
 
-#: src/presentation/bot/handlers/edit_profile.py:131
+#: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Unknown field"
 msgstr "Невідоме поле"
 
-#: src/presentation/bot/handlers/edit_profile.py:136
+#: src/presentation/bot/handlers/edit_profile.py:139
 msgid "Send new name:"
 msgstr "Надішли нове ім'я:"
 
-#: src/presentation/bot/handlers/edit_profile.py:137
+#: src/presentation/bot/handlers/edit_profile.py:140
 msgid "Send new age (18-100):"
 msgstr "Надішли новий вік (18-100):"
 
-#: src/presentation/bot/handlers/edit_profile.py:139
+#: src/presentation/bot/handlers/edit_profile.py:142
 msgid "Share your new location:"
 msgstr "Поділись новою локацією:"
 
-#: src/presentation/bot/handlers/edit_profile.py:140
+#: src/presentation/bot/handlers/edit_profile.py:143
 msgid "Send new bio (or /skip to clear):"
 msgstr "Надішли новий опис (або /skip, щоб очистити):"
 
-#: src/presentation/bot/handlers/edit_profile.py:141
+#: src/presentation/bot/handlers/edit_profile.py:144
 #, python-brace-format
 msgid "Send up to {max} new photos:"
 msgstr "Надішли до {max} нових фото:"
 
-#: src/presentation/bot/handlers/edit_profile.py:208
+#: src/presentation/bot/handlers/edit_profile.py:211
 msgid "Invalid"
 msgstr "Невірно"
 
-#: src/presentation/bot/handlers/edit_profile.py:230
+#: src/presentation/bot/handlers/edit_profile.py:233
 msgid "Please send text or /skip to clear."
 msgstr "Будь ласка, надішли текст або /skip, щоб очистити."
 
-#: src/presentation/bot/handlers/edit_profile.py:268
+#: src/presentation/bot/handlers/edit_profile.py:271
 msgid "Please send a photo."
 msgstr "Будь ласка, надішли фото."
 
-#: src/presentation/bot/handlers/edit_profile.py:289
+#: src/presentation/bot/handlers/edit_profile.py:301
+#: src/presentation/bot/handlers/edit_profile.py:356
 msgid "Please share a location."
 msgstr "Будь ласка, поділись локацією."
 

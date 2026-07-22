@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:34+0300\n"
+"POT-Creation-Date: 2026-07-23 00:40+0300\n"
 "PO-Revision-Date: 2026-05-11 23:03+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -23,11 +23,8 @@ msgid "Start the bot"
 msgstr ""
 
 #: src/presentation/bot/commands.py:17
-#, fuzzy
 msgid "Create your profile"
-msgstr ""
-"Let's create your profile.\n"
-"What's your name?"
+msgstr "Create your profile"
 
 #: src/presentation/bot/commands.py:18
 msgid "Edit your profile"
@@ -46,9 +43,8 @@ msgid "Premium subscription"
 msgstr ""
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
 msgid "Who rated me (premium)"
-msgstr "🌟 Who rated me"
+msgstr "Who rated me (premium)"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -88,7 +84,7 @@ msgstr ""
 
 #: src/presentation/bot/keyboards.py:142
 msgid "⏭ Skip"
-msgstr "Skipped"
+msgstr "⏭ Skip"
 
 #: src/presentation/bot/keyboards.py:151
 msgid "Name"
@@ -100,7 +96,7 @@ msgstr ""
 
 #: src/presentation/bot/keyboards.py:153
 msgid "Gender"
-msgstr "Pick gender:"
+msgstr "Gender"
 
 #: src/presentation/bot/keyboards.py:154
 msgid "Location"
@@ -149,12 +145,12 @@ msgstr ""
 "What's your name?"
 
 #: src/presentation/bot/handlers/create_profile.py:88
-#: src/presentation/bot/handlers/edit_profile.py:166
+#: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "Please send text."
 
 #: src/presentation/bot/handlers/create_profile.py:93
-#: src/presentation/bot/handlers/edit_profile.py:171
+#: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ Name must be 1-50 non-empty characters. Try again:"
 
@@ -163,28 +159,29 @@ msgid "How old are you?"
 msgstr "How old are you?"
 
 #: src/presentation/bot/handlers/create_profile.py:103
-#: src/presentation/bot/handlers/edit_profile.py:183
+#: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "Please send a number."
 
 #: src/presentation/bot/handlers/create_profile.py:108
-#: src/presentation/bot/handlers/edit_profile.py:189
+#: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ That's not a number. Try again:"
 
 #: src/presentation/bot/handlers/create_profile.py:111
-#: src/presentation/bot/handlers/edit_profile.py:192
+#: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ Age must be between 18 and 100. Try again:"
 
 #: src/presentation/bot/handlers/create_profile.py:115
-#: src/presentation/bot/handlers/edit_profile.py:138
+#: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "Pick gender:"
 
 #: src/presentation/bot/handlers/create_profile.py:128
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/edit_profile.py:341
 #: src/presentation/bot/handlers/settings.py:193
 #: src/presentation/bot/handlers/settings.py:223
 #: src/presentation/bot/handlers/settings.py:244
@@ -201,11 +198,12 @@ msgid "Share your location — it's used to find nearby profiles:"
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr "Or just type your city name."
 
 #: src/presentation/bot/handlers/create_profile.py:159
-#: src/presentation/bot/handlers/edit_profile.py:148
+#: src/presentation/bot/handlers/edit_profile.py:151
 msgid "📍 Share location"
 msgstr ""
 
@@ -220,14 +218,17 @@ msgid "Please share a location to continue."
 msgstr ""
 
 #: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/edit_profile.py:308
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr "Couldn't look that up right now — please share your location instead."
 
 #: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/edit_profile.py:313
 msgid "No such place found. Check the spelling, or share your location."
 msgstr "No such place found. Check the spelling, or share your location."
 
 #: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/edit_profile.py:322
 msgid "Pick your city:"
 msgstr "Pick your city:"
 
@@ -242,7 +243,7 @@ msgid "Please send text or /skip."
 msgstr "Please send text or /skip."
 
 #: src/presentation/bot/handlers/create_profile.py:275
-#: src/presentation/bot/handlers/edit_profile.py:235
+#: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ Bio is too long (max 500 chars). Try again or /skip:"
 
@@ -259,74 +260,75 @@ msgstr ""
 msgid "Please send a photo (not text)."
 msgstr "Please send a photo (not text)."
 
-#: src/presentation/bot/handlers/edit_profile.py:60
+#: src/presentation/bot/handlers/edit_profile.py:63
 msgid "Session lost. Use /edit again."
 msgstr "Session lost. Use /edit again."
 
-#: src/presentation/bot/handlers/edit_profile.py:76
+#: src/presentation/bot/handlers/edit_profile.py:79
 msgid "Profile not found."
 msgstr "Profile not found."
 
-#: src/presentation/bot/handlers/edit_profile.py:82
+#: src/presentation/bot/handlers/edit_profile.py:85
 msgid "Location updated."
 msgstr ""
 
-#: src/presentation/bot/handlers/edit_profile.py:83
+#: src/presentation/bot/handlers/edit_profile.py:86
 msgid "Updated. Pick another field or [Done]:"
 msgstr "Updated. Pick another field or [Done]:"
 
-#: src/presentation/bot/handlers/edit_profile.py:103
+#: src/presentation/bot/handlers/edit_profile.py:106
 msgid "No profile to edit. Use /create first."
 msgstr "No profile to edit. Use /create first."
 
-#: src/presentation/bot/handlers/edit_profile.py:106
+#: src/presentation/bot/handlers/edit_profile.py:109
 msgid "Pick a field to edit:"
 msgstr "Pick a field to edit:"
 
-#: src/presentation/bot/handlers/edit_profile.py:118
+#: src/presentation/bot/handlers/edit_profile.py:121
 msgid "Saved. /feed to keep rating."
 msgstr "Saved. /feed to keep rating."
 
-#: src/presentation/bot/handlers/edit_profile.py:131
+#: src/presentation/bot/handlers/edit_profile.py:134
 msgid "Unknown field"
 msgstr "Unknown field"
 
-#: src/presentation/bot/handlers/edit_profile.py:136
+#: src/presentation/bot/handlers/edit_profile.py:139
 msgid "Send new name:"
 msgstr "Send new name:"
 
-#: src/presentation/bot/handlers/edit_profile.py:137
+#: src/presentation/bot/handlers/edit_profile.py:140
 msgid "Send new age (18-100):"
 msgstr "Send new age (18-100):"
 
-#: src/presentation/bot/handlers/edit_profile.py:139
+#: src/presentation/bot/handlers/edit_profile.py:142
 msgid "Share your new location:"
 msgstr ""
 
-#: src/presentation/bot/handlers/edit_profile.py:140
+#: src/presentation/bot/handlers/edit_profile.py:143
 msgid "Send new bio (or /skip to clear):"
 msgstr "Send new bio (or /skip to clear):"
 
-#: src/presentation/bot/handlers/edit_profile.py:141
+#: src/presentation/bot/handlers/edit_profile.py:144
 #, python-brace-format
 msgid "Send up to {max} new photos:"
 msgstr ""
 
-#: src/presentation/bot/handlers/edit_profile.py:208
+#: src/presentation/bot/handlers/edit_profile.py:211
 msgid "Invalid"
 msgstr "Invalid"
 
-#: src/presentation/bot/handlers/edit_profile.py:230
+#: src/presentation/bot/handlers/edit_profile.py:233
 msgid "Please send text or /skip to clear."
 msgstr "Please send text or /skip to clear."
 
-#: src/presentation/bot/handlers/edit_profile.py:268
+#: src/presentation/bot/handlers/edit_profile.py:271
 msgid "Please send a photo."
-msgstr "Please send text."
-
-#: src/presentation/bot/handlers/edit_profile.py:289
-msgid "Please share a location."
 msgstr "Please send a photo."
+
+#: src/presentation/bot/handlers/edit_profile.py:301
+#: src/presentation/bot/handlers/edit_profile.py:356
+msgid "Please share a location."
+msgstr "Please share a location."
 
 #: src/presentation/bot/handlers/feed.py:60
 msgid "No more profiles to rate. Come back later!"
@@ -395,9 +397,8 @@ msgid "Anonymous"
 msgstr "Anonymous"
 
 #: src/presentation/bot/handlers/premium.py:43
-#, fuzzy
 msgid "Expires within a minute."
-msgstr "Expires in {days} day."
+msgstr "Expires within a minute."
 
 #: src/presentation/bot/handlers/premium.py:49
 #, fuzzy, python-brace-format
