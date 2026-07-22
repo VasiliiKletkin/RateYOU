@@ -41,6 +41,7 @@ def _register_uc(session: AsyncSession) -> RegisterUserUseCase:
     return RegisterUserUseCase(
         user_repo=UserRepository(session=session),
         referral_repo=ReferralRepository(session=session),
+        subscription_repo=SubscriptionRepository(session=session),
         uow=SqlAlchemyUnitOfWork(session=session),
     )
 
@@ -102,11 +103,21 @@ async def test_referee_profile_creation_pays_both_sides(
     subs = SubscriptionRepository(session=session)
     referee_grants = await subs.list_for(referee_id)
     referrer_grants = await subs.list_for(inviter.id)
-    assert len(referee_grants) == 1
+    # Registering also mints the welcome grant, so the referee holds two: the
+    # welcome month plus the referral day. The inviter was seeded straight
+    # through the repository, never RegisterUserUseCase, so they hold only the
+    # referral day.
+    assert len(referee_grants) == 2
     assert len(referrer_grants) == 1
-    for g in referee_grants + referrer_grants:
+
+    referral_payouts = [
+        g
+        for g in referee_grants + referrer_grants
+        if (g.expires_at - g.starts_at).days == PER_REFERRAL_REWARD_DAYS
+    ]
+    assert len(referral_payouts) == 2
+    for g in referral_payouts:
         assert g.source == SubscriptionSource.BONUS
-        assert (g.expires_at - g.starts_at).days == PER_REFERRAL_REWARD_DAYS
 
 
 async def test_third_referral_grants_milestone_bonus(

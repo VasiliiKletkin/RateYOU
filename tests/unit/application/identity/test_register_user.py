@@ -2,11 +2,14 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 from src.application.identity.dto import RegisterUserRequest
-from src.application.identity.register_user import RegisterUserUseCase
+from src.application.identity.register_user import WELCOME_BONUS_DAYS, RegisterUserUseCase
 from src.domain.identity.entities import User
 from src.domain.identity.value_objects import TelegramId
+from src.domain.payment.value_objects import TransactionId
 from src.domain.referral.entities import Referral
 from src.domain.shared.identifiers import UserId
+from src.domain.subscription.entities import Subscription
+from src.domain.subscription.value_objects import SubscriptionSource, Tier
 
 
 @dataclass
@@ -56,6 +59,28 @@ class FakeReferralRepo:
 
 
 @dataclass
+class FakeSubscriptionRepo:
+    grants: list[Subscription] = field(default_factory=list)
+
+    async def add(self, grant: Subscription) -> None:
+        self.grants.append(grant)
+
+    async def list_for(self, owner_id: UserId) -> list[Subscription]:
+        return [g for g in self.grants if g.owner_id == owner_id]
+
+    # Unused-but-required:
+    async def list_active_purchases_for(
+        self, owner_id: UserId, now: datetime
+    ) -> list[Subscription]:
+        return []
+
+    async def find_by_transaction(self, transaction_id: TransactionId) -> Subscription | None:
+        return None
+
+    async def update(self, grant: Subscription) -> None: ...
+
+
+@dataclass
 class FakeUoW:
     committed: bool = False
 
@@ -70,12 +95,19 @@ def _make_use_case(
     users: FakeUserRepository | None = None,
     referrals: FakeReferralRepo | None = None,
     uow: FakeUoW | None = None,
+    subs: FakeSubscriptionRepo | None = None,
 ) -> tuple[RegisterUserUseCase, FakeUserRepository, FakeReferralRepo, FakeUoW]:
     users = users or FakeUserRepository()
     referrals = referrals or FakeReferralRepo()
     uow = uow or FakeUoW()
+    subs = subs or FakeSubscriptionRepo()
     return (
-        RegisterUserUseCase(user_repo=users, referral_repo=referrals, uow=uow),
+        RegisterUserUseCase(
+            user_repo=users,
+            referral_repo=referrals,
+            subscription_repo=subs,
+            uow=uow,
+        ),
         users,
         referrals,
         uow,
@@ -111,6 +143,31 @@ async def test_register_is_idempotent() -> None:
     assert first.id == second.id
     assert len(repo.users) == 1
     assert uow.committed is False
+
+
+async def test_new_user_gets_welcome_premium_bonus() -> None:
+    subs = FakeSubscriptionRepo()
+    use_case, _, _, _ = _make_use_case(subs=subs)
+
+    response = await use_case.execute(RegisterUserRequest(telegram_id=12345))
+
+    assert len(subs.grants) == 1
+    grant = subs.grants[0]
+    assert grant.owner_id == UserId(response.id)
+    assert grant.source is SubscriptionSource.BONUS
+    assert grant.tier is Tier.BONUS
+    assert (grant.expires_at - grant.starts_at).days == WELCOME_BONUS_DAYS
+    assert grant.is_active_at(grant.starts_at) is True
+
+
+async def test_returning_user_does_not_get_a_second_bonus() -> None:
+    subs = FakeSubscriptionRepo()
+    use_case, _, _, _ = _make_use_case(subs=subs)
+
+    await use_case.execute(RegisterUserRequest(telegram_id=12345))
+    await use_case.execute(RegisterUserRequest(telegram_id=12345))
+
+    assert len(subs.grants) == 1
 
 
 async def test_register_stores_username_stripped_of_at_sign() -> None:

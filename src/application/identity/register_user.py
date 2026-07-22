@@ -8,6 +8,13 @@ from src.domain.identity.value_objects import Language, TelegramId
 from src.domain.referral.entities import Referral
 from src.domain.referral.repositories import IReferralRepository
 from src.domain.shared.uow import UnitOfWork
+from src.domain.subscription.entities import Subscription
+from src.domain.subscription.repositories import ISubscriptionRepository
+
+# Every newly registered user gets a month of premium on the house, granted
+# as a BONUS Subscription — the same shape referral rewards use, so it shows
+# up in /premium and expires on its own without any scheduled job.
+WELCOME_BONUS_DAYS = 30
 
 
 @dataclass
@@ -27,10 +34,15 @@ class RegisterUserUseCase:
     The pending Referral is later promoted to "rewarded" by
     ``ReferralRewardService.mark_profile_created`` when the referee
     creates their profile.
+
+    New users also receive a ``WELCOME_BONUS_DAYS`` premium grant. It rides
+    the new-user branch only, so the idempotent early return above doubles as
+    the guard against handing out a second month on every later /start.
     """
 
     user_repo: IUserRepository
     referral_repo: IReferralRepository
+    subscription_repo: ISubscriptionRepository
     uow: UnitOfWork
 
     async def execute(self, request: RegisterUserRequest) -> UserResponse:
@@ -70,6 +82,16 @@ class RegisterUserUseCase:
             username=request.username,
         )
         await self.user_repo.add(user)
+
+        # Welcome gift. Same transaction as the user row: either both land or
+        # neither does, so nobody ends up registered without their bonus.
+        await self.subscription_repo.add(
+            Subscription.create_bonus(
+                owner_id=user.id,
+                duration_days=WELCOME_BONUS_DAYS,
+                now=now,
+            )
+        )
 
         if referrer is not None:
             await self.referral_repo.add(
