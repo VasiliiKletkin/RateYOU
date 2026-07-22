@@ -10,14 +10,6 @@ from src.domain.shared.identifiers import UserId
 from src.domain.shared.uow import UnitOfWork
 
 
-def _to_response(prefs: SearchPreferences) -> SearchPreferencesResponse:
-    return SearchPreferencesResponse(
-        user_id=prefs.user_id.value,
-        gender_preference=prefs.gender_preference.value,
-        min_rating=prefs.min_rating.value,
-    )
-
-
 @dataclass
 class GetSearchPreferencesUseCase:
     """Returns prefs for the user, materialising defaults on first access.
@@ -36,7 +28,11 @@ class GetSearchPreferencesUseCase:
             prefs = SearchPreferences.default(uid, datetime.now(UTC))
             await self.prefs_repo.add(prefs)
             await self.uow.commit()
-        return _to_response(prefs)
+        return SearchPreferencesResponse(
+            user_id=prefs.user_id.value,
+            gender_preference=prefs.gender_preference.value,
+            min_rating=prefs.min_rating.value,
+        )
 
 
 @dataclass
@@ -59,7 +55,11 @@ class UpdateGenderPreferenceUseCase:
             prefs.change_gender_preference(pref, now)
             await self.prefs_repo.update(prefs)
         await self.uow.commit()
-        return _to_response(prefs)
+        return SearchPreferencesResponse(
+            user_id=prefs.user_id.value,
+            gender_preference=prefs.gender_preference.value,
+            min_rating=prefs.min_rating.value,
+        )
 
 
 @dataclass
@@ -82,4 +82,8 @@ class UpdateMinRatingUseCase:
             prefs.change_min_rating(value, now)
             await self.prefs_repo.update(prefs)
         await self.uow.commit()
-        return _to_response(prefs)
+        return SearchPreferencesResponse(
+            user_id=prefs.user_id.value,
+            gender_preference=prefs.gender_preference.value,
+            min_rating=prefs.min_rating.value,
+        )

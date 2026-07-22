@@ -68,7 +68,13 @@ class RegisterUserUseCase:
                 existing.set_username(request.username)
                 await self.user_repo.update(existing)
                 await self.uow.commit()
-            return _to_response(existing)
+            return UserResponse(
+                id=existing.id.value,
+                telegram_id=existing.telegram_id.value,
+                is_banned=existing.is_banned,
+                is_admin=existing.is_admin,
+                language=existing.language,
+            )
 
         now = datetime.now(UTC)
         referrer = await self._resolve_referrer(
@@ -103,7 +109,13 @@ class RegisterUserUseCase:
             )
 
         await self.uow.commit()
-        return _to_response(user)
+        return UserResponse(
+            id=user.id.value,
+            telegram_id=user.telegram_id.value,
+            is_banned=user.is_banned,
+            is_admin=user.is_admin,
+            language=user.language,
+        )
 
     async def _resolve_referrer(
         self,
@@ -119,13 +131,3 @@ class RegisterUserUseCase:
         except ValueError:
             return None
         return await self.user_repo.get_by_telegram_id(tg)
-
-
-def _to_response(user: User) -> UserResponse:
-    return UserResponse(
-        id=user.id.value,
-        telegram_id=user.telegram_id.value,
-        is_banned=user.is_banned,
-        is_admin=user.is_admin,
-        language=user.language,
-    )

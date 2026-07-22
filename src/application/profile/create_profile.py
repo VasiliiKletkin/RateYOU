@@ -56,18 +56,14 @@ class CreateProfileUseCase:
         await self.profile_repo.add(profile)
         await self.referral_service.mark_profile_created(owner_id, now)
         await self.uow.commit()
-        return _to_response(profile)
-
-
-def _to_response(profile: Profile) -> ProfileResponse:
-    return ProfileResponse(
-        id=profile.id.value,
-        owner_id=profile.owner_id.value,
-        name=profile.name.value,
-        age=profile.age.value,
-        gender=profile.gender.value,
-        bio=profile.bio.value,
-        photo_file_ids=tuple(profile.photos.to_strings()),
-        location=(profile.location.lat, profile.location.lon),
-        is_visible=profile.is_visible,
-    )
+        return ProfileResponse(
+            id=profile.id.value,
+            owner_id=profile.owner_id.value,
+            name=profile.name.value,
+            age=profile.age.value,
+            gender=profile.gender.value,
+            bio=profile.bio.value,
+            photo_file_ids=tuple(profile.photos.to_strings()),
+            location=(profile.location.lat, profile.location.lon),
+            is_visible=profile.is_visible,
+        )

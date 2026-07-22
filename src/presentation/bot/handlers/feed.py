@@ -45,11 +45,16 @@ def _format_distance(meters: int) -> str:
     return f"{meters / 1000:.1f} km"
 
 
-async def _show_next_or_done(
+async def show_next_or_done(
     message: Message,
     viewer_id: UUID,
     get_next: GetNextProfileForRatingUseCase,
 ) -> None:
+    """Sends the viewer's next candidate, or a "come back later" note.
+
+    Public because /create hands the user straight into the feed once their
+    profile is saved, instead of asking them to type /feed.
+    """
     next_profile = await get_next.execute(viewer_id)
     if next_profile is None:
         await message.answer(_("No more profiles to rate. Come back later!"))
@@ -124,7 +129,7 @@ async def cmd_feed(
     if (await get_my_profile.execute(user.id)) is None:
         await message.answer(_("You need a profile of your own first. Send /create to make one."))
         return
-    await _show_next_or_done(message, user.id, get_next)
+    await show_next_or_done(message, user.id, get_next)
 
 
 @router.callback_query(F.data.startswith("rate:"))
@@ -187,7 +192,7 @@ async def on_rate(
                     count=score_resp.rating_count,
                 )
             )
-        await _show_next_or_done(callback.message, user.id, get_next)
+        await show_next_or_done(callback.message, user.id, get_next)
 
 
 @router.callback_query(F.data.startswith("skip:"))
@@ -222,4 +227,4 @@ async def on_skip(
 
     if isinstance(callback.message, Message):
         await _strip_keyboard(callback.message)
-        await _show_next_or_done(callback.message, user.id, get_next)
+        await show_next_or_done(callback.message, user.id, get_next)

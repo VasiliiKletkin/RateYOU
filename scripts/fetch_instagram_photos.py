@@ -54,6 +54,15 @@ except ImportError:  # pragma: no cover - dev-only script
 IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".webp")
 
 
+def _normalize_username(raw: str) -> str:
+    """Accept ``anna``, ``@anna`` or a profile URL and return ``anna``."""
+    value = raw.strip().rstrip("/")
+    if "instagram.com" in value:
+        value = value.split("instagram.com", 1)[1].lstrip("/")
+        value = value.split("?", 1)[0].split("/", 1)[0]
+    return value.lstrip("@")
+
+
 def _image_urls(post: instaloader.Post, needed: int) -> list[str]:
     """Return still-image URLs from a post, at most ``needed`` of them."""
     if post.typename == "GraphSidecar":
@@ -74,6 +83,7 @@ def download_profile(
     username: str,
     target_dir: Path,
     count: int,
+    delay: float,
     overwrite: bool,
 ) -> int:
     """Download up to ``count`` photos of ``username`` into ``target_dir``."""
@@ -91,6 +101,8 @@ def download_profile(
     saved = 0
     for post in profile.get_posts():
         for url in _image_urls(post, needed=count - saved):
+            if saved and delay:
+                time.sleep(delay)
             saved += 1
             stem = target_dir / f"{saved:02d}"
             loader.download_pic(filename=str(stem), url=url, mtime=post.date_utc)
@@ -104,7 +116,11 @@ def download_profile(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("usernames", nargs="+", help="Instagram usernames (without @)")
+    parser.add_argument(
+        "usernames",
+        nargs="+",
+        help="Instagram usernames, @handles or profile URLs",
+    )
     parser.add_argument(
         "--out-dir",
         type=Path,
@@ -127,7 +143,7 @@ def main() -> None:
         "--delay",
         type=float,
         default=5.0,
-        help="Seconds to sleep between accounts, to stay under rate limits",
+        help="Seconds to sleep between photos and between accounts",
     )
     parser.add_argument(
         "--overwrite",
@@ -154,15 +170,33 @@ def main() -> None:
                 f"Run: poetry run instaloader --login {args.login}"
             )
 
+    usernames = [_normalize_username(raw) for raw in args.usernames]
+    if not all(usernames):
+        sys.exit("Could not parse a username out of every argument")
+
     total = 0
-    for offset, username in enumerate(args.usernames):
+    for offset, username in enumerate(usernames):
         index = args.start_index + offset
         target_dir = args.out_dir / f"{index:04d}_{username}"
         print(f"{username} -> {target_dir}")
         try:
-            total += download_profile(loader, username, target_dir, args.count, args.overwrite)
+            total += download_profile(
+                loader,
+                username,
+                target_dir,
+                args.count,
+                args.delay,
+                args.overwrite,
+            )
         except instaloader.exceptions.ProfileNotExistsException:
-            print(f"  {username}: no such profile")
+            if args.login:
+                print(f"  {username}: no such profile")
+            else:
+                print(
+                    f"  {username}: not reachable anonymously (Instagram returns 403). "
+                    f"Log in once with `poetry run instaloader --login YOUR_LOGIN`, "
+                    f"then re-run with --login YOUR_LOGIN"
+                )
         except instaloader.exceptions.InstaloaderException as exc:
             print(f"  {username}: failed ({exc})")
         if args.delay and offset < len(args.usernames) - 1:

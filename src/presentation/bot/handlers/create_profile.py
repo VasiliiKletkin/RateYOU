@@ -7,6 +7,7 @@ from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from aiogram.utils.i18n import gettext as _
 from dishka import FromDishka
 
+from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
 from src.application.discovery.search_preferences import (
     UpdateGenderPreferenceUseCase,
 )
@@ -22,6 +23,7 @@ from src.domain.profile.exceptions import (
     ProfileAlreadyExists,
 )
 from src.domain.profile.value_objects import Age, Bio, Name, Photos
+from src.presentation.bot.handlers.feed import show_next_or_done
 from src.presentation.bot.i18n import normalize_language
 from src.presentation.bot.keyboards import (
     gender_keyboard,
@@ -202,6 +204,7 @@ async def _finalize_create(
     register_user: RegisterUserUseCase,
     create_profile: CreateProfileUseCase,
     update_gender_preference: UpdateGenderPreferenceUseCase,
+    get_next: GetNextProfileForRatingUseCase,
 ) -> None:
     data = await state.get_data()
     photos: list[str] = data.get("photos", [])
@@ -249,6 +252,9 @@ async def _finalize_create(
             "Send /feed to start rating profiles."
         ).format(name=profile.name, age=profile.age)
     )
+    # Hand them straight into the feed rather than waiting for them to type
+    # /feed — the confirmation above still names the command for later.
+    await show_next_or_done(message, user.id, get_next)
 
 
 @router.message(F.photo, CreateProfile.waiting_for_photo)
@@ -258,6 +264,7 @@ async def collect_photo(
     register_user: FromDishka[RegisterUserUseCase],
     create_profile: FromDishka[CreateProfileUseCase],
     update_gender_preference: FromDishka[UpdateGenderPreferenceUseCase],
+    get_next: FromDishka[GetNextProfileForRatingUseCase],
 ) -> None:
     if not message.photo:
         return
@@ -283,6 +290,7 @@ async def collect_photo(
         register_user,
         create_profile,
         update_gender_preference,
+        get_next,
     )
 
 
