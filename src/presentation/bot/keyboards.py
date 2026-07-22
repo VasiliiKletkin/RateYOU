@@ -63,9 +63,11 @@ def settings_main_keyboard(
     gender_label: str,
     rating_label: str,
     language_label: str,
+    notifications_label: str,
     gender_action: str = "openpref",
     rating_action: str = "openrating",
     language_action: str = "openlang",
+    notifications_action: str = "togglenotify",
 ) -> InlineKeyboardMarkup:
     """Top-level /settings menu: one button per editable setting.
 
@@ -79,6 +81,14 @@ def settings_main_keyboard(
             [InlineKeyboardButton(text=gender_label, callback_data=gender_action)],
             [InlineKeyboardButton(text=rating_label, callback_data=rating_action)],
             [InlineKeyboardButton(text=language_label, callback_data=language_action)],
+            # Unlike the rows above this one isn't a picker — it flips the
+            # value straight away and re-renders this same menu.
+            [
+                InlineKeyboardButton(
+                    text=notifications_label,
+                    callback_data=notifications_action,
+                )
+            ],
         ]
     )
 

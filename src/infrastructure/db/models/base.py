@@ -7,8 +7,9 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 class Base(DeclarativeBase):
     """Declarative base for all ORM models.
 
-    ORM models live separately from domain entities (see
-    infrastructure/db/mappers/ for the translation layer).
+    ORM models live separately from domain entities; each repository in
+    infrastructure/db/repositories/ builds the entity (or the ORM row)
+    inline, so there is no shared translation layer to keep in sync.
     """
 
 

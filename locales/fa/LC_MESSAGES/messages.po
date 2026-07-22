@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:40+0300\n"
+"POT-Creation-Date: 2026-07-23 02:05+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fa\n"
@@ -68,63 +68,63 @@ msgid "♀️ Female"
 msgstr "♀️ زن"
 
 # WARNING: Machine translation — review by a native speaker before production.
-#: src/presentation/bot/handlers/settings.py:52
+#: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:51
 msgid "♂️ Men"
 msgstr "♂️ مرد"
 
-#: src/presentation/bot/handlers/settings.py:54
+#: src/presentation/bot/handlers/settings.py:58
 #: src/presentation/bot/keyboards.py:52
 msgid "♀️ Women"
 msgstr "♀️ خانم‌ها"
 
-#: src/presentation/bot/handlers/settings.py:55
+#: src/presentation/bot/handlers/settings.py:59
 #: src/presentation/bot/keyboards.py:55
 msgid "👥 Everyone"
 msgstr "👥 همه"
 
-#: src/presentation/bot/handlers/settings.py:60
-#: src/presentation/bot/keyboards.py:91
+#: src/presentation/bot/handlers/settings.py:64
+#: src/presentation/bot/keyboards.py:101
 msgid "Any"
 msgstr "هرکدام"
 
-#: src/presentation/bot/keyboards.py:142
+#: src/presentation/bot/keyboards.py:152
 msgid "⏭ Skip"
 msgstr "⏭ رد کردن"
 
-#: src/presentation/bot/keyboards.py:151
+#: src/presentation/bot/keyboards.py:161
 msgid "Name"
 msgstr "نام"
 
-#: src/presentation/bot/keyboards.py:152
+#: src/presentation/bot/keyboards.py:162
 msgid "Age"
 msgstr "سن"
 
-#: src/presentation/bot/keyboards.py:153
+#: src/presentation/bot/keyboards.py:163
 msgid "Gender"
 msgstr "جنسیت"
 
-#: src/presentation/bot/keyboards.py:154
+#: src/presentation/bot/keyboards.py:164
 msgid "Location"
 msgstr "موقعیت"
 
-#: src/presentation/bot/keyboards.py:155
+#: src/presentation/bot/keyboards.py:165
 msgid "Bio"
 msgstr "بیوگرافی"
 
-#: src/presentation/bot/keyboards.py:156
+#: src/presentation/bot/keyboards.py:166
 msgid "Photo"
 msgstr "عکس"
 
-#: src/presentation/bot/keyboards.py:157
+#: src/presentation/bot/keyboards.py:167
 msgid "✅ Done"
 msgstr "✅ انجام شد"
 
-#: src/presentation/bot/keyboards.py:195
+#: src/presentation/bot/keyboards.py:205
 msgid "🌟 Who rated me"
 msgstr "🌟 چه کسی به من امتیاز داد"
 
-#: src/presentation/bot/keyboards.py:200
+#: src/presentation/bot/keyboards.py:210
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} روز"
@@ -188,10 +188,10 @@ msgstr "جنسیت را انتخاب کنید:"
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
 #: src/presentation/bot/handlers/edit_profile.py:341
-#: src/presentation/bot/handlers/settings.py:193
-#: src/presentation/bot/handlers/settings.py:223
-#: src/presentation/bot/handlers/settings.py:244
-#: src/presentation/bot/handlers/settings.py:265
+#: src/presentation/bot/handlers/settings.py:219
+#: src/presentation/bot/handlers/settings.py:255
+#: src/presentation/bot/handlers/settings.py:282
+#: src/presentation/bot/handlers/settings.py:309
 msgid "Invalid choice"
 msgstr "انتخاب نامعتبر"
 
@@ -488,38 +488,47 @@ msgstr ""
 "{expires}\n"
 "فیلتر حداقل امتیازت را در /settings انتخاب کن."
 
-#: src/presentation/bot/handlers/settings.py:67
+#: src/presentation/bot/handlers/settings.py:75
 #, python-brace-format
 msgid "👤 Show me: {current}"
 msgstr "👤 نمایش: {current}"
 
-#: src/presentation/bot/handlers/settings.py:71
+#: src/presentation/bot/handlers/settings.py:79
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
 msgstr "⭐ حداقل امتیاز: {current}"
 
-#: src/presentation/bot/handlers/settings.py:75
+#: src/presentation/bot/handlers/settings.py:83
 msgid "⭐ Min rating: premium only"
 msgstr "⭐ حداقل امتیاز: فقط پریمیوم"
 
-#: src/presentation/bot/handlers/settings.py:76
+#: src/presentation/bot/handlers/settings.py:84
 #, python-brace-format
 msgid "🌐 Language: {current}"
 msgstr "🌐 زبان: {current}"
 
-#: src/presentation/bot/handlers/settings.py:103
-#: src/presentation/bot/handlers/settings.py:135
+#: src/presentation/bot/handlers/settings.py:88
+msgid "🔔 Notifications: on"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:88
+msgid "🔕 Notifications: off"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:119
+#: src/presentation/bot/handlers/settings.py:156
 msgid "<b>Settings</b>"
 msgstr "<b>تنظیمات</b>"
 
-#: src/presentation/bot/handlers/settings.py:162
-#: src/presentation/bot/handlers/settings.py:237
+#: src/presentation/bot/handlers/settings.py:188
+#: src/presentation/bot/handlers/settings.py:269
 msgid "Premium only"
 msgstr "فقط پریمیوم"
 
-#: src/presentation/bot/handlers/settings.py:204
-#: src/presentation/bot/handlers/settings.py:246
-#: src/presentation/bot/handlers/settings.py:283
+#: src/presentation/bot/handlers/settings.py:230
+#: src/presentation/bot/handlers/settings.py:284
+#: src/presentation/bot/handlers/settings.py:327
+#: src/presentation/bot/handlers/settings.py:359
 msgid "Updated"
 msgstr "ذخیره شد"
 
@@ -540,6 +549,17 @@ msgstr ""
 "<b>خوش برگشتی، {name}!</b>\n"
 "برای امتیازدهی به سایر پروفایل‌ها /feed را بفرست."
 
+#: src/presentation/tasks/broadcast.py:96
+msgid ""
+"✨ New profiles have appeared.\n"
+"Open /feed to rate them."
+msgstr ""
+
 #~ msgid "No profile yet. Use /create first."
 #~ msgstr "پروفایلی برای ویرایش نیست. ابتدا از /create استفاده کنید."
+
+#~ msgid ""
+#~ "✨ New profiles to rate: {count}\n"
+#~ "Open /feed to see them."
+#~ msgstr ""
 

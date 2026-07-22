@@ -4,29 +4,24 @@ from uuid import UUID
 from src.application.identity.dto import UserResponse
 from src.domain.identity.exceptions import UserNotFound
 from src.domain.identity.repositories import IUserRepository
-from src.domain.identity.value_objects import Language
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.uow import UnitOfWork
 
 
 @dataclass
-class UpdateUserLanguageUseCase:
-    """Explicit user-driven language change (e.g. via /settings).
-
-    Separate from RegisterUserUseCase's auto-update so the intent is
-    unambiguous — manual choices shouldn't get overwritten on the next
-    Telegram update just because the client locale still says English.
-    """
+class UpdateNotificationsUseCase:
+    """Turns bot-initiated broadcasts on or off for one user (/settings)."""
 
     user_repo: IUserRepository
     uow: UnitOfWork
 
-    async def execute(self, user_id: UUID, language: Language) -> UserResponse:
+    async def execute(self, user_id: UUID, enabled: bool) -> UserResponse:
         user = await self.user_repo.get_by_id(UserId(user_id))
         if user is None:
             raise UserNotFound(f"User {user_id} not found")
-        if user.language != language:
-            user.change_language(language)
+        # Skip the write when nothing changes — /settings re-renders often.
+        if user.notifications_enabled != enabled:
+            user.set_notifications(enabled)
             await self.user_repo.update(user)
             await self.uow.commit()
         return UserResponse(

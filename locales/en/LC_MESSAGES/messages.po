@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:40+0300\n"
+"POT-Creation-Date: 2026-07-23 02:05+0300\n"
 "PO-Revision-Date: 2026-05-11 23:03+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -62,63 +62,63 @@ msgstr ""
 msgid "♀️ Female"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:52
+#: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:51
 msgid "♂️ Men"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:54
+#: src/presentation/bot/handlers/settings.py:58
 #: src/presentation/bot/keyboards.py:52
 msgid "♀️ Women"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:55
+#: src/presentation/bot/handlers/settings.py:59
 #: src/presentation/bot/keyboards.py:55
 msgid "👥 Everyone"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:60
-#: src/presentation/bot/keyboards.py:91
+#: src/presentation/bot/handlers/settings.py:64
+#: src/presentation/bot/keyboards.py:101
 msgid "Any"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:142
+#: src/presentation/bot/keyboards.py:152
 msgid "⏭ Skip"
 msgstr "⏭ Skip"
 
-#: src/presentation/bot/keyboards.py:151
+#: src/presentation/bot/keyboards.py:161
 msgid "Name"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:152
+#: src/presentation/bot/keyboards.py:162
 msgid "Age"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:153
+#: src/presentation/bot/keyboards.py:163
 msgid "Gender"
 msgstr "Gender"
 
-#: src/presentation/bot/keyboards.py:154
+#: src/presentation/bot/keyboards.py:164
 msgid "Location"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:155
+#: src/presentation/bot/keyboards.py:165
 msgid "Bio"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:156
+#: src/presentation/bot/keyboards.py:166
 msgid "Photo"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:157
+#: src/presentation/bot/keyboards.py:167
 msgid "✅ Done"
 msgstr ""
 
-#: src/presentation/bot/keyboards.py:195
+#: src/presentation/bot/keyboards.py:205
 msgid "🌟 Who rated me"
 msgstr "🌟 Who rated me"
 
-#: src/presentation/bot/keyboards.py:200
+#: src/presentation/bot/keyboards.py:210
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr ""
@@ -182,10 +182,10 @@ msgstr "Pick gender:"
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
 #: src/presentation/bot/handlers/edit_profile.py:341
-#: src/presentation/bot/handlers/settings.py:193
-#: src/presentation/bot/handlers/settings.py:223
-#: src/presentation/bot/handlers/settings.py:244
-#: src/presentation/bot/handlers/settings.py:265
+#: src/presentation/bot/handlers/settings.py:219
+#: src/presentation/bot/handlers/settings.py:255
+#: src/presentation/bot/handlers/settings.py:282
+#: src/presentation/bot/handlers/settings.py:309
 msgid "Invalid choice"
 msgstr "Invalid choice"
 
@@ -476,38 +476,47 @@ msgstr ""
 "{expires}\n"
 "Pick your minimum rating filter in /settings."
 
-#: src/presentation/bot/handlers/settings.py:67
+#: src/presentation/bot/handlers/settings.py:75
 #, python-brace-format
 msgid "👤 Show me: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:71
+#: src/presentation/bot/handlers/settings.py:79
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:75
+#: src/presentation/bot/handlers/settings.py:83
 msgid "⭐ Min rating: premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:76
+#: src/presentation/bot/handlers/settings.py:84
 #, python-brace-format
 msgid "🌐 Language: {current}"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:103
-#: src/presentation/bot/handlers/settings.py:135
+#: src/presentation/bot/handlers/settings.py:88
+msgid "🔔 Notifications: on"
+msgstr "🔔 Notifications: on"
+
+#: src/presentation/bot/handlers/settings.py:88
+msgid "🔕 Notifications: off"
+msgstr "🔕 Notifications: off"
+
+#: src/presentation/bot/handlers/settings.py:119
+#: src/presentation/bot/handlers/settings.py:156
 msgid "<b>Settings</b>"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:162
-#: src/presentation/bot/handlers/settings.py:237
+#: src/presentation/bot/handlers/settings.py:188
+#: src/presentation/bot/handlers/settings.py:269
 msgid "Premium only"
 msgstr ""
 
-#: src/presentation/bot/handlers/settings.py:204
-#: src/presentation/bot/handlers/settings.py:246
-#: src/presentation/bot/handlers/settings.py:283
+#: src/presentation/bot/handlers/settings.py:230
+#: src/presentation/bot/handlers/settings.py:284
+#: src/presentation/bot/handlers/settings.py:327
+#: src/presentation/bot/handlers/settings.py:359
 msgid "Updated"
 msgstr ""
 
@@ -525,6 +534,14 @@ msgid ""
 msgstr ""
 "<b>Welcome back, {name}!</b>\n"
 "Send /feed to rate other profiles."
+
+#: src/presentation/tasks/broadcast.py:96
+msgid ""
+"✨ New profiles have appeared.\n"
+"Open /feed to rate them."
+msgstr ""
+"✨ New profiles have appeared.\n"
+"Open /feed to rate them."
 
 #~ msgid "No profile yet. Use /create first."
 #~ msgstr "No profile to edit. Use /create first."

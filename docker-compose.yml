@@ -49,6 +49,54 @@ services:
         condition: service_healthy
     restart: "no"
 
+  # taskiq worker + scheduler. Split for the same reason as in prod: a slow
+  # mailout must not block the bot's event loop. The task module is listed
+  # explicitly — that's what registers tasks and their schedule labels.
+  worker:
+    build: .
+    container_name: rateyou-worker
+    command: >-
+      taskiq worker
+      src.presentation.tasks.broker:broker
+      src.presentation.tasks.broadcast
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # Keep at a single replica — two schedulers would double every broadcast.
+  scheduler:
+    build: .
+    container_name: rateyou-scheduler
+    command: >-
+      taskiq scheduler
+      src.presentation.tasks.broker:scheduler
+      src.presentation.tasks.broadcast
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      redis:
+        condition: service_healthy
+      worker:
+        condition: service_started
+    restart: unless-stopped
+
   bot:
     build: .
     container_name: rateyou-bot

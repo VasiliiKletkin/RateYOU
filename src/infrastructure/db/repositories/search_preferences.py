@@ -4,11 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.discovery.entities import SearchPreferences
+from src.domain.discovery.value_objects import MinRating
 from src.domain.shared.identifiers import UserId
-from src.infrastructure.db.mappers.discovery import (
-    orm_to_search_preferences,
-    search_preferences_to_orm,
-)
 from src.infrastructure.db.models.discovery import SearchPreferencesORM
 
 
@@ -21,10 +18,26 @@ class SearchPreferencesRepository:
             select(SearchPreferencesORM).where(SearchPreferencesORM.user_id == user_id.value)
         )
         orm = result.scalar_one_or_none()
-        return orm_to_search_preferences(orm) if orm is not None else None
+        if orm is None:
+            return None
+        return SearchPreferences(
+            user_id=UserId(orm.user_id),
+            gender_preference=orm.gender_preference,
+            min_rating=MinRating(orm.min_rating),
+            created_at=orm.created_at,
+            updated_at=orm.updated_at,
+        )
 
     async def add(self, prefs: SearchPreferences) -> None:
-        self.session.add(search_preferences_to_orm(prefs))
+        self.session.add(
+            SearchPreferencesORM(
+                user_id=prefs.user_id.value,
+                gender_preference=prefs.gender_preference,
+                min_rating=prefs.min_rating.value,
+                created_at=prefs.created_at,
+                updated_at=prefs.updated_at,
+            )
+        )
         await self.session.flush()
 
     async def update(self, prefs: SearchPreferences) -> None:

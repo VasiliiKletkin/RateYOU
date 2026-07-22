@@ -20,4 +20,5 @@ class GetUserByTelegramIdUseCase:
             is_banned=user.is_banned,
             is_admin=user.is_admin,
             language=user.language,
+            notifications_enabled=user.notifications_enabled,
         )

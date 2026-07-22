@@ -7,10 +7,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from src.domain.discovery.repositories import DiscoveryMatch
-from src.domain.profile.value_objects import Location
+from src.domain.profile.entities import Profile
+from src.domain.profile.value_objects import (
+    Age,
+    Bio,
+    Location,
+    Name,
+    PhotoFileId,
+    Photos,
+    ProfileId,
+)
+from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 from src.infrastructure.db.discovery_spec_applier import DiscoverySpecApplier
-from src.infrastructure.db.mappers.profile import orm_to_profile
+from src.infrastructure.db.geo import wkb_to_location
 from src.infrastructure.db.models.profile import ProfileORM
 
 
@@ -54,6 +64,22 @@ class DiscoveryRepository:
             return None
         orm, distance = row
         return DiscoveryMatch(
-            profile=orm_to_profile(orm),
+            profile=Profile(
+                id=ProfileId(orm.id),
+                owner_id=UserId(orm.owner_id),
+                name=Name(orm.name),
+                age=Age(orm.age),
+                gender=orm.gender,
+                bio=Bio(orm.bio),
+                photos=Photos(
+                    items=tuple(
+                        PhotoFileId(p.file_id) for p in sorted(orm.photos, key=lambda p: p.position)
+                    )
+                ),
+                location=wkb_to_location(orm.location),
+                is_visible=orm.is_visible,
+                created_at=orm.created_at,
+                updated_at=orm.updated_at,
+            ),
             distance_meters=int(distance),
         )

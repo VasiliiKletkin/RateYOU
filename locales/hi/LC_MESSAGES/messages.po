@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 00:40+0300\n"
+"POT-Creation-Date: 2026-07-23 02:05+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: hi\n"
@@ -68,63 +68,63 @@ msgid "♀️ Female"
 msgstr "♀️ महिला"
 
 # WARNING: Machine translation — review by a native speaker before production.
-#: src/presentation/bot/handlers/settings.py:52
+#: src/presentation/bot/handlers/settings.py:56
 #: src/presentation/bot/keyboards.py:51
 msgid "♂️ Men"
 msgstr "♂️ पुरुष"
 
-#: src/presentation/bot/handlers/settings.py:54
+#: src/presentation/bot/handlers/settings.py:58
 #: src/presentation/bot/keyboards.py:52
 msgid "♀️ Women"
 msgstr "♀️ लड़कियाँ"
 
-#: src/presentation/bot/handlers/settings.py:55
+#: src/presentation/bot/handlers/settings.py:59
 #: src/presentation/bot/keyboards.py:55
 msgid "👥 Everyone"
 msgstr "👥 सभी"
 
-#: src/presentation/bot/handlers/settings.py:60
-#: src/presentation/bot/keyboards.py:91
+#: src/presentation/bot/handlers/settings.py:64
+#: src/presentation/bot/keyboards.py:101
 msgid "Any"
 msgstr "कोई भी"
 
-#: src/presentation/bot/keyboards.py:142
+#: src/presentation/bot/keyboards.py:152
 msgid "⏭ Skip"
 msgstr "⏭ छोड़ें"
 
-#: src/presentation/bot/keyboards.py:151
+#: src/presentation/bot/keyboards.py:161
 msgid "Name"
 msgstr "नाम"
 
-#: src/presentation/bot/keyboards.py:152
+#: src/presentation/bot/keyboards.py:162
 msgid "Age"
 msgstr "उम्र"
 
-#: src/presentation/bot/keyboards.py:153
+#: src/presentation/bot/keyboards.py:163
 msgid "Gender"
 msgstr "लिंग"
 
-#: src/presentation/bot/keyboards.py:154
+#: src/presentation/bot/keyboards.py:164
 msgid "Location"
 msgstr "स्थान"
 
-#: src/presentation/bot/keyboards.py:155
+#: src/presentation/bot/keyboards.py:165
 msgid "Bio"
 msgstr "बायो"
 
-#: src/presentation/bot/keyboards.py:156
+#: src/presentation/bot/keyboards.py:166
 msgid "Photo"
 msgstr "फ़ोटो"
 
-#: src/presentation/bot/keyboards.py:157
+#: src/presentation/bot/keyboards.py:167
 msgid "✅ Done"
 msgstr "✅ हो गया"
 
-#: src/presentation/bot/keyboards.py:195
+#: src/presentation/bot/keyboards.py:205
 msgid "🌟 Who rated me"
 msgstr "🌟 मुझे किसने रेट किया"
 
-#: src/presentation/bot/keyboards.py:200
+#: src/presentation/bot/keyboards.py:210
 #, python-brace-format
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} दिन"
@@ -188,10 +188,10 @@ msgstr "लिंग चुनो:"
 #: src/presentation/bot/handlers/create_profile.py:150
 #: src/presentation/bot/handlers/create_profile.py:238
 #: src/presentation/bot/handlers/edit_profile.py:341
-#: src/presentation/bot/handlers/settings.py:193
-#: src/presentation/bot/handlers/settings.py:223
-#: src/presentation/bot/handlers/settings.py:244
-#: src/presentation/bot/handlers/settings.py:265
+#: src/presentation/bot/handlers/settings.py:219
+#: src/presentation/bot/handlers/settings.py:255
+#: src/presentation/bot/handlers/settings.py:282
+#: src/presentation/bot/handlers/settings.py:309
 msgid "Invalid choice"
 msgstr "गलत विकल्प"
 
@@ -490,38 +490,47 @@ msgstr ""
 "{expires}\n"
 "/settings में अपना न्यूनतम रेटिंग फ़िल्टर चुनो।"
 
-#: src/presentation/bot/handlers/settings.py:67
+#: src/presentation/bot/handlers/settings.py:75
 #, python-brace-format
 msgid "👤 Show me: {current}"
 msgstr "👤 दिखाओ: {current}"
 
-#: src/presentation/bot/handlers/settings.py:71
+#: src/presentation/bot/handlers/settings.py:79
 #, python-brace-format
 msgid "⭐ Min rating: {current}"
 msgstr "⭐ न्यून. रेटिंग: {current}"
 
-#: src/presentation/bot/handlers/settings.py:75
+#: src/presentation/bot/handlers/settings.py:83
 msgid "⭐ Min rating: premium only"
 msgstr "⭐ न्यून. रेटिंग: सिर्फ़ प्रीमियम"
 
-#: src/presentation/bot/handlers/settings.py:76
+#: src/presentation/bot/handlers/settings.py:84
 #, python-brace-format
 msgid "🌐 Language: {current}"
 msgstr "🌐 भाषा: {current}"
 
-#: src/presentation/bot/handlers/settings.py:103
-#: src/presentation/bot/handlers/settings.py:135
+#: src/presentation/bot/handlers/settings.py:88
+msgid "🔔 Notifications: on"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:88
+msgid "🔕 Notifications: off"
+msgstr ""
+
+#: src/presentation/bot/handlers/settings.py:119
+#: src/presentation/bot/handlers/settings.py:156
 msgid "<b>Settings</b>"
 msgstr "<b>सेटिंग्स</b>"
 
-#: src/presentation/bot/handlers/settings.py:162
-#: src/presentation/bot/handlers/settings.py:237
+#: src/presentation/bot/handlers/settings.py:188
+#: src/presentation/bot/handlers/settings.py:269
 msgid "Premium only"
 msgstr "सिर्फ़ प्रीमियम"
 
-#: src/presentation/bot/handlers/settings.py:204
-#: src/presentation/bot/handlers/settings.py:246
-#: src/presentation/bot/handlers/settings.py:283
+#: src/presentation/bot/handlers/settings.py:230
+#: src/presentation/bot/handlers/settings.py:284
+#: src/presentation/bot/handlers/settings.py:327
+#: src/presentation/bot/handlers/settings.py:359
 msgid "Updated"
 msgstr "सहेजा गया"
 
@@ -542,6 +551,17 @@ msgstr ""
 "<b>वापसी पर स्वागत है, {name}!</b>\n"
 "दूसरी प्रोफ़ाइल रेट करने के लिए /feed भेजो।"
 
+#: src/presentation/tasks/broadcast.py:96
+msgid ""
+"✨ New profiles have appeared.\n"
+"Open /feed to rate them."
+msgstr ""
+
 #~ msgid "No profile yet. Use /create first."
 #~ msgstr "एडिट करने के लिए कोई प्रोफ़ाइल नहीं है। पहले /create का उपयोग करो।"
+
+#~ msgid ""
+#~ "✨ New profiles to rate: {count}\n"
+#~ "Open /feed to see them."
+#~ msgstr ""
 

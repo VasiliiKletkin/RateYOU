@@ -57,6 +57,9 @@ class FakeUserRepo:
     async def update(self, user: User) -> None:
         self.users[user.id] = user
 
+    async def list_by_ids(self, user_ids: list[UserId]) -> list[User]:
+        return [self.users[uid] for uid in user_ids if uid in self.users]
+
 
 @dataclass
 class FakeSubscriptionRepo:

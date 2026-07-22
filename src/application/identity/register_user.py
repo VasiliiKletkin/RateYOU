@@ -74,6 +74,7 @@ class RegisterUserUseCase:
                 is_banned=existing.is_banned,
                 is_admin=existing.is_admin,
                 language=existing.language,
+                notifications_enabled=existing.notifications_enabled,
             )
 
         now = datetime.now(UTC)
@@ -115,6 +116,7 @@ class RegisterUserUseCase:
             is_banned=user.is_banned,
             is_admin=user.is_admin,
             language=user.language,
+            notifications_enabled=user.notifications_enabled,
         )
 
     async def _resolve_referrer(

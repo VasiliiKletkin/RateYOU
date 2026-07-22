@@ -38,6 +38,10 @@ class User:
     # of accounts have none. Refreshed on /start since users can change or
     # drop it at any time; used to let raters be contacted from /my_ratings.
     username: str | None = None
+    # Opt-out for bot-initiated broadcasts (e.g. "new profiles appeared").
+    # Only gates outbound nudges — replies to the user's own actions and
+    # notifications they directly caused are never suppressed by it.
+    notifications_enabled: bool = True
     role: Role = Role.USER
     is_banned: bool = False
     ban_reason: str | None = None
@@ -70,6 +74,9 @@ class User:
     def set_username(self, username: str | None) -> None:
         """Refreshes the cached handle. Idempotent — safe to call on every /start."""
         self.username = normalize_username(username)
+
+    def set_notifications(self, enabled: bool) -> None:
+        self.notifications_enabled = enabled
 
     def ban(self, reason: str, now: datetime) -> None:
         if not reason.strip():

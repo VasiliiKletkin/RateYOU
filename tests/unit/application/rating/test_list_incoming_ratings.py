@@ -35,6 +35,9 @@ class FakeRatingRepo:
         belonging.sort(key=lambda r: r.created_at, reverse=True)
         return belonging[:limit]
 
+    async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
+        return []
+
     # Unused-but-required protocol methods (kept thin: tests don't exercise them)
     async def add(self, rating: Rating) -> None: ...
     async def get_by_id(self, rating_id: RatingId) -> Rating | None: ...
@@ -59,6 +62,11 @@ class FakeProfileRepo:
         return False
 
     async def update(self, profile: Profile) -> None: ...
+    async def list_owner_ids_created_after(self, since: datetime) -> list[UserId]:
+        return []
+
+    async def list_visible_owner_ids(self) -> list[UserId]:
+        return []
 
 
 @dataclass
@@ -72,6 +80,8 @@ class FakeUserRepo:
     async def add(self, user: User) -> None: ...
     async def get_by_telegram_id(self, telegram_id: TelegramId) -> User | None: ...
     async def update(self, user: User) -> None: ...
+    async def list_by_ids(self, user_ids: list[UserId]) -> list[User]:
+        return [self.by_id[uid.value] for uid in user_ids if uid.value in self.by_id]
 
 
 def _make_user(user_id: UserId, telegram_id: int, username: str | None) -> User:

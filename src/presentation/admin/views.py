@@ -9,6 +9,7 @@ class UserAdmin(ModelView):
         "id",
         "telegram_id",
         "username",
+        "notifications_enabled",
         "role",
         "is_banned",
         "ban_reason",

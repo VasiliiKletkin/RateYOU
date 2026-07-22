@@ -29,3 +29,4 @@ class UserResponse:
     is_banned: bool
     is_admin: bool
     language: Language
+    notifications_enabled: bool = True

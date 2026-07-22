@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -33,6 +34,12 @@ class FakeProfileRepository:
 
     async def update(self, profile: Profile) -> None:
         self.profiles[profile.id.value] = profile
+
+    async def list_owner_ids_created_after(self, since: datetime) -> list[UserId]:
+        return []
+
+    async def list_visible_owner_ids(self) -> list[UserId]:
+        return []
 
 
 @dataclass

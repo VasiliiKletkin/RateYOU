@@ -22,6 +22,29 @@ class NextProfileResponse:
 
 
 @dataclass(frozen=True, slots=True)
+class BroadcastRecipient:
+    """One person to nudge, with everything the sender needs.
+
+    `language` is a plain locale code rather than the Identity enum so the
+    Discovery contract doesn't drag another context's value object along.
+
+    No count of new profiles: the message deliberately doesn't quote one, and
+    deciding *whether* someone has anything new stays inside the use case.
+    """
+
+    user_id: UUID
+    telegram_id: int
+    language: str
+
+
+@dataclass(frozen=True, slots=True)
+class NewProfilesBroadcast:
+    """Who should hear about profiles added since the last run. Empty = stay quiet."""
+
+    recipients: tuple[BroadcastRecipient, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class SearchPreferencesResponse:
     user_id: UUID
     gender_preference: str  # "male" | "female" | "any"

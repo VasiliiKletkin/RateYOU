@@ -24,13 +24,11 @@ class RedisSkipRegistry:
         skipped_owner_id: UserId,
     ) -> None:
         key = self._key(viewer_id)
-        # redis-py's stubs declare sync|async Union returns on the async client;
-        # mypy can't see the awaitable on sadd/smembers. expire works fine.
-        await self.redis.sadd(key, str(skipped_owner_id.value))  # type: ignore[misc]
+        await self.redis.sadd(key, str(skipped_owner_id.value))
         await self.redis.expire(key, self.ttl_seconds)
 
     async def get_skipped(self, viewer_id: UserId) -> list[UserId]:
-        members = await self.redis.smembers(self._key(viewer_id))  # type: ignore[misc]
+        members = await self.redis.smembers(self._key(viewer_id))
         return [UserId(UUID(self._as_str(m))) for m in members]
 
     @staticmethod

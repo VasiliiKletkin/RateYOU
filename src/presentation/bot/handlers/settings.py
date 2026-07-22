@@ -16,6 +16,7 @@ from src.application.discovery.search_preferences import (
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.identity.update_language import UpdateUserLanguageUseCase
+from src.application.identity.update_notifications import UpdateNotificationsUseCase
 from src.application.subscription.get_premium import GetMyPremiumUseCase
 from src.domain.discovery.exceptions import InvalidMinRating
 from src.domain.identity.value_objects import Language
@@ -37,6 +38,9 @@ from src.presentation.bot.keyboards import (
 _OPEN_GENDER = "openpref"
 _OPEN_RATING = "openrating"
 _OPEN_LANGUAGE = "openlang"
+
+# Not a picker: flips the value and re-renders the same menu.
+_TOGGLE_NOTIFY = "togglenotify"
 
 # Value-setter callback prefixes. Payload is the new value.
 _GENDER_PREFIX = "setpref"
@@ -62,7 +66,11 @@ def _format_min_rating(value: int) -> str:
 
 
 def _main_keyboard(
-    prefs: SearchPreferencesResponse, *, is_premium: bool, language: Language
+    prefs: SearchPreferencesResponse,
+    *,
+    is_premium: bool,
+    language: Language,
+    notifications_enabled: bool,
 ) -> InlineKeyboardMarkup:
     gender_label = _("👤 Show me: {current}").format(
         current=_format_gender(prefs.gender_preference)
@@ -74,13 +82,20 @@ def _main_keyboard(
     else:
         rating_label = _("⭐ Min rating: premium only")
     language_label = _("🌐 Language: {current}").format(current=native_name(language))
+    # Two complete strings rather than a label + "on"/"off" fragment: the
+    # fragments are unusable for translators without the surrounding sentence.
+    notifications_label = (
+        _("🔔 Notifications: on") if notifications_enabled else _("🔕 Notifications: off")
+    )
     return settings_main_keyboard(
         gender_label=gender_label,
         rating_label=rating_label,
         language_label=language_label,
+        notifications_label=notifications_label,
         gender_action=_OPEN_GENDER,
         rating_action=_OPEN_RATING,
         language_action=_OPEN_LANGUAGE,
+        notifications_action=_TOGGLE_NOTIFY,
     )
 
 
@@ -90,6 +105,7 @@ async def _refresh_main(
     *,
     is_premium: bool,
     language: Language,
+    notifications_enabled: bool,
 ) -> None:
     """Restore the top-level settings view after a picker tap.
 
@@ -101,7 +117,12 @@ async def _refresh_main(
     with suppress(TelegramAPIError):
         await callback.message.edit_text(
             _("<b>Settings</b>"),
-            reply_markup=_main_keyboard(prefs, is_premium=is_premium, language=language),
+            reply_markup=_main_keyboard(
+                prefs,
+                is_premium=is_premium,
+                language=language,
+                notifications_enabled=notifications_enabled,
+            ),
         )
 
 
@@ -133,7 +154,12 @@ async def cmd_settings(
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await message.answer(
         _("<b>Settings</b>"),
-        reply_markup=_main_keyboard(prefs, is_premium=is_premium, language=user.language),
+        reply_markup=_main_keyboard(
+            prefs,
+            is_premium=is_premium,
+            language=user.language,
+            notifications_enabled=user.notifications_enabled,
+        ),
     )
 
 
@@ -202,7 +228,13 @@ async def on_set_gender(
     prefs = await update_gender.execute(user.id, preference)
     is_premium = (await get_my_premium.execute(user.id)) is not None
     await callback.answer(_("Updated"))
-    await _refresh_main(callback, prefs, is_premium=is_premium, language=user.language)
+    await _refresh_main(
+        callback,
+        prefs,
+        is_premium=is_premium,
+        language=user.language,
+        notifications_enabled=user.notifications_enabled,
+    )
 
 
 @router.callback_query(F.data.startswith(f"{_RATING_PREFIX}:"))
@@ -235,7 +267,13 @@ async def on_set_min_rating(
         # keyboard from before an expiry could still send it.
         prefs = await get_prefs.execute(user.id)
         await callback.answer(_("Premium only"), show_alert=True)
-        await _refresh_main(callback, prefs, is_premium=is_premium, language=user.language)
+        await _refresh_main(
+            callback,
+            prefs,
+            is_premium=is_premium,
+            language=user.language,
+            notifications_enabled=user.notifications_enabled,
+        )
         return
 
     try:
@@ -244,7 +282,13 @@ async def on_set_min_rating(
         await callback.answer(_("Invalid choice"))
         return
     await callback.answer(_("Updated"))
-    await _refresh_main(callback, prefs, is_premium=is_premium, language=user.language)
+    await _refresh_main(
+        callback,
+        prefs,
+        is_premium=is_premium,
+        language=user.language,
+        notifications_enabled=user.notifications_enabled,
+    )
 
 
 @router.callback_query(F.data.startswith(f"{_LANGUAGE_PREFIX}:"))
@@ -281,4 +325,42 @@ async def on_set_language(
     # card matches what the user just chose.
     with i18n.use_locale(updated.language.value):
         await callback.answer(_("Updated"))
-        await _refresh_main(callback, prefs, is_premium=is_premium, language=updated.language)
+        await _refresh_main(
+            callback,
+            prefs,
+            is_premium=is_premium,
+            language=updated.language,
+            notifications_enabled=updated.notifications_enabled,
+        )
+
+
+@router.callback_query(F.data == _TOGGLE_NOTIFY)
+async def on_toggle_notifications(
+    callback: CallbackQuery,
+    register_user: FromDishka[RegisterUserUseCase],
+    update_notifications: FromDishka[UpdateNotificationsUseCase],
+    get_prefs: FromDishka[GetSearchPreferencesUseCase],
+    get_my_premium: FromDishka[GetMyPremiumUseCase],
+) -> None:
+    """Flips broadcast opt-in and redraws the menu with the new label."""
+    if callback.from_user is None:
+        await callback.answer()
+        return
+    user = await register_user.execute(
+        RegisterUserRequest(
+            telegram_id=callback.from_user.id,
+            language=normalize_language(callback.from_user.language_code),
+        )
+    )
+    updated = await update_notifications.execute(user.id, enabled=not user.notifications_enabled)
+    prefs = await get_prefs.execute(user.id)
+    is_premium = (await get_my_premium.execute(user.id)) is not None
+
+    await callback.answer(_("Updated"))
+    await _refresh_main(
+        callback,
+        prefs,
+        is_premium=is_premium,
+        language=updated.language,
+        notifications_enabled=updated.notifications_enabled,
+    )

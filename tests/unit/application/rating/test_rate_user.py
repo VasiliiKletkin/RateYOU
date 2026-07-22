@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -41,6 +42,9 @@ class FakeRatingRepository:
 
     async def delete(self, rating: Rating) -> None:
         self.ratings.pop(rating.id.value, None)
+
+    async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
+        return []
 
     async def compute_stats_for(self, rated_id: UserId) -> tuple[float, int]:
         scores = [r.score.value for r in self.ratings.values() if r.rated_id == rated_id]

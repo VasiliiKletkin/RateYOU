@@ -59,6 +59,46 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
 
+  # taskiq worker: executes queued tasks (currently the new-profile broadcast).
+  # Separate from the bot so a slow, rate-limited mailout can't stall the loop
+  # that answers live Telegram updates. The task module is listed explicitly —
+  # that's what registers the tasks and their schedule labels.
+  worker:
+    image: ghcr.io/vasiliikletkin/rateyou:latest
+    container_name: rateyou-worker
+    command: >-
+      taskiq worker
+      src.presentation.tasks.broker:broker
+      src.presentation.tasks.broadcast
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # taskiq scheduler: the only thing that decides *when* to enqueue. Must stay
+  # a single replica — two of these would double every broadcast.
+  scheduler:
+    image: ghcr.io/vasiliikletkin/rateyou:latest
+    container_name: rateyou-scheduler
+    command: >-
+      taskiq scheduler
+      src.presentation.tasks.broker:scheduler
+      src.presentation.tasks.broadcast
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      worker:
+        condition: service_started
+    restart: unless-stopped
+
   admin:
     image: ghcr.io/vasiliikletkin/rateyou:latest
     container_name: rateyou-admin

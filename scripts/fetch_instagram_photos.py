@@ -63,6 +63,23 @@ def _normalize_username(raw: str) -> str:
     return value.lstrip("@")
 
 
+def _slugify(value: str) -> str:
+    """Turn a display name into something safe for a directory name."""
+    cleaned = "".join(ch if ch.isalnum() or ch in " -_" else " " for ch in value)
+    return "_".join(cleaned.split())
+
+
+def _folder_name(profile: instaloader.Profile, index: int, style: str) -> str:
+    """Build the per-profile directory name for the chosen naming style."""
+    name = _slugify(profile.full_name or "") or profile.username
+    return {
+        "index_username": f"{index:04d}_{profile.username}",
+        "index_name": f"{index:04d}_{name}",
+        "username": profile.username,
+        "name": name,
+    }[style]
+
+
 def _image_urls(post: instaloader.Post, needed: int) -> list[str]:
     """Return still-image URLs from a post, at most ``needed`` of them."""
     if post.typename == "GraphSidecar":
@@ -81,19 +98,24 @@ def _existing_images(directory: Path) -> int:
 def download_profile(
     loader: instaloader.Instaloader,
     username: str,
-    target_dir: Path,
+    out_dir: Path,
+    index: int,
+    folder_style: str,
     count: int,
     delay: float,
     overwrite: bool,
 ) -> int:
-    """Download up to ``count`` photos of ``username`` into ``target_dir``."""
+    """Download up to ``count`` photos of ``username`` under ``out_dir``."""
+    profile = instaloader.Profile.from_username(loader.context, username)
+
+    target_dir = out_dir / _folder_name(profile, index, folder_style)
+    print(f"  {username}: {profile.full_name or '(no name)'} -> {target_dir}")
     target_dir.mkdir(parents=True, exist_ok=True)
 
     if not overwrite and _existing_images(target_dir) >= count:
         print(f"  {username}: already has {count}+ images, skipping")
         return 0
 
-    profile = instaloader.Profile.from_username(loader.context, username)
     if profile.is_private:
         print(f"  {username}: private account, skipping")
         return 0
@@ -137,7 +159,17 @@ def main() -> None:
         "--start-index",
         type=int,
         default=1,
-        help="First number used in the NNNN_username folder names",
+        help="First number used in the numbered folder names",
+    )
+    parser.add_argument(
+        "--folder-name",
+        choices=("index_username", "index_name", "username", "name"),
+        default="index_username",
+        help=(
+            "Per-profile folder naming: 0001_username (default), "
+            "0001_Display_Name, username, or Display_Name. Falls back to the "
+            "username when the account has no display name."
+        ),
     )
     parser.add_argument(
         "--delay",
@@ -177,13 +209,14 @@ def main() -> None:
     total = 0
     for offset, username in enumerate(usernames):
         index = args.start_index + offset
-        target_dir = args.out_dir / f"{index:04d}_{username}"
-        print(f"{username} -> {target_dir}")
+        print(f"{username}")
         try:
             total += download_profile(
                 loader,
                 username,
-                target_dir,
+                args.out_dir,
+                index,
+                args.folder_name,
                 args.count,
                 args.delay,
                 args.overwrite,

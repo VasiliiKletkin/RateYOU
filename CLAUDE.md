@@ -49,6 +49,11 @@ docker compose up -d --build               # everything: bot + admin + migrate
 # Entry points (dev)
 poetry run python -m src.presentation.bot.main      # bot (polling by default)
 poetry run python -m src.presentation.admin.main    # admin on :8000
+
+# Background tasks (taskiq). The task module must be passed explicitly —
+# that's what registers tasks and their `schedule=[...]` labels.
+poetry run taskiq worker    src.presentation.tasks.broker:broker    src.presentation.tasks.broadcast
+poetry run taskiq scheduler src.presentation.tasks.broker:scheduler src.presentation.tasks.broadcast
 ```
 
 When adding ORM models, also import them in `src/infrastructure/db/models/__init__.py` so Alembic autogenerate sees them in `Base.metadata`.
@@ -58,8 +63,10 @@ When adding ORM models, also import them in `src/infrastructure/db/models/__init
 Bot user-facing strings are wrapped with `_(...)` from `aiogram.utils.i18n`. The locale is picked from `from_user.language_code` (via `UserLanguageI18nMiddleware` in `src/presentation/bot/i18n.py`); unsupported codes fall back to `en`.
 
 ```bash
-# After adding/changing a _("...") string anywhere under src/presentation/bot/:
-poetry run pybabel extract -F locales/babel.cfg -o locales/messages.pot src/presentation/bot/
+# After adding/changing a _("...") string anywhere under src/presentation/
+# (bot handlers AND taskiq broadcasts — extracting only bot/ silently drops
+# the task strings):
+poetry run pybabel extract -F locales/babel.cfg -o locales/messages.pot src/presentation/
 poetry run pybabel update -i locales/messages.pot -d locales
 
 # Translate the new entries in locales/{en,ru}/LC_MESSAGES/messages.po

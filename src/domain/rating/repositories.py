@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Protocol
 
 from src.domain.rating.entities import Rating
@@ -31,6 +32,14 @@ class IRatingRepository(Protocol):
         limit: int,
     ) -> list[Rating]:
         """Latest ratings of `rated_id`, newest first."""
+        ...
+
+    async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
+        """Who has rated anyone since `since` — i.e. who is still engaged.
+
+        Reads `updated_at`, not `created_at`: re-rating an existing profile
+        counts as activity too, and only `updated_at` moves for those.
+        """
         ...
 
 

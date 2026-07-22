@@ -1,6 +1,7 @@
 from dishka import Provider, Scope, provide
 
 from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
+from src.application.discovery.notify_new_profiles import NotifyAboutNewProfilesUseCase
 from src.application.discovery.search_preferences import (
     GetSearchPreferencesUseCase,
     UpdateGenderPreferenceUseCase,
@@ -10,6 +11,7 @@ from src.application.discovery.skip_profile import SkipProfileUseCase
 from src.application.identity.get_user import GetUserByTelegramIdUseCase
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.identity.update_language import UpdateUserLanguageUseCase
+from src.application.identity.update_notifications import UpdateNotificationsUseCase
 from src.application.payment.confirm_payment import ConfirmPaymentUseCase
 from src.application.payment.create_invoice import CreatePremiumInvoiceUseCase
 from src.application.payment.refund_payment import RefundPaymentUseCase
@@ -41,6 +43,7 @@ class UseCaseProvider(Provider):
     register_user = provide(RegisterUserUseCase)
     get_user_by_telegram_id = provide(GetUserByTelegramIdUseCase)
     update_user_language = provide(UpdateUserLanguageUseCase)
+    update_notifications = provide(UpdateNotificationsUseCase)
 
     # Profile
     create_profile = provide(CreateProfileUseCase)
@@ -61,6 +64,7 @@ class UseCaseProvider(Provider):
     get_search_preferences = provide(GetSearchPreferencesUseCase)
     update_gender_preference = provide(UpdateGenderPreferenceUseCase)
     update_min_rating = provide(UpdateMinRatingUseCase)
+    notify_about_new_profiles = provide(NotifyAboutNewProfilesUseCase)
 
     # Subscription
     activate_premium = provide(ActivatePremiumUseCase)
