@@ -68,9 +68,7 @@ class FakeRatingRepo:
         return []
 
 
-def _make_user(
-    telegram_id: int, *, banned: bool = False, role: Role = Role.USER
-) -> User:
+def _make_user(telegram_id: int, *, banned: bool = False, role: Role = Role.USER) -> User:
     user = User.register(
         TelegramId(telegram_id), datetime.now(UTC), language=Language.RU, role=role
     )

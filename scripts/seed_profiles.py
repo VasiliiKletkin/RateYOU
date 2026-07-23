@@ -374,9 +374,7 @@ async def amain(args: argparse.Namespace) -> int:
             pinned_city[2],
         )
 
-    full_total = (
-        len(photo_source) if pinned_city else len(CITIES) * PROFILES_PER_CITY
-    )
+    full_total = len(photo_source) if pinned_city else len(CITIES) * PROFILES_PER_CITY
     available = len(photo_source)
     total = min(full_total, available)
     if args.limit:
