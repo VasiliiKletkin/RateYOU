@@ -41,6 +41,11 @@ RUN poetry install --no-root --no-cache --only=main
 COPY src/ ./src/
 COPY migrations/ ./migrations/
 COPY locales/ ./locales/
+# Operational one-offs (seeding, backfills) are run against prod via
+# `docker compose run --rm bot python -m scripts.<name>`, so they ship with
+# the image. Photos are bind-mounted at run time — .dockerignore keeps
+# scripts/seed_photos out of the build context.
+COPY scripts/ ./scripts/
 COPY alembic.ini ./
 
 RUN pybabel compile -d locales

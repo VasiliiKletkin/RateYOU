@@ -9,6 +9,9 @@ __pycache__/
 .mypy_cache/
 .env
 tests/
+# Seed photos are bind-mounted at run time, never baked in — they are tens
+# of megabytes and change independently of the code.
+scripts/seed_photos/
 *.md
 .python-version
 poetry.toml
