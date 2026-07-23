@@ -5,7 +5,7 @@ from uuid import uuid4
 from src.application.discovery.dto import NewProfilesBroadcast
 from src.application.discovery.notify_new_profiles import NotifyAboutNewProfilesUseCase
 from src.domain.identity.entities import User
-from src.domain.identity.value_objects import Language, TelegramId
+from src.domain.identity.value_objects import Language, Role, TelegramId
 from src.domain.profile.entities import Profile
 from src.domain.profile.value_objects import ProfileId
 from src.domain.rating.entities import Rating
@@ -68,8 +68,12 @@ class FakeRatingRepo:
         return []
 
 
-def _make_user(telegram_id: int, *, banned: bool = False) -> User:
-    user = User.register(TelegramId(telegram_id), datetime.now(UTC), language=Language.RU)
+def _make_user(
+    telegram_id: int, *, banned: bool = False, role: Role = Role.USER
+) -> User:
+    user = User.register(
+        TelegramId(telegram_id), datetime.now(UTC), language=Language.RU, role=role
+    )
     if banned:
         user.ban("spam", datetime.now(UTC))
     return user
@@ -139,6 +143,17 @@ async def test_recently_active_raters_are_left_alone() -> None:
 async def test_banned_users_are_skipped() -> None:
     alice, spammer = _make_user(1), _make_user(2, banned=True)
     profiles, users, ratings = _repos(alice, spammer)
+    profiles.created_after = [UserId(uuid4())]
+
+    result = await _run(profiles, users, ratings)
+
+    assert [r.telegram_id for r in result.recipients] == [1]
+
+
+async def test_seed_users_are_skipped() -> None:
+    """Nobody is behind a seeded telegram_id — sending there always fails."""
+    alice, seeded = _make_user(1), _make_user(9_000_000_000, role=Role.SEED)
+    profiles, users, ratings = _repos(alice, seeded)
     profiles.created_after = [UserId(uuid4())]
 
     result = await _run(profiles, users, ratings)

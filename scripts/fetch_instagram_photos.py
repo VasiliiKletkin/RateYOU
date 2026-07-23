@@ -174,7 +174,7 @@ def main() -> None:
     parser.add_argument(
         "--delay",
         type=float,
-        default=5.0,
+        default=30.0,
         help="Seconds to sleep between photos and between accounts",
     )
     parser.add_argument(

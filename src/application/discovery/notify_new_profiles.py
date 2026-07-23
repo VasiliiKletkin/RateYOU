@@ -3,6 +3,7 @@ from datetime import datetime
 
 from src.application.discovery.dto import BroadcastRecipient, NewProfilesBroadcast
 from src.domain.identity.repositories import IUserRepository
+from src.domain.identity.value_objects import Role
 from src.domain.profile.repositories import IProfileRepository
 from src.domain.rating.repositories import IRatingRepository
 
@@ -49,6 +50,10 @@ class NotifyAboutNewProfilesUseCase:
         total_new = len(new_owner_ids)
         recipients = []
         for user in users:
+            # Seeded users have no one behind their telegram_id: every send
+            # would be a guaranteed TelegramForbiddenError.
+            if user.role is Role.SEED:
+                continue
             if user.is_banned or not user.notifications_enabled:
                 continue
             if user.id in still_active:

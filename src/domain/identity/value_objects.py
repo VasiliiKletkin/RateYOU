@@ -12,8 +12,16 @@ class TelegramId:
 
 
 class Role(StrEnum):
+    """What a user is in the system.
+
+    SEED marks seeded content rather than a person: nothing is ever
+    delivered to its ``telegram_id``, but its profile still takes part in
+    discovery so early real users have something to rate.
+    """
+
     USER = "user"
     ADMIN = "admin"
+    SEED = "seed"
 
 
 class Language(StrEnum):

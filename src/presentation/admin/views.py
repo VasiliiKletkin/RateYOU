@@ -18,7 +18,7 @@ class UserAdmin(ModelView):
         "created_at",
     ]
     searchable_fields = ["telegram_id"]
-    sortable_fields = ["created_at", "telegram_id"]
+    sortable_fields = ["created_at", "telegram_id", "role"]
 
 
 class ProfileAdmin(ModelView):

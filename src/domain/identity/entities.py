@@ -59,12 +59,14 @@ class User:
         now: datetime,
         language: Language = Language.EN,
         username: str | None = None,
+        role: Role = Role.USER,
     ) -> "User":
         return cls(
             id=UserId.new(),
             telegram_id=telegram_id,
             username=normalize_username(username),
             language=language,
+            role=role,
             created_at=now,
         )
 

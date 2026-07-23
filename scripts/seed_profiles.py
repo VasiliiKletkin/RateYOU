@@ -33,7 +33,13 @@ Run (note the env -i wrapper from CLAUDE.md):
     python -m scripts.seed_profiles \
     --owner-chat-id 877916659 \
     --photos-dir scripts/seed_photos \
+    --city Kazan \
     --limit 5
+
+``--city`` geocodes one place through Nominatim and scatters every profile
+around it, 10 m to 1 km out by default (``--spread-min-m`` /
+``--spread-max-m``). Without it, profiles are spread across the built-in
+CITIES table instead, PROFILES_PER_CITY per city.
 
 Cleanup later (cascade should remove profiles + ratings if the FKs are
 configured ON DELETE CASCADE; otherwise delete profiles first):
@@ -46,6 +52,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import logging
+import math
 import random
 import sys
 from datetime import UTC, datetime
@@ -66,7 +73,8 @@ from scripts.name_data import FEMALE_NAMES
 from src.application.profile.create_profile import CreateProfileUseCase
 from src.application.profile.dto import CreateProfileRequest
 from src.domain.identity.entities import User
-from src.domain.identity.value_objects import Language, TelegramId
+from src.domain.identity.value_objects import Language, Role, TelegramId
+from src.domain.profile.exceptions import GeocodingUnavailable, InvalidLocation
 from src.domain.referral.services import ReferralRewardService
 from src.infrastructure.config import get_settings
 from src.infrastructure.db.repositories.profile import ProfileRepository
@@ -74,6 +82,7 @@ from src.infrastructure.db.repositories.referral import ReferralRepository
 from src.infrastructure.db.repositories.subscription import SubscriptionRepository
 from src.infrastructure.db.repositories.user import UserRepository
 from src.infrastructure.db.uow import SqlAlchemyUnitOfWork
+from src.infrastructure.geocoding.nominatim import NominatimGeocoder
 
 log = logging.getLogger("seed")
 
@@ -103,15 +112,45 @@ def _city_for_index(idx: int) -> tuple[str, float, float]:
     return CITIES[idx // PROFILES_PER_CITY]
 
 
-def _location_around(lat0: float, lon0: float) -> tuple[float, float]:
-    # 1 degree of lat ≈ 111 km; 1 degree of lon shrinks with cos(lat).
-    import math
+METERS_PER_DEGREE_LAT = 111_320.0
 
-    lat_range = CITY_RADIUS_KM / 111.0
-    lon_range = CITY_RADIUS_KM / (111.0 * max(math.cos(math.radians(lat0)), 0.1))
-    lat = lat0 + random.uniform(-lat_range, lat_range)
-    lon = lon0 + random.uniform(-lon_range, lon_range)
+
+def _location_near(
+    lat0: float,
+    lon0: float,
+    min_meters: float,
+    max_meters: float,
+) -> tuple[float, float]:
+    """Offset a point by a random bearing and distance in [min, max] metres.
+
+    Distance is uniform in metres rather than in area, so the profiles are
+    spread evenly across the range instead of piling up near the outer edge.
+    """
+    distance = random.uniform(min_meters, max_meters)
+    bearing = random.uniform(0.0, 2.0 * math.pi)
+    north = distance * math.cos(bearing)
+    east = distance * math.sin(bearing)
+    # 1 degree of lat is ~constant; 1 degree of lon shrinks with cos(lat).
+    lat = lat0 + north / METERS_PER_DEGREE_LAT
+    lon = lon0 + east / (METERS_PER_DEGREE_LAT * max(math.cos(math.radians(lat0)), 0.01))
     return (lat, lon)
+
+
+async def _geocode_city(query: str) -> tuple[str, float, float]:
+    """Resolve a city name to (label, lat, lon). Raises on no match."""
+    settings = get_settings()
+    geocoder = NominatimGeocoder(
+        base_url=settings.geocoding.base_url,
+        user_agent=settings.geocoding.user_agent,
+        timeout_seconds=settings.geocoding.timeout_seconds,
+    )
+    candidates = await geocoder.geocode(query, language="ru", limit=5)
+    if not candidates:
+        raise RuntimeError(f"Geocoder found nothing for {query!r}")
+    if len(candidates) > 1:
+        log.info("Other matches for %r: %s", query, [c.label for c in candidates[1:]])
+    best = candidates[0]
+    return (best.label, best.location.lat, best.location.lon)
 
 
 # --- fake data --------------------------------------------------------------
@@ -222,6 +261,8 @@ async def _process_one(
     *,
     idx: int,
     name: str,
+    city: tuple[str, float, float],
+    spread_meters: tuple[float, float],
     photo_paths: list[Path],
     bot: Bot,
     owner_chat_id: int,
@@ -253,12 +294,15 @@ async def _process_one(
         await asyncio.sleep(0.35)  # stay under per-chat soft rate-limit
 
     # 2. Create User + Profile in one transaction.
-    city_name, city_lat, city_lon = _city_for_index(idx)
+    city_name, city_lat, city_lon = city
     async with session_factory() as session:
         user_repo = UserRepository(session=session)
         now = datetime.now(UTC)
         user = User.register(
-            telegram_id=TelegramId(tg_id), now=now, language=Language.RU
+            telegram_id=TelegramId(tg_id),
+            now=now,
+            language=Language.RU,
+            role=Role.SEED,
         )
         await user_repo.add(user)
 
@@ -285,7 +329,7 @@ async def _process_one(
                 gender="female",
                 bio=_random_bio(),
                 photo_file_ids=tuple(file_ids),
-                location=_location_around(city_lat, city_lon),
+                location=_location_near(city_lat, city_lon, *spread_meters),
             )
         )
 
@@ -308,16 +352,42 @@ async def amain(args: argparse.Namespace) -> int:
         log.error("%s", exc)
         return 2
 
-    full_total = len(CITIES) * PROFILES_PER_CITY
+    if args.spread_min_m > args.spread_max_m:
+        log.error("--spread-min-m must not exceed --spread-max-m")
+        return 2
+    spread = (args.spread_min_m, args.spread_max_m)
+
+    # --city pins every profile to one geocoded point; without it the built-in
+    # CITIES table is used, PROFILES_PER_CITY profiles per city in order.
+    pinned_city: tuple[str, float, float] | None = None
+    if args.city:
+        try:
+            pinned_city = await _geocode_city(args.city)
+        except (RuntimeError, GeocodingUnavailable, InvalidLocation) as exc:
+            log.error("Could not geocode %r: %s", args.city, exc)
+            return 2
+        log.info(
+            "City %r resolved to %s (%.5f, %.5f)",
+            args.city,
+            pinned_city[0],
+            pinned_city[1],
+            pinned_city[2],
+        )
+
+    full_total = (
+        len(photo_source) if pinned_city else len(CITIES) * PROFILES_PER_CITY
+    )
     available = len(photo_source)
     total = min(full_total, available)
     if args.limit:
         total = min(total, args.limit)
     log.info(
-        "Target: %d profiles (photo dirs: %d, full plan: %d)",
+        "Target: %d profiles (photo dirs: %d, full plan: %d), spread %.0f-%.0f m",
         total,
         available,
         full_total,
+        args.spread_min_m,
+        args.spread_max_m,
     )
 
     settings = get_settings()
@@ -355,6 +425,8 @@ async def amain(args: argparse.Namespace) -> int:
                 ok = await _process_one(
                     idx=idx,
                     name=name_pool[idx],
+                    city=pinned_city or _city_for_index(idx),
+                    spread_meters=spread,
                     photo_paths=photo_source.photos_for(idx),
                     bot=bot,
                     owner_chat_id=args.owner_chat_id,
@@ -417,6 +489,27 @@ def main() -> None:
         type=int,
         default=None,
         help="Cap total profiles to seed (handy for smoke-testing on N).",
+    )
+    parser.add_argument(
+        "--city",
+        default=None,
+        help=(
+            "City name to geocode (Nominatim). All profiles are scattered "
+            "around that one point. Without it, the built-in 10-city table "
+            "is used instead."
+        ),
+    )
+    parser.add_argument(
+        "--spread-min-m",
+        type=float,
+        default=10.0,
+        help="Minimum distance from the city centre, in metres (default 10).",
+    )
+    parser.add_argument(
+        "--spread-max-m",
+        type=float,
+        default=1000.0,
+        help="Maximum distance from the city centre, in metres (default 1000).",
     )
     args = parser.parse_args()
     sys.exit(asyncio.run(amain(args)))
