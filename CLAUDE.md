@@ -75,6 +75,25 @@ make i18n-compile
 
 Domain exceptions stay in English (developer/log audience). Bot handlers catch them by type and pick a translated message — they never echo `str(exception)`.
 
+## User-facing flows (the business logic)
+
+Every handler starts with the idempotent `RegisterUserUseCase`, so any command works as the user's first-ever message — /start is not a prerequisite. `BanCheckMiddleware` blocks banned users before any handler runs.
+
+- **`/start [<referrer_telegram_id>]`** — registration. New users get `WELCOME_BONUS_DAYS = 30` of premium as a BONUS subscription **in the same transaction** as the user row (the idempotent early-return for existing users is the double-grant guard). A referral payload creates a *pending* `Referral` (self-referrals and unknown referrers silently dropped; returning users never become referees). `/start` is also where the cached `@username` is (re)captured. Then: search location already set → "welcome back" pointing at /feed and /create; not set → straight into the city picker.
+- **`/feed`** — the core loop; needs a search location but **not** an own profile. Shows the nearest unrated candidate: one photo → photo + inline rating keyboard; 2–10 photos → media group + a separate "Rate this profile" message (media groups can't carry inline keyboards). Buttons: `rate:<owner_uuid>:<1-10>` and `skip:<owner_uuid>`.
+  - **rate** → `RateUserUseCase` (re-rating the same person updates the old score) → `RatingGiven` recomputes the read model → the rated user gets a localized "⭐ Someone just rated you: X/10" DM (skipped if banned; send errors suppressed) → rater sees the fresh average and the next card.
+  - **skip** → Redis cooldown via `RedisSkipRegistry`; that owner disappears from the feed until the TTL expires → next card.
+  - No candidates left → "come back later"; no search location → city-picker prompt.
+- **`/create`** — profile FSM: name → age → gender (buttons) → "who would you like to rate" (buttons) → location (share button, or typed city → Nominatim → `geopick:` candidate buttons) → bio or /skip → photos (album debounce). Finalize creates the `Profile`, persists the gender preference into `SearchPreferences`, seeds the search location from the profile's location, and **pays out the referral** (`ReferralRewardService.mark_profile_created`) — then drops the user straight into the feed. Re-running with an existing profile bails early.
+- **`/edit`** — inline field menu (name / age / gender / bio / photos / location / Done); each edit applies immediately and returns to the menu. Requires a profile.
+- **`/setcity`** — standalone search-origin picker (same share-or-type-city UX as /create's location step); saving drops the user straight into the feed.
+- **`/cancel`** — global FSM abort, registered with `StateFilter("*")` in `create_profile.py`.
+- **`/settings`** — one inline card, edited in place: gender preference, min-rating feed filter (**premium-gated**, re-checked server-side because a stale keyboard can outlive an expired subscription), language (explicit pick is never overwritten by Telegram's `language_code` afterwards), notifications toggle (opt-out of the daily broadcast).
+- **`/premium`** — tiers from `TIER_CATALOG` → `buy:<tier>` → Stars invoice → `pre_checkout_query` always answers ok → `successful_payment` → `ConfirmPaymentUseCase` (Telegram retries absorbed via `InvalidStatusTransition` pass) → `PaymentConfirmed` event activates the subscription → confirmation with expiry countdown. Premium currently gates exactly two things: the min-rating filter and /my_ratings.
+- **`/my_ratings`** — premium-gated (`PremiumRequired` → upsell message); lists recent raters as tappable contacts (`t.me/<username>`, else `tg://user?id=…`) — *seeing who rated you* is the paid value proposition. Also reachable via the `show_my_ratings` button on /premium.
+- **`/refer`** — Russian-only by product decision. Link is `t.me/<bot>?start=<telegram_id>`. Reward: +1 day premium to **both** sides when the referee *creates a profile* (not on mere registration — the message copy says "за каждую регистрацию" and overpromises), plus +3 days to the referrer on every 3rd rewarded referral. Banned referrers are skipped; the referee still gets paid.
+- **Daily broadcast** (18:00, taskiq) — "new profiles near you" re-engagement push to everyone who hasn't toggled notifications off; details under Background tasks.
+
 ## DDD with 7 bounded contexts
 
 `identity`, `profile`, `rating`, `discovery`, `subscription`, `payment`, `referral`. See [docs/context-map.md](docs/context-map.md) — note it predates the Referral context and still says "six".
