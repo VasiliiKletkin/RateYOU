@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Production is live — push to main deploys
+
+The bot runs on a Hetzner VPS. `.github/workflows/cd.yml` on every push to `main`: checks → image build to GHCR (`ghcr.io/vasiliikletkin/rateyou:latest`) → SSH deploy via [docker-compose.prod.yml](docker-compose.prod.yml), where the `migrate` service applies Alembic migrations **automatically against real data**. Treat migrations as production changes, not dev conveniences. `.github/workflows/ci.yml` runs ruff + mypy + pytest on PRs; both reuse `checks.yml`. Server setup is documented in [docs/deployment.md](docs/deployment.md).
+
 ## Poetry must run under `env -i` on this machine
 
 The user's shell PATH puts `~/.pyenv/versions/3.11.9/bin` ahead of `~/.pyenv/shims`, so a plain `poetry` call picks Python 3.11.9 and fails the project's `requires-python = ">=3.13,<3.14"` check. Wrap every host-side Poetry / `poetry run X` / Alembic / pytest invocation:
@@ -98,7 +102,9 @@ The domain `Protocol` (e.g. `IUserRepository`) lives in `domain/<ctx>/repositori
 | `PaymentConfirmed` | `OnPaymentConfirmed` | activate tier from `purpose` (`"premium:<tier>"`) |
 | `PaymentRefunded` | `OnPaymentRefunded` | revoke the grant linked to that transaction |
 
-**Specifications compile to SQL at the infrastructure boundary.** `GetNextProfileForRatingUseCase` composes `Specification`s (visible, not own, not already rated, gender preference, min-rating for premium, skipped-owner cooldown) with `&`; `DiscoverySpecApplier` translates the tree into WHERE/JOIN clauses. Domain code stays SQL-free. Adding a spec means adding a branch to the applier — it raises on unknown specs. `DiscoveryRepository.find_next` orders by PostGIS `ST_Distance` from the viewer's own profile location; it must `selectinload(ProfileORM.photos)` explicitly because `lazy="selectin"` is unreliable when the outer SELECT mixes the entity with extra columns.
+**Specifications compile to SQL at the infrastructure boundary.** `GetNextProfileForRatingUseCase` composes `Specification`s (visible, not own, not already rated, gender preference, min-rating for premium, skipped-owner cooldown) with `&`; `DiscoverySpecApplier` translates the tree into WHERE/JOIN clauses. Domain code stays SQL-free. Adding a spec means adding a branch to the applier — it raises on unknown specs. `DiscoveryRepository.find_next` orders by PostGIS `ST_Distance` (distance ASC, NULLS LAST); it must `selectinload(ProfileORM.photos)` explicitly because `lazy="selectin"` is unreliable when the outer SELECT mixes the entity with extra columns.
+
+**The feed's origin is `SearchPreferences.location`, not the viewer's profile.** A user can browse without ever creating a profile: the nullable Geography column on `search_preferences` is the point the feed sorts around. When it's unset, `GetNextProfileForRatingUseCase` raises `SearchLocationNotSet` — deliberately distinct from returning `None` ("no candidates left"); handlers turn the exception into the city-picker prompt. `/create` seeds the search origin from the new profile's location so the feed works immediately after onboarding, and migration `f7d2a4c9b6e1` backfilled existing rows from `profiles.location`.
 
 **Domain services own cross-aggregate logic but never commit** — `RatingFulfillmentService`, `SubscriptionActivationService`, `ReferralRewardService`. The use case above them owns the transaction boundary.
 
@@ -111,15 +117,16 @@ The domain `Protocol` (e.g. `IUserRepository`) lives in `domain/<ctx>/repositori
 - **Idempotency at the use case**: `RegisterUserUseCase` returns the existing user for a known telegram_id (and that early return is what stops the welcome bonus being granted twice), `RateUserUseCase` updates the score on re-rating (UNIQUE on `(rater_id, rated_id)`), `Referral.mark_rewarded` won't overwrite an existing timestamp. Telegram's `successful_payment` retries are absorbed one level higher: `ConfirmPaymentUseCase` lets `InvalidStatusTransition` propagate and the bot handler in `handlers/premium.py` swallows it.
 - **`ProfileScoreSummary` is a read model**, not an aggregate — recomputed by the `RatingGiven`/`RatingWithdrawn` handlers, never mutated directly by a use case.
 - **Static catalogs live in code, not the DB**: `TIER_CATALOG` (prices in Stars, durations), `PER_REFERRAL_REWARD_DAYS` / `MILESTONE_INTERVAL`, `WELCOME_BONUS_DAYS = 30`. Changing a price is a code change plus a release.
-- Repositories raise a bare `ValueError(f"<Entity> <id> not found for update")` on a missing row — a known wart, repeated in seven files.
+- Repositories raise a bare `ValueError(f"<Entity> <id> not found for update")` on a missing row — a known wart, repeated across the repository files.
 
 ## Bot specifics
 
 - **Handlers take `FromDishka[X]` directly in their signatures**; `setup_dishka(..., auto_inject=True)` wires it. No `@inject` decorator on bot handlers (taskiq tasks *do* need `@inject`).
 - **FSM state lives in Redis** (`RedisStorage`), with TTLs from `RedisConfig` (`fsm_state_ttl_seconds`, 24h). Each FSM stores the relevant aggregate id on the first step so later handlers don't re-query.
+- **`search_location.py` owns the standalone city picker** (`SetSearchLocation` FSM, `/setcity`), reused by `/start` and `/feed` when no search area is set. Its router is registered **last** in `handlers/__init__.py` — it has an in-state catch-all that must not shadow other routers' commands — and its text handler filters out `/`-prefixed messages so a command typed mid-flow isn't geocoded as a city name. `feed.py` keeps its own local copy of the prompt (`_prompt_search_city`) because `search_location` imports `show_next_or_done` from `feed` — importing back would create a cycle.
 - **Media-group photo buffering is in-process.** `create_profile.py` and `edit_profile.py` each keep their own module-level `dict` plus a ~1.2s debounce to collect a Telegram album into one `Photos` VO. Duplicated between the two handlers, and it does not survive a restart or a second bot replica — unlike the FSM itself.
 - **Middlewares**: `ThrottlingMiddleware` (cheap Redis `SET NX EX`) runs before `BanCheckMiddleware` (DB lookup via `dishka_container` from `data`). Both on `dp.message` and `dp.callback_query`.
-- **Callback data is capped at 64 bytes.** Prefixed forms: `rate:<uuid>:<score>` (the widest, 44 bytes), `skip:<uuid>`, `edit_field:<name>`, `buy:<tier>`, `gender:<v>`, `genderpref:<v>`, `geopick:<idx>`, and `/settings`' own `setpref:` / `setrating:` / `setlang:`. Bare actions (`openpref`, `openrating`, `openlang`, `togglenotify`, `show_my_ratings`) are module constants in `handlers/settings.py`, not literals at the call site.
+- **Callback data is capped at 64 bytes.** Prefixed forms: `rate:<uuid>:<score>` (the widest, 44 bytes), `skip:<uuid>`, `edit_field:<name>`, `buy:<tier>`, `gender:<v>`, `genderpref:<v>`, `geopick:<idx>`, and `/settings`' own `setpref:` / `setrating:` / `setlang:`. `geopick:` buttons carry only an index — the geocoder candidates are parked in FSM data (both in `/create` and the city picker). Bare actions (`openpref`, `openrating`, `openlang`, `togglenotify`, `show_my_ratings`) are module constants in `handlers/settings.py`, not literals at the call site.
 - **Polling vs webhook**: `BOT_USE_WEBHOOK=true` → aiohttp on `:8080/webhook` (requires `BOT_WEBHOOK_BASE_URL`); default is polling.
 - **Telegram Stars**: `bot.send_invoice(currency="XTR", provider_token="")`. Payload is `str(transaction.id.value)` and comes back in `successful_payment.invoice_payload`. The Payment domain carries no Telegram fields — `RefundPaymentUseCase` resolves `payer_id → User.telegram_id` through `IUserRepository`, and `TelegramStarsGateway` is the ACL for `"XTR"` and `telegram_payment_charge_id`.
 - **Geocoding**: free-text city input goes through `CachedGeocoder` → `NominatimGeocoder`. Public Nominatim allows ~1 req/s and requires the identifying `User-Agent` in `GeocodingConfig`; hits cache for 30 days, misses for an hour, failures are never cached.

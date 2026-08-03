@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from geoalchemy2 import Geography, WKBElement
 from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -19,3 +20,8 @@ class SearchPreferencesORM(Base, CreatedAtMixin, UpdatedAtMixin):
         Enum(GenderPreference), default=GenderPreference.ANY
     )
     min_rating: Mapped[int] = mapped_column(default=0)
+    # Origin the feed sorts around. Nullable: a fresh prefs row has no search
+    # area until the user sets one (or it's seeded from their profile).
+    location: Mapped[WKBElement | None] = mapped_column(
+        Geography(geometry_type="POINT", srid=4326), default=None
+    )

@@ -2,8 +2,11 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
+import pytest
+
 from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
 from src.domain.discovery.entities import SearchPreferences
+from src.domain.discovery.exceptions import SearchLocationNotSet
 from src.domain.discovery.repositories import DiscoveryMatch
 from src.domain.discovery.specifications import (
     ProfileAverageRatingAtLeast,
@@ -20,7 +23,6 @@ from src.domain.profile.value_objects import (
     Name,
     PhotoFileId,
     Photos,
-    ProfileId,
 )
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import AndSpec, Specification
@@ -44,32 +46,6 @@ class FakeDiscoveryRepository:
         if self.next_profile is None:
             return None
         return DiscoveryMatch(profile=self.next_profile, distance_meters=0)
-
-
-@dataclass
-class FakeProfileRepository:
-    profile: Profile | None = None
-
-    async def add(self, profile: Profile) -> None:
-        self.profile = profile
-
-    async def get_by_id(self, profile_id: ProfileId) -> Profile | None:
-        return self.profile
-
-    async def get_by_owner_id(self, owner_id: UserId) -> Profile | None:
-        return self.profile
-
-    async def exists_for_owner(self, owner_id: UserId) -> bool:
-        return self.profile is not None
-
-    async def update(self, profile: Profile) -> None:
-        self.profile = profile
-
-    async def list_owner_ids_created_after(self, since: datetime) -> list[UserId]:
-        return []
-
-    async def list_visible_owner_ids(self) -> list[UserId]:
-        return []
 
 
 @dataclass
@@ -141,12 +117,14 @@ def _make_prefs(
     *,
     gender_preference: GenderPreference = GenderPreference.ANY,
     min_rating: int = 0,
+    location: Location | None = Location(lat=55.7558, lon=37.6173),
 ) -> SearchPreferences:
     now = datetime.now(UTC)
     return SearchPreferences(
         user_id=UserId.new(),
         gender_preference=gender_preference,
         min_rating=MinRating(min_rating),
+        location=location,
         created_at=now,
         updated_at=now,
     )
@@ -156,18 +134,15 @@ def _make_use_case(
     discovery: FakeDiscoveryRepository,
     subs: FakeSubscriptionRepository,
     skips: FakeSkipRegistry,
-    profiles: FakeProfileRepository | None = None,
     prefs: FakeSearchPreferencesRepository | None = None,
 ) -> GetNextProfileForRatingUseCase:
-    # Use case requires viewer to have a profile (with location). Tests that
-    # don't care about the viewer profile still need one mounted on the repo.
-    if profiles is None:
-        profiles = FakeProfileRepository(profile=_make_profile())
+    # The feed's origin comes from SearchPreferences.location, not a profile —
+    # tests that don't care still need prefs with a location, else the use
+    # case raises SearchLocationNotSet.
     if prefs is None:
-        prefs = FakeSearchPreferencesRepository()
+        prefs = FakeSearchPreferencesRepository(preferences=_make_prefs())
     return GetNextProfileForRatingUseCase(
         discovery_repo=discovery,
-        profile_repo=profiles,
         prefs_repo=prefs,
         subscription_repo=subs,
         skip_registry=skips,
@@ -394,16 +369,16 @@ async def test_skipped_ids_become_owner_not_in_spec() -> None:
     assert set(exclude_spec.user_ids) == {skipped_a, skipped_b}
 
 
-async def test_viewer_location_is_passed_to_repository() -> None:
-    viewer_profile = _make_profile()
-    viewer_profile.location = Location(lat=12.34, lon=56.78)
+async def test_search_location_is_passed_to_repository() -> None:
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
-    profiles = FakeProfileRepository(profile=viewer_profile)
+    prefs = FakeSearchPreferencesRepository(
+        preferences=_make_prefs(location=Location(lat=12.34, lon=56.78))
+    )
     use_case = _make_use_case(
         discovery,
         FakeSubscriptionRepository(),
         FakeSkipRegistry(),
-        profiles=profiles,
+        prefs=prefs,
     )
 
     await use_case.execute(uuid4())
@@ -413,13 +388,25 @@ async def test_viewer_location_is_passed_to_repository() -> None:
     assert discovery.last_viewer_location.lon == 56.78
 
 
-async def test_returns_none_when_viewer_has_no_profile() -> None:
+async def test_raises_when_no_search_location() -> None:
+    """A viewer without a search area — even without a profile — can't be
+    served a distance-sorted feed; the handler turns this into a prompt."""
     discovery = FakeDiscoveryRepository(next_profile=_make_profile())
+    prefs = FakeSearchPreferencesRepository(preferences=_make_prefs(location=None))
     use_case = _make_use_case(
-        discovery,
-        FakeSubscriptionRepository(),
-        FakeSkipRegistry(),
-        profiles=FakeProfileRepository(profile=None),
+        discovery, FakeSubscriptionRepository(), FakeSkipRegistry(), prefs=prefs
     )
 
-    assert await use_case.execute(uuid4()) is None
+    with pytest.raises(SearchLocationNotSet):
+        await use_case.execute(uuid4())
+
+
+async def test_raises_when_no_prefs_row() -> None:
+    discovery = FakeDiscoveryRepository(next_profile=_make_profile())
+    prefs = FakeSearchPreferencesRepository(preferences=None)
+    use_case = _make_use_case(
+        discovery, FakeSubscriptionRepository(), FakeSkipRegistry(), prefs=prefs
+    )
+
+    with pytest.raises(SearchLocationNotSet):
+        await use_case.execute(uuid4())

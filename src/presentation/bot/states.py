@@ -11,6 +11,16 @@ class CreateProfile(StatesGroup):
     waiting_for_photo = State()
 
 
+class SetSearchLocation(StatesGroup):
+    """Standalone city picker for the feed's search origin.
+
+    Separate from CreateProfile: a user sets a search area to browse without
+    ever creating a profile of their own.
+    """
+
+    waiting_for_location = State()
+
+
 class EditProfile(StatesGroup):
     choosing_field = State()
     editing_name = State()

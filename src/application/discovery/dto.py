@@ -49,3 +49,4 @@ class SearchPreferencesResponse:
     user_id: UUID
     gender_preference: str  # "male" | "female" | "any"
     min_rating: int  # 0..10; 0 = no filter
+    has_location: bool  # False = no search area set yet, feed can't run

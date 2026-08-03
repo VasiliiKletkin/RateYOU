@@ -4,6 +4,7 @@ from uuid import UUID
 from aiogram import Bot, F, Router
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InputMediaPhoto, Message
 from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import ngettext
@@ -14,17 +15,35 @@ from src.application.discovery.get_next_profile import GetNextProfileForRatingUs
 from src.application.discovery.skip_profile import SkipProfileUseCase
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
-from src.application.profile.get_profile import GetMyProfileUseCase
 from src.application.rating.dto import RateUserRequest
 from src.application.rating.get_profile_score import GetProfileScoreUseCase
 from src.application.rating.rate_user import RateUserUseCase
+from src.domain.discovery.exceptions import SearchLocationNotSet
 from src.domain.identity.repositories import IUserRepository
 from src.domain.rating.exceptions import CannotRateSelf, InvalidScore
 from src.domain.shared.identifiers import UserId
 from src.presentation.bot.i18n import i18n, normalize_language
-from src.presentation.bot.keyboards import rating_keyboard
+from src.presentation.bot.keyboards import rating_keyboard, share_location_keyboard
+from src.presentation.bot.states import SetSearchLocation
 
 router = Router(name="feed")
+
+
+async def _prompt_search_city(message: Message, state: FSMContext) -> None:
+    """Ask for a search area and enter the picker FSM (search_location owns it).
+
+    Kept local to avoid a feed <-> search_location import cycle; search_location
+    imports `show_next_or_done` from here.
+    """
+    await state.set_state(SetSearchLocation.waiting_for_location)
+    await message.answer(
+        _(
+            "📍 Where do you want to browse?\n"
+            "Share your location, or type a city name — profiles nearest to "
+            "it come first."
+        ),
+        reply_markup=share_location_keyboard(_("📍 Share location")),
+    )
 
 
 def _format_caption(profile: NextProfileResponse) -> str:
@@ -49,13 +68,25 @@ async def show_next_or_done(
     message: Message,
     viewer_id: UUID,
     get_next: GetNextProfileForRatingUseCase,
+    state: FSMContext | None = None,
 ) -> None:
     """Sends the viewer's next candidate, or a "come back later" note.
 
-    Public because /create hands the user straight into the feed once their
-    profile is saved, instead of asking them to type /feed.
+    Public because /create and the search-location picker both hand the user
+    straight into the feed once they're set up, instead of asking them to
+    type /feed.
+
+    If the viewer has no search location yet, prompts them to set one (when
+    `state` is given) rather than showing candidates.
     """
-    next_profile = await get_next.execute(viewer_id)
+    try:
+        next_profile = await get_next.execute(viewer_id)
+    except SearchLocationNotSet:
+        if state is not None:
+            await _prompt_search_city(message, state)
+        else:
+            await message.answer(_("Set your search area first — send /setcity."))
+        return
     if next_profile is None:
         await message.answer(_("No more profiles to rate. Come back later!"))
         return
@@ -114,8 +145,8 @@ async def _notify_rated_user(
 @router.message(Command("feed"))
 async def cmd_feed(
     message: Message,
+    state: FSMContext,
     register_user: FromDishka[RegisterUserUseCase],
-    get_my_profile: FromDishka[GetMyProfileUseCase],
     get_next: FromDishka[GetNextProfileForRatingUseCase],
 ) -> None:
     if message.from_user is None:
@@ -126,15 +157,15 @@ async def cmd_feed(
             language=normalize_language(message.from_user.language_code),
         )
     )
-    if (await get_my_profile.execute(user.id)) is None:
-        await message.answer(_("You need a profile of your own first. Send /create to make one."))
-        return
-    await show_next_or_done(message, user.id, get_next)
+    # No profile-of-your-own gate: a search location is all the feed needs,
+    # and show_next_or_done prompts for it when missing.
+    await show_next_or_done(message, user.id, get_next, state)
 
 
 @router.callback_query(F.data.startswith("rate:"))
 async def on_rate(
     callback: CallbackQuery,
+    state: FSMContext,
     register_user: FromDishka[RegisterUserUseCase],
     rate_user: FromDishka[RateUserUseCase],
     get_profile_score: FromDishka[GetProfileScoreUseCase],
@@ -192,12 +223,13 @@ async def on_rate(
                     count=score_resp.rating_count,
                 )
             )
-        await show_next_or_done(callback.message, user.id, get_next)
+        await show_next_or_done(callback.message, user.id, get_next, state)
 
 
 @router.callback_query(F.data.startswith("skip:"))
 async def on_skip(
     callback: CallbackQuery,
+    state: FSMContext,
     register_user: FromDishka[RegisterUserUseCase],
     skip_profile: FromDishka[SkipProfileUseCase],
     get_next: FromDishka[GetNextProfileForRatingUseCase],
@@ -227,4 +259,4 @@ async def on_skip(
 
     if isinstance(callback.message, Message):
         await _strip_keyboard(callback.message)
-        await show_next_or_done(callback.message, user.id, get_next)
+        await show_next_or_done(callback.message, user.id, get_next, state)

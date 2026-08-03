@@ -7,6 +7,7 @@ from src.presentation.bot.handlers import (
     my_ratings,
     premium,
     refer,
+    search_location,
     settings,
     start,
 )
@@ -22,4 +23,7 @@ def all_routers() -> list[Router]:
         my_ratings.router,
         refer.router,
         settings.router,
+        # Last: its in-state catch-all must not shadow other routers' commands
+        # (/feed, /settings, …) typed while the city picker is open.
+        search_location.router,
     ]

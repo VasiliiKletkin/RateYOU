@@ -1,12 +1,14 @@
 from aiogram import Router
 from aiogram.filters import CommandObject, CommandStart
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram.utils.i18n import gettext as _
 from dishka import FromDishka
 
+from src.application.discovery.search_preferences import GetSearchPreferencesUseCase
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
-from src.application.profile.get_profile import GetMyProfileUseCase
+from src.presentation.bot.handlers.search_location import prompt_for_search_city
 from src.presentation.bot.i18n import normalize_language
 
 router = Router(name="start")
@@ -15,9 +17,10 @@ router = Router(name="start")
 @router.message(CommandStart())
 async def on_start(
     message: Message,
+    state: FSMContext,
     command: CommandObject,
     register_user: FromDishka[RegisterUserUseCase],
-    get_my_profile: FromDishka[GetMyProfileUseCase],
+    get_prefs: FromDishka[GetSearchPreferencesUseCase],
 ) -> None:
     if message.from_user is None:
         return
@@ -31,21 +34,23 @@ async def on_start(
             username=message.from_user.username,
         )
     )
-    profile = await get_my_profile.execute(user.id)
+    prefs = await get_prefs.execute(user.id)
 
-    if profile is None:
+    if prefs.has_location:
         await message.answer(
-            _(
-                "<b>Welcome to RateYou!</b>\n"
-                "You don't have a profile yet - send /create to make one."
-            )
+            _("<b>Welcome back!</b>\nSend /feed to rate profiles, or /create to set up your own.")
         )
-    else:
-        await message.answer(
-            _("<b>Welcome back, {name}!</b>\nSend /feed to rate other profiles.").format(
-                name=profile.name
-            )
+        return
+
+    # No search area yet: browsing is one step away — no profile required.
+    await message.answer(
+        _(
+            "<b>Welcome to RateYou!</b>\n"
+            "Set where you want to browse and you can start rating right away. "
+            "Want to be rated too? Send /create to make your own profile."
         )
+    )
+    await prompt_for_search_city(message, state)
 
 
 def _extract_referrer_telegram_id(payload: str | None) -> int | None:

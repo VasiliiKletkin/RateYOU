@@ -6,6 +6,7 @@ from src.application.discovery.dto import SearchPreferencesResponse
 from src.domain.discovery.entities import SearchPreferences
 from src.domain.discovery.repositories import ISearchPreferencesRepository
 from src.domain.discovery.value_objects import GenderPreference, MinRating
+from src.domain.profile.value_objects import Location
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.uow import UnitOfWork
 
@@ -32,6 +33,7 @@ class GetSearchPreferencesUseCase:
             user_id=prefs.user_id.value,
             gender_preference=prefs.gender_preference.value,
             min_rating=prefs.min_rating.value,
+            has_location=prefs.location is not None,
         )
 
 
@@ -59,6 +61,7 @@ class UpdateGenderPreferenceUseCase:
             user_id=prefs.user_id.value,
             gender_preference=prefs.gender_preference.value,
             min_rating=prefs.min_rating.value,
+            has_location=prefs.location is not None,
         )
 
 
@@ -86,4 +89,39 @@ class UpdateMinRatingUseCase:
             user_id=prefs.user_id.value,
             gender_preference=prefs.gender_preference.value,
             min_rating=prefs.min_rating.value,
+            has_location=prefs.location is not None,
+        )
+
+
+@dataclass
+class UpdateSearchLocationUseCase:
+    """Sets the viewer's search origin, creating the prefs row if missing.
+
+    This is what unblocks the feed for a user without a profile: the origin
+    the feed sorts around no longer comes from `Profile.location`.
+    """
+
+    prefs_repo: ISearchPreferencesRepository
+    uow: UnitOfWork
+
+    async def execute(
+        self, user_id: UUID, latitude: float, longitude: float
+    ) -> SearchPreferencesResponse:
+        uid = UserId(user_id)
+        now = datetime.now(UTC)
+        location = Location(lat=latitude, lon=longitude)
+        prefs = await self.prefs_repo.get_for(uid)
+        if prefs is None:
+            prefs = SearchPreferences.default(uid, now)
+            prefs.change_location(location, now)
+            await self.prefs_repo.add(prefs)
+        else:
+            prefs.change_location(location, now)
+            await self.prefs_repo.update(prefs)
+        await self.uow.commit()
+        return SearchPreferencesResponse(
+            user_id=prefs.user_id.value,
+            gender_preference=prefs.gender_preference.value,
+            min_rating=prefs.min_rating.value,
+            has_location=prefs.location is not None,
         )

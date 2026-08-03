@@ -10,6 +10,7 @@ from dishka import FromDishka
 from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
 from src.application.discovery.search_preferences import (
     UpdateGenderPreferenceUseCase,
+    UpdateSearchLocationUseCase,
 )
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
@@ -285,6 +286,7 @@ async def _finalize_create(
     register_user: RegisterUserUseCase,
     create_profile: CreateProfileUseCase,
     update_gender_preference: UpdateGenderPreferenceUseCase,
+    update_search_location: UpdateSearchLocationUseCase,
     get_next: GetNextProfileForRatingUseCase,
 ) -> None:
     data = await state.get_data()
@@ -323,6 +325,9 @@ async def _finalize_create(
     # `update_gender_preference` is idempotent (creates the row with defaults
     # if missing) so we don't need to differentiate first-time vs re-create.
     await update_gender_preference.execute(user.id, data["gender_preference"])
+    # Seed the search origin from the profile's own location so the feed works
+    # immediately after /create — no separate "set your city" step.
+    await update_search_location.execute(user.id, data["location_lat"], data["location_lon"])
 
     await state.clear()
     await message.answer(
@@ -345,6 +350,7 @@ async def collect_photo(
     register_user: FromDishka[RegisterUserUseCase],
     create_profile: FromDishka[CreateProfileUseCase],
     update_gender_preference: FromDishka[UpdateGenderPreferenceUseCase],
+    update_search_location: FromDishka[UpdateSearchLocationUseCase],
     get_next: FromDishka[GetNextProfileForRatingUseCase],
 ) -> None:
     if not message.photo:
@@ -371,6 +377,7 @@ async def collect_photo(
         register_user,
         create_profile,
         update_gender_preference,
+        update_search_location,
         get_next,
     )
 

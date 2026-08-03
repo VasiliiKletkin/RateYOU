@@ -6,6 +6,7 @@ from src.application.discovery.search_preferences import (
     GetSearchPreferencesUseCase,
     UpdateGenderPreferenceUseCase,
     UpdateMinRatingUseCase,
+    UpdateSearchLocationUseCase,
 )
 from src.application.discovery.skip_profile import SkipProfileUseCase
 from src.application.identity.get_user import GetUserByTelegramIdUseCase
@@ -64,6 +65,7 @@ class UseCaseProvider(Provider):
     get_search_preferences = provide(GetSearchPreferencesUseCase)
     update_gender_preference = provide(UpdateGenderPreferenceUseCase)
     update_min_rating = provide(UpdateMinRatingUseCase)
+    update_search_location = provide(UpdateSearchLocationUseCase)
     notify_about_new_profiles = provide(NotifyAboutNewProfilesUseCase)
 
     # Subscription
