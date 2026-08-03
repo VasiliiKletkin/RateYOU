@@ -77,22 +77,85 @@ Domain exceptions stay in English (developer/log audience). Bot handlers catch t
 
 ## User-facing flows (the business logic)
 
-Every handler starts with the idempotent `RegisterUserUseCase`, so any command works as the user's first-ever message — /start is not a prerequisite. `BanCheckMiddleware` blocks banned users before any handler runs.
+Cross-cutting rules first:
 
-- **`/start [<referrer_telegram_id>]`** — registration. New users get `WELCOME_BONUS_DAYS = 30` of premium as a BONUS subscription **in the same transaction** as the user row (the idempotent early-return for existing users is the double-grant guard). A referral payload creates a *pending* `Referral` (self-referrals and unknown referrers silently dropped; returning users never become referees). `/start` is also where the cached `@username` is (re)captured. Then: search location already set → "welcome back" pointing at /feed and /create; not set → straight into the city picker.
-- **`/feed`** — the core loop; needs a search location but **not** an own profile. Shows the nearest unrated candidate: one photo → photo + inline rating keyboard; 2–10 photos → media group + a separate "Rate this profile" message (media groups can't carry inline keyboards). Buttons: `rate:<owner_uuid>:<1-10>` and `skip:<owner_uuid>`.
-  - **rate** → `RateUserUseCase` (re-rating the same person updates the old score) → `RatingGiven` recomputes the read model → the rated user gets a localized "⭐ Someone just rated you: X/10" DM (skipped if banned; send errors suppressed) → rater sees the fresh average and the next card.
-  - **skip** → Redis cooldown via `RedisSkipRegistry`; that owner disappears from the feed until the TTL expires → next card.
-  - No candidates left → "come back later"; no search location → city-picker prompt.
-- **`/create`** — profile FSM: name → age → gender (buttons) → "who would you like to rate" (buttons) → location (share button, or typed city → Nominatim → `geopick:` candidate buttons) → bio or /skip → photos (album debounce). Finalize creates the `Profile`, persists the gender preference into `SearchPreferences`, seeds the search location from the profile's location, and **pays out the referral** (`ReferralRewardService.mark_profile_created`) — then drops the user straight into the feed. Re-running with an existing profile bails early.
-- **`/edit`** — inline field menu (name / age / gender / bio / photos / location / Done); each edit applies immediately and returns to the menu. Requires a profile.
-- **`/setcity`** — standalone search-origin picker (same share-or-type-city UX as /create's location step); saving drops the user straight into the feed.
-- **`/cancel`** — global FSM abort, registered with `StateFilter("*")` in `create_profile.py`.
-- **`/settings`** — one inline card, edited in place: gender preference, min-rating feed filter (**premium-gated**, re-checked server-side because a stale keyboard can outlive an expired subscription), language (explicit pick is never overwritten by Telegram's `language_code` afterwards), notifications toggle (opt-out of the daily broadcast).
-- **`/premium`** — tiers from `TIER_CATALOG` → `buy:<tier>` → Stars invoice → `pre_checkout_query` always answers ok → `successful_payment` → `ConfirmPaymentUseCase` (Telegram retries absorbed via `InvalidStatusTransition` pass) → `PaymentConfirmed` event activates the subscription → confirmation with expiry countdown. Premium currently gates exactly two things: the min-rating filter and /my_ratings.
-- **`/my_ratings`** — premium-gated (`PremiumRequired` → upsell message); lists recent raters as tappable contacts (`t.me/<username>`, else `tg://user?id=…`) — *seeing who rated you* is the paid value proposition. Also reachable via the `show_my_ratings` button on /premium.
-- **`/refer`** — Russian-only by product decision. Link is `t.me/<bot>?start=<telegram_id>`. Reward: +1 day premium to **both** sides when the referee *creates a profile* (not on mere registration — the message copy says "за каждую регистрацию" and overpromises), plus +3 days to the referrer on every 3rd rewarded referral. Banned referrers are skipped; the referee still gets paid.
-- **Daily broadcast** (18:00, taskiq) — "new profiles near you" re-engagement push to everyone who hasn't toggled notifications off; details under Background tasks.
+- **Every handler starts with the idempotent `RegisterUserUseCase`**, so any command works as the user's first-ever message — /start is not a prerequisite (a user's first-ever interaction can be /refer or a `rate:` button tap).
+- `ThrottlingMiddleware` then `BanCheckMiddleware` run before every handler; banned users are silently blocked.
+- The product loop: browse & rate needs only a **search location**; having your **own profile** is what makes you ratable (and is required only for /edit and referral payout). Premium gates exactly two things: the min-rating feed filter and /my_ratings.
+
+### `/start [<referrer_telegram_id>]`
+
+Registration + routing. On the new-user branch (and only there), three writes land in **one transaction**: the `users` row, a `WELCOME_BONUS_DAYS = 30` premium BONUS grant (the idempotent early-return for existing users is the double-grant guard), and — when the deep-link payload resolves to a known, non-self user — a *pending* `Referral` (`rewarded_at=NULL`). Malformed/unknown/self payloads are silently dropped; registration always succeeds. /start is also where the cached `@username` is (re)captured — on every call, not just the first. Then: search location set → "welcome back" naming /feed and /create; not set → welcome text + straight into the city picker (`SetSearchLocation` FSM).
+
+### `/feed` → `rate:` / `skip:` loop
+
+The core loop; needs a search location but **not** an own profile (`show_next_or_done` catches `SearchLocationNotSet` and opens the city picker instead).
+
+Candidate selection (`GetNextProfileForRatingUseCase`): visible profiles, not the viewer's own, not already rated by them, matching the viewer's gender preference, above their min-rating threshold (only if premium **and** threshold > 0), excluding owners in the viewer's Redis skip set — ordered by `ST_Distance` from the viewer's search location, nearest first, NULLS LAST (profiles without location come last, not never).
+
+Card rendering: caption is `<b>name, age</b>` + distance (`350 m` / `5.4 km`) + bio if present. One photo → `answer_photo` with the rating keyboard attached; 2–10 photos → `answer_media_group` + a separate "Rate this profile:" message carrying the keyboard (Telegram media groups can't have inline keyboards). Buttons: `rate:<owner_uuid>:<1-10>` and `skip:<owner_uuid>`.
+
+- **rate** → `RateUserUseCase`: `RatingFulfillmentService` gives or updates the rating (re-rating the same person replaces the score — UNIQUE on `(rater_id, rated_id)`), `RatingGiven` recomputes `ProfileScoreSummary` in the same UoW. `CannotRateSelf` → alert; then, in order: "Rated X/10 ✓" toast → the rated user gets a "⭐ Someone just rated you: X/10" DM **in their stored locale** (skipped if banned or gone; `TelegramAPIError` suppressed — a blocked bot must not break the rater's flow) → old keyboard stripped → rater sees "📊 Their average: N/10 (from M ratings)" → next card. The rater's identity is *not* revealed in the DM — that's what /my_ratings sells.
+- **skip** → `SkipProfileUseCase` → Redis SET `skipped:<viewer_id>` (no DB write, no UoW), TTL `skip_ttl_seconds = 3600`; the TTL is per-set, so every skip refreshes the whole set's hour. Keyboard stripped → next card.
+- No candidates left → "No more profiles to rate. Come back later!".
+
+### `/create` — profile FSM (`CreateProfile` states)
+
+Guard: existing profile → "You already have a profile", no FSM entered. Steps, each with a retry-on-invalid message:
+
+1. **name** — `Name` VO, 1–50 non-empty chars.
+2. **age** — `Age` VO, int 18–100.
+3. **gender** — `gender:male|female` buttons (no "other" by product decision).
+4. **gender preference** — "who would you like to rate": `genderpref:male|female|any`.
+5. **location** — share-location reply button, or typed city → Nominatim geocode in the user's locale → up to N candidates parked in FSM data → `geopick:<idx>` buttons (index only; the 64-byte callback cap forbids embedding coordinates). Commands are filtered out (`~F.text.startswith("/")`) so /feed typed mid-flow isn't geocoded. Geocoder down → "share location instead"; typed-city is the only path for Telegram Desktop, which can't send locations.
+6. **bio** — `Bio` VO ≤ 500 chars, or /skip for empty.
+7. **photos** — up to `Photos.MAX_COUNT`, collected via the in-process media-group buffer (~1.2 s debounce; first handler in becomes the leader and flushes).
+
+Finalize re-resolves the user via `RegisterUserUseCase` (never trusts the FSM-stored UUID — the row may have been wiped mid-flow), then: `CreateProfileUseCase` (which also triggers **referral payout**, see /refer) → gender preference persisted into `SearchPreferences` → search location seeded from the profile's location → FSM cleared → confirmation → **straight into the feed** (no "now send /feed" dead end). `ProfileAlreadyExists` → bail politely.
+
+### `/edit` — field-at-a-time profile editing (`EditProfile` states)
+
+Requires a profile ("No profile to edit. Use /create first."). Inline menu `edit_field:<name|age|gender|bio|photo|location|done>`; each field edit validates with the same VOs as /create, applies **immediately** via `EditProfileUseCase` (no draft state), and returns to the menu. Location supports the same share-or-typed-city path, with its own copy of the geocode-candidates dance; photos use a separate module-level buffer from /create's. Bio: /skip *clears* it. Done → "Saved. /feed to keep rating."
+
+### `/setcity` — standalone search-origin picker (`SetSearchLocation` FSM)
+
+What unblocks browsing without a profile. Same share-or-type-city UX as /create's location step but writes to `SearchPreferences.location` via `UpdateSearchLocationUseCase` (creates the prefs row if missing). Entered from /start (no location yet), /feed (ditto), or explicitly via /setcity. On save: "✅ Search area saved" → **straight into the feed**. Its router is registered last and excludes `/`-prefixed text so commands typed mid-picker fall through to their own handlers.
+
+### `/cancel`
+
+Global FSM abort — registered with `StateFilter("*")` in `create_profile.py` but clears *any* flow's state; outside a flow answers "Nothing to cancel."
+
+### `/settings`
+
+One inline card ("Settings"), always edited in place (`edit_text`; the "message is not modified" Telegram error is suppressed when a picker re-selects the current value). Four rows, each showing its current value:
+
+- **Show me** (`openpref` → `setpref:<male|female|any>`) — gender preference, same aggregate /create seeds.
+- **Min rating** (`openrating` → `setrating:<0-10>`, 0 = off) — **premium-gated twice**: the picker won't open without an active subscription, and the setter re-checks server-side because a stale keyboard can outlive an expired subscription. The label reads "premium only" for free users.
+- **Language** (`openlang` → `setlang:<code>`, 22 locales shown by native name) — an explicit pick is permanent: the setter passes `language=None` to `RegisterUserUseCase` so the Telegram client code never overwrites it, and the confirmation renders in the freshly-picked locale.
+- **Notifications** (`togglenotify`) — flips the daily-broadcast opt-in and redraws the card.
+
+### `/premium` → Stars payment
+
+Header shows the current subscription (tier + human "Expires in N days/hours/minutes" via `ngettext`) or the pitch. Tier buttons from `TIER_CATALOG`: Bronze 100 ⭐ / 7 d, Silver 300 ⭐ / 30 d, Gold 1000 ⭐ / 30 d (Silver vs Gold differ in price only — a placeholder for future perks). Then:
+
+1. `buy:<tier>` → `CreatePremiumInvoiceUseCase` creates a PENDING `Transaction` (purpose `"premium:<tier>"`) and sends a Stars invoice (`currency="XTR"`, empty `provider_token`, payload = transaction UUID).
+2. `pre_checkout_query` → always `ok=True` (no stock/validation to do).
+3. `successful_payment` → `ConfirmPaymentUseCase` flips the transaction to CONFIRMED and stores `telegram_payment_charge_id`; the `PaymentConfirmed` handler activates the tier from `purpose` as a PURCHASE grant. Telegram redelivers `successful_payment` — the second delivery raises `InvalidStatusTransition`, which the handler deliberately swallows before re-reading premium state, so the user gets the same confirmation twice rather than an error.
+4. Confirmation: "✅ Premium activated!" + expiry + pointer to /settings' min-rating filter.
+
+Subscriptions are an **append-only ledger of grants** (purchase / welcome bonus / referral bonus can coexist); "is premium" is derived from the active set at read time — nothing ever mutates or deletes a grant except refund revocation.
+
+### `/my_ratings`
+
+The paid value proposition: *who* rated you. No subscription → `PremiumRequired` → upsell pointing at /premium. Otherwise the last 10 incoming ratings, newest first: `⭐ score/10 — contact, dd.mm hh:mm`. Raters are identified by **User data only** (`@username` linking to `t.me/<username>`; accounts without a handle render as a localized "Anonymous" over a `tg://user?id=…` mention, which resolves because the rater has used this bot) — the use case deliberately never touches the Profile context, since raters aren't required to have a profile. Also reachable via the `show_my_ratings` button shown on /premium to active subscribers.
+
+### `/refer`
+
+Russian-only by product decision (hardcoded strings, own pluralizer, `ruff: noqa: RUF001`). Shows `t.me/<bot>?start=<telegram_id>` plus stats (invitations, registrations, count-to-next-milestone). Reward flow: the pending `Referral` created at the referee's /start is paid out by `ReferralRewardService.mark_profile_created` when the referee **creates a profile** — +1 day premium to both sides, and every 3rd rewarded referral gives the referrer +3 bonus days on top. Idempotent (`mark_rewarded` won't double-pay); a banned referrer is skipped while the referee still gets paid. ⚠️ The message copy says "за каждую регистрацию" — it overpromises; payout actually requires profile creation.
+
+### Daily broadcast (18:00 UTC, taskiq)
+
+The re-engagement loop: "N new profiles" push to everyone with a visible profile, minus banned / notifications-off / those for whom every new profile is their own. Full mechanics under Background tasks.
 
 ## DDD with 7 bounded contexts
 
