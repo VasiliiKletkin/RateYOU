@@ -27,7 +27,6 @@ class ProfileScoreResponse:
 
 @dataclass(frozen=True, slots=True)
 class IncomingRatingItem:
-    rater_name: str | None
     score: int
     rated_at: datetime
     # Contact handles for the rater. `rater_username` is None when the rater

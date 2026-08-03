@@ -44,20 +44,22 @@ async def _send_my_ratings(
 def _rater_contact(item: IncomingRatingItem) -> str:
     """Renders the rater as a tappable contact so the viewer can message them.
 
-    Prefers the public t.me handle and shows it verbatim; accounts without a
+    Identified by User data only (no Profile lookup — raters aren't required
+    to have one): the public t.me handle when present; accounts without a
     username (a large share on Telegram) fall back to a `tg://user?id=`
-    mention, which resolves because the rater has already used this bot.
+    mention with a localized placeholder, which resolves because the rater
+    has already used this bot.
 
-    Names are user-supplied and the bot sends with parse_mode=HTML, so they
-    are escaped before being embedded in the markup.
+    The bot sends with parse_mode=HTML, so the handle is escaped before
+    being embedded in the markup.
     """
-    name = html.escape(item.rater_name or _("Anonymous"))
     if item.rater_username:
         handle = html.escape(item.rater_username)
-        return f'<a href="https://t.me/{handle}">{name}</a> (@{handle})'
+        return f'<a href="https://t.me/{handle}">@{handle}</a>'
+    anonymous = html.escape(_("Anonymous"))
     if item.rater_telegram_id is not None:
-        return f'<a href="tg://user?id={item.rater_telegram_id}">{name}</a>'
-    return name
+        return f'<a href="tg://user?id={item.rater_telegram_id}">{anonymous}</a>'
+    return anonymous
 
 
 @router.message(Command("my_ratings"))

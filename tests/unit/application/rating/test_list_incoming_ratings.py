@@ -8,16 +8,6 @@ from src.application.rating.list_incoming_ratings import ListIncomingRatingsUseC
 from src.domain.identity.entities import User
 from src.domain.identity.value_objects import TelegramId
 from src.domain.payment.value_objects import TransactionId
-from src.domain.profile.entities import Profile
-from src.domain.profile.value_objects import (
-    Age,
-    Bio,
-    Gender,
-    Location,
-    Name,
-    Photos,
-    ProfileId,
-)
 from src.domain.rating.entities import Rating
 from src.domain.rating.value_objects import RatingId, Score
 from src.domain.shared.exceptions import PremiumRequired
@@ -46,27 +36,6 @@ class FakeRatingRepo:
     async def delete(self, rating: Rating) -> None: ...
     async def compute_stats_for(self, rated_id: UserId) -> tuple[float, int]:
         return 0.0, 0
-
-
-@dataclass
-class FakeProfileRepo:
-    by_owner: dict[UUID, Profile] = field(default_factory=dict)
-
-    async def get_by_owner_id(self, owner_id: UserId) -> Profile | None:
-        return self.by_owner.get(owner_id.value)
-
-    # Unused-but-required:
-    async def add(self, profile: Profile) -> None: ...
-    async def get_by_id(self, profile_id: ProfileId) -> Profile | None: ...
-    async def exists_for_owner(self, owner_id: UserId) -> bool:
-        return False
-
-    async def update(self, profile: Profile) -> None: ...
-    async def list_owner_ids_created_after(self, since: datetime) -> list[UserId]:
-        return []
-
-    async def list_visible_owner_ids(self) -> list[UserId]:
-        return []
 
 
 @dataclass
@@ -124,20 +93,6 @@ class FakeSubscriptionRepo:
                 return
 
 
-def _make_profile(owner: UserId, name: str) -> Profile:
-    now = datetime.now(UTC)
-    return Profile.create(
-        owner_id=owner,
-        name=Name(name),
-        age=Age(25),
-        gender=Gender.FEMALE,
-        bio=Bio(""),
-        photos=Photos.from_strings(["x" * 10]),
-        location=Location(lat=0.0, lon=0.0),
-        now=now,
-    )
-
-
 def _make_rating(rater: UserId, rated: UserId, score: int, at: datetime) -> Rating:
     return Rating(
         id=RatingId.new(),
@@ -163,7 +118,6 @@ async def test_premium_required_when_no_subscription() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=FakeSubscriptionRepo(),
         rating_repo=FakeRatingRepo(),
-        profile_repo=FakeProfileRepo(),
         user_repo=FakeUserRepo(),
     )
     with pytest.raises(PremiumRequired):
@@ -185,7 +139,6 @@ async def test_premium_required_when_subscription_expired() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=FakeRatingRepo(),
-        profile_repo=FakeProfileRepo(),
         user_repo=FakeUserRepo(),
     )
     with pytest.raises(PremiumRequired):
@@ -200,7 +153,6 @@ async def test_returns_empty_when_no_ratings() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=FakeRatingRepo(),
-        profile_repo=FakeProfileRepo(),
         user_repo=FakeUserRepo(),
     )
 
@@ -234,7 +186,6 @@ async def test_returns_rater_contact_handles() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=ratings_repo,
-        profile_repo=FakeProfileRepo(),
         user_repo=users,
     )
 
@@ -246,7 +197,7 @@ async def test_returns_rater_contact_handles() -> None:
     assert response.items[1].rater_telegram_id == 222
 
 
-async def test_returns_ratings_with_rater_names_newest_first() -> None:
+async def test_returns_ratings_newest_first() -> None:
     viewer_uuid = uuid4()
     viewer = UserId(viewer_uuid)
     rater_a, rater_b = UserId(uuid4()), UserId(uuid4())
@@ -258,10 +209,10 @@ async def test_returns_ratings_with_rater_names_newest_first() -> None:
             _make_rating(rater_b, viewer, 5, now - timedelta(minutes=10)),
         ]
     )
-    profiles = FakeProfileRepo(
-        by_owner={
-            rater_a.value: _make_profile(rater_a, "Anna"),
-            rater_b.value: _make_profile(rater_b, "Boris"),
+    users = FakeUserRepo(
+        by_id={
+            rater_a.value: _make_user(rater_a, 111, "anna_k"),
+            rater_b.value: _make_user(rater_b, 222, "boris_b"),
         }
     )
     subs = FakeSubscriptionRepo()
@@ -270,21 +221,21 @@ async def test_returns_ratings_with_rater_names_newest_first() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=ratings_repo,
-        profile_repo=profiles,
-        user_repo=FakeUserRepo(),
+        user_repo=users,
     )
 
     response = await use_case.execute(viewer_uuid)
 
     assert len(response.items) == 2
-    # Newest first: Boris (10 min ago) before Anna (2 hours ago)
-    assert response.items[0].rater_name == "Boris"
+    # Newest first: boris_b (10 min ago) before anna_k (2 hours ago)
+    assert response.items[0].rater_username == "boris_b"
     assert response.items[0].score == 5
-    assert response.items[1].rater_name == "Anna"
+    assert response.items[1].rater_username == "anna_k"
     assert response.items[1].score == 8
 
 
-async def test_rater_without_profile_returns_none_name() -> None:
+async def test_missing_rater_user_returns_no_handles() -> None:
+    """A rater whose User row is gone still shows up — score only, no contact."""
     viewer_uuid = uuid4()
     viewer = UserId(viewer_uuid)
     rater = UserId(uuid4())
@@ -297,14 +248,14 @@ async def test_rater_without_profile_returns_none_name() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=ratings_repo,
-        profile_repo=FakeProfileRepo(),  # no profiles registered
-        user_repo=FakeUserRepo(),
+        user_repo=FakeUserRepo(),  # no users registered
     )
 
     response = await use_case.execute(viewer_uuid)
 
     assert len(response.items) == 1
-    assert response.items[0].rater_name is None
+    assert response.items[0].rater_username is None
+    assert response.items[0].rater_telegram_id is None
     assert response.items[0].score == 9
 
 
@@ -321,7 +272,6 @@ async def test_limit_caps_returned_items() -> None:
     use_case = ListIncomingRatingsUseCase(
         subscription_repo=subs,
         rating_repo=FakeRatingRepo(ratings=ratings),
-        profile_repo=FakeProfileRepo(),
         user_repo=FakeUserRepo(),
     )
 

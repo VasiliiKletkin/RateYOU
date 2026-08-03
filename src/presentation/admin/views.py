@@ -69,15 +69,18 @@ class ProfilePhotoAdmin(ModelView):
 class RatingAdmin(ModelView):
     label = "Ratings"
     icon = "fa fa-star"
+    # `rater` / `rated` render as links to the User rows (same pattern as
+    # ReferralAdmin's referrer/referee) instead of bare UUID columns.
     fields = [
         "id",
-        "rater_id",
-        "rated_id",
+        "rater",
+        "rated",
         "score",
         "created_at",
         "updated_at",
     ]
     sortable_fields = ["created_at", "score"]
+    fields_default_sort = [("created_at", True)]  # DESC
 
 
 class ProfileScoreSummaryAdmin(ModelView):
