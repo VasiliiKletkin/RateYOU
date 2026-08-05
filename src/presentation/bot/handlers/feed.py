@@ -11,38 +11,37 @@ from aiogram.utils.i18n import ngettext
 from dishka import FromDishka
 
 from src.application.discovery.dto import NextProfileResponse
-from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
+from src.application.discovery.get_next_profile import (
+    FREE_RATINGS_WITHOUT_PROFILE,
+    GetNextProfileForRatingUseCase,
+)
 from src.application.discovery.skip_profile import SkipProfileUseCase
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
 from src.application.rating.dto import RateUserRequest
 from src.application.rating.get_profile_score import GetProfileScoreUseCase
 from src.application.rating.rate_user import RateUserUseCase
-from src.domain.discovery.exceptions import SearchLocationNotSet
+from src.domain.discovery.exceptions import ProfileRequiredToContinue, SearchLocationNotSet
 from src.domain.identity.repositories import IUserRepository
 from src.domain.rating.exceptions import CannotRateSelf, InvalidScore
 from src.domain.shared.identifiers import UserId
 from src.presentation.bot.i18n import i18n, normalize_language
-from src.presentation.bot.keyboards import rating_keyboard, share_location_keyboard
+from src.presentation.bot.keyboards import gender_preference_keyboard, rating_keyboard
 from src.presentation.bot.states import SetSearchLocation
 
 router = Router(name="feed")
 
 
-async def _prompt_search_city(message: Message, state: FSMContext) -> None:
-    """Ask for a search area and enter the picker FSM (search_location owns it).
+async def _start_browse_onboarding(message: Message, state: FSMContext) -> None:
+    """First-time setup: gender preference, then city (search_location owns it).
 
     Kept local to avoid a feed <-> search_location import cycle; search_location
     imports `show_next_or_done` from here.
     """
-    await state.set_state(SetSearchLocation.waiting_for_location)
+    await state.set_state(SetSearchLocation.waiting_for_gender_preference)
     await message.answer(
-        _(
-            "📍 Where do you want to browse?\n"
-            "Share your location, or type a city name — profiles nearest to "
-            "it come first."
-        ),
-        reply_markup=share_location_keyboard(_("📍 Share location")),
+        _("Who would you like to rate?"),
+        reply_markup=gender_preference_keyboard(),
     )
 
 
@@ -83,9 +82,19 @@ async def show_next_or_done(
         next_profile = await get_next.execute(viewer_id)
     except SearchLocationNotSet:
         if state is not None:
-            await _prompt_search_city(message, state)
+            await _start_browse_onboarding(message, state)
         else:
             await message.answer(_("Set your search area first — send /setcity."))
+        return
+    except ProfileRequiredToContinue:
+        await message.answer(
+            _(
+                "🔒 You've rated {count} profiles — that's the limit without a "
+                "profile of your own.\n"
+                "Create yours with /create to keep rating (and find out how "
+                "people rate you)."
+            ).format(count=FREE_RATINGS_WITHOUT_PROFILE)
+        )
         return
     if next_profile is None:
         await message.answer(_("No more profiles to rate. Come back later!"))

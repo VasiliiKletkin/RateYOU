@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 02:05+0300\n"
+"POT-Creation-Date: 2026-08-05 13:26+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fa\n"
@@ -129,20 +129,20 @@ msgstr "🌟 چه کسی به من امتیاز داد"
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} روز"
 
-#: src/presentation/bot/handlers/create_profile.py:55
+#: src/presentation/bot/handlers/create_profile.py:56
 msgid "Nothing to cancel."
 msgstr "چیزی برای لغو نیست."
 
-#: src/presentation/bot/handlers/create_profile.py:58
+#: src/presentation/bot/handlers/create_profile.py:59
 msgid "Cancelled."
 msgstr "لغو شد."
 
-#: src/presentation/bot/handlers/create_profile.py:77
-#: src/presentation/bot/handlers/create_profile.py:318
+#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/create_profile.py:320
 msgid "You already have a profile."
 msgstr "شما در حال حاضر یک پروفایل دارید."
 
-#: src/presentation/bot/handlers/create_profile.py:82
+#: src/presentation/bot/handlers/create_profile.py:83
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -150,44 +150,46 @@ msgstr ""
 "بیا پروفایلت رو بسازیم.\n"
 "اسمت چیه؟"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:89
 #: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "لطفاً متن ارسال کنید."
 
-#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/create_profile.py:94
 #: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ نام باید بین ۱ تا ۵۰ کاراکتر غیرخالی باشد. دوباره تلاش کنید:"
 
-#: src/presentation/bot/handlers/create_profile.py:97
+#: src/presentation/bot/handlers/create_profile.py:98
 msgid "How old are you?"
 msgstr "چند سالته؟"
 
-#: src/presentation/bot/handlers/create_profile.py:103
+#: src/presentation/bot/handlers/create_profile.py:104
 #: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "لطفاً یک عدد ارسال کنید."
 
-#: src/presentation/bot/handlers/create_profile.py:108
+#: src/presentation/bot/handlers/create_profile.py:109
 #: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ این عدد نیست. دوباره تلاش کنید:"
 
-#: src/presentation/bot/handlers/create_profile.py:111
+#: src/presentation/bot/handlers/create_profile.py:112
 #: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ سن باید بین ۱۸ تا ۱۰۰ باشد. دوباره تلاش کنید:"
 
-#: src/presentation/bot/handlers/create_profile.py:115
+#: src/presentation/bot/handlers/create_profile.py:116
 #: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "جنسیت را انتخاب کنید:"
 
-#: src/presentation/bot/handlers/create_profile.py:128
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/create_profile.py:129
+#: src/presentation/bot/handlers/create_profile.py:151
+#: src/presentation/bot/handlers/create_profile.py:239
 #: src/presentation/bot/handlers/edit_profile.py:341
+#: src/presentation/bot/handlers/search_location.py:89
+#: src/presentation/bot/handlers/search_location.py:203
 #: src/presentation/bot/handlers/settings.py:219
 #: src/presentation/bot/handlers/settings.py:255
 #: src/presentation/bot/handlers/settings.py:282
@@ -195,67 +197,74 @@ msgstr "جنسیت را انتخاب کنید:"
 msgid "Invalid choice"
 msgstr "انتخاب نامعتبر"
 
-#: src/presentation/bot/handlers/create_profile.py:134
+#: src/presentation/bot/handlers/create_profile.py:135
+#: src/presentation/bot/handlers/feed.py:43
+#: src/presentation/bot/handlers/search_location.py:48
+#: src/presentation/bot/handlers/search_location.py:110
 msgid "Who would you like to rate?"
 msgstr "چه کسی را می‌خواهی امتیاز بدهی؟"
 
-#: src/presentation/bot/handlers/create_profile.py:156
+#: src/presentation/bot/handlers/create_profile.py:157
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr ""
 "موقعیتت رو به اشتراک بذار — برای پیدا کردن پروفایل‌های نزدیک استفاده "
 "می‌شه:"
 
-#: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/create_profile.py:159
 #: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:159
+#: src/presentation/bot/handlers/create_profile.py:160
 #: src/presentation/bot/handlers/edit_profile.py:151
+#: src/presentation/bot/handlers/search_location.py:65
 msgid "📍 Share location"
 msgstr "📍 اشتراک‌گذاری موقعیت"
 
-#: src/presentation/bot/handlers/create_profile.py:174
-#: src/presentation/bot/handlers/create_profile.py:250
+#: src/presentation/bot/handlers/create_profile.py:175
+#: src/presentation/bot/handlers/create_profile.py:251
 msgid "Tell something about yourself (or /skip):"
 msgstr "یه چیزی درباره خودت بگو (یا /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:195
-#: src/presentation/bot/handlers/create_profile.py:257
+#: src/presentation/bot/handlers/create_profile.py:196
+#: src/presentation/bot/handlers/create_profile.py:258
 msgid "Please share a location to continue."
 msgstr "لطفاً برای ادامه یک موقعیت به اشتراک بذارید."
 
-#: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/create_profile.py:205
 #: src/presentation/bot/handlers/edit_profile.py:308
+#: src/presentation/bot/handlers/search_location.py:164
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/create_profile.py:210
 #: src/presentation/bot/handlers/edit_profile.py:313
+#: src/presentation/bot/handlers/search_location.py:169
 msgid "No such place found. Check the spelling, or share your location."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/create_profile.py:221
 #: src/presentation/bot/handlers/edit_profile.py:322
+#: src/presentation/bot/handlers/search_location.py:180
 msgid "Pick your city:"
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:264
-#: src/presentation/bot/handlers/create_profile.py:279
+#: src/presentation/bot/handlers/create_profile.py:265
+#: src/presentation/bot/handlers/create_profile.py:280
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "تا {max} عکس ارسال کنید:"
 
-#: src/presentation/bot/handlers/create_profile.py:270
+#: src/presentation/bot/handlers/create_profile.py:271
 msgid "Please send text or /skip."
 msgstr "لطفاً متن یا /skip ارسال کنید."
 
-#: src/presentation/bot/handlers/create_profile.py:275
+#: src/presentation/bot/handlers/create_profile.py:276
 #: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ بیوگرافی خیلی طولانیه (حداکثر ۵۰۰ کاراکتر). دوباره تلاش کنید یا /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:330
+#: src/presentation/bot/handlers/create_profile.py:335
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -268,7 +277,7 @@ msgstr ""
 "سن: {age}\n"
 "برای شروع امتیازدهی به پروفایل‌ها /feed را بفرست."
 
-#: src/presentation/bot/handlers/create_profile.py:380
+#: src/presentation/bot/handlers/create_profile.py:387
 msgid "Please send a photo (not text)."
 msgstr "لطفاً یک عکس ارسال کنید (نه متن)."
 
@@ -342,48 +351,60 @@ msgstr "لطفاً یک عکس ارسال کنید."
 msgid "Please share a location."
 msgstr "لطفاً یک موقعیت به اشتراک بذارید."
 
-#: src/presentation/bot/handlers/feed.py:60
+#: src/presentation/bot/handlers/feed.py:87
+msgid "Set your search area first — send /setcity."
+msgstr "ابتدا منطقهٔ جستجو را تنظیم کن — ‎/setcity را بفرست."
+
+#: src/presentation/bot/handlers/feed.py:92
+#, python-brace-format
+msgid ""
+"🔒 You've rated {count} profiles — that's the limit without a profile of "
+"your own.\n"
+"Create yours with /create to keep rating (and find out how people rate "
+"you)."
+msgstr ""
+"🔒 تو {count} پروفایل را امتیاز داده‌ای — بدون پروفایل خودت این سقف است.\n"
+"با ‎/create پروفایلت را بساز تا به امتیازدادن ادامه دهی (و بفهمی دیگران "
+"به تو چه امتیازی می‌دهند)."
+
+#: src/presentation/bot/handlers/feed.py:100
 msgid "No more profiles to rate. Come back later!"
 msgstr "پروفایل دیگری برای امتیازدهی نیست. بعداً برگرد!"
 
-#: src/presentation/bot/handlers/feed.py:87
+#: src/presentation/bot/handlers/feed.py:127
 msgid "Rate this profile:"
 msgstr "به این پروفایل امتیاز بده:"
 
-#: src/presentation/bot/handlers/feed.py:109
+#: src/presentation/bot/handlers/feed.py:149
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
 msgstr "⭐ یک نفر به تو امتیاز داد: {score}/10"
 
-#: src/presentation/bot/handlers/feed.py:130
-msgid "You need a profile of your own first. Send /create to make one."
-msgstr "اول باید پروفایل خودت رو داشته باشی. برای ساختن /create رو بفرست."
-
-#: src/presentation/bot/handlers/feed.py:150
-#: src/presentation/bot/handlers/feed.py:156
+#: src/presentation/bot/handlers/feed.py:190
+#: src/presentation/bot/handlers/feed.py:196
 msgid "Bad payload"
 msgstr "داده نامعتبر"
 
-#: src/presentation/bot/handlers/feed.py:171
+#: src/presentation/bot/handlers/feed.py:211
 msgid "Can't rate yourself"
 msgstr "نمی‌تونی به خودت امتیاز بدی"
 
-#: src/presentation/bot/handlers/feed.py:174
+#: src/presentation/bot/handlers/feed.py:214
 msgid "Bad score"
 msgstr "امتیاز نامعتبر"
 
-#: src/presentation/bot/handlers/feed.py:177
+#: src/presentation/bot/handlers/feed.py:217
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "امتیاز {score}/10 داده شد ✓"
 
-#: src/presentation/bot/handlers/feed.py:187
+#: src/presentation/bot/handlers/feed.py:227
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 میانگین آن‌ها: {avg}/10 (از {count} امتیاز)"
 
-#: src/presentation/bot/handlers/feed.py:226
+#: src/presentation/bot/handlers/feed.py:267
 msgid "Skipped"
 msgstr "رد شد"
 
@@ -403,7 +424,7 @@ msgstr "هنوز کسی به تو امتیاز نداده است."
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 آخرین کسانی که به تو امتیاز دادند:"
 
-#: src/presentation/bot/handlers/my_ratings.py:54
+#: src/presentation/bot/handlers/my_ratings.py:59
 msgid "Anonymous"
 msgstr "ناشناس"
 
@@ -488,6 +509,26 @@ msgstr ""
 "{expires}\n"
 "فیلتر حداقل امتیازت را در /settings انتخاب کن."
 
+#: src/presentation/bot/handlers/search_location.py:61
+msgid ""
+"📍 Where do you want to browse?\n"
+"Share your location, or type a city name — profiles nearest to it come "
+"first."
+msgstr ""
+"📍 کجا می‌خواهی پروفایل‌ها را ببینی؟\n"
+"موقعیتت را به اشتراک بگذار یا نام یک شهر را بنویس — نزدیک‌ترین پروفایل‌ها"
+" اول نمایش داده می‌شوند."
+
+#: src/presentation/bot/handlers/search_location.py:136
+#: src/presentation/bot/handlers/search_location.py:214
+msgid "✅ Search area saved."
+msgstr "✅ منطقهٔ جستجو ذخیره شد."
+
+#: src/presentation/bot/handlers/search_location.py:157
+#: src/presentation/bot/handlers/search_location.py:221
+msgid "Please share a location or type a city name."
+msgstr "موقعیتت را به اشتراک بگذار یا نام یک شهر را بنویس."
+
 #: src/presentation/bot/handlers/settings.py:75
 #, python-brace-format
 msgid "👤 Show me: {current}"
@@ -532,24 +573,27 @@ msgstr "فقط پریمیوم"
 msgid "Updated"
 msgstr "ذخیره شد"
 
-#: src/presentation/bot/handlers/start.py:39
+#: src/presentation/bot/handlers/start.py:41
+msgid ""
+"<b>Welcome back!</b>\n"
+"Send /feed to rate profiles, or /create to set up your own."
+msgstr ""
+"<b>خوش برگشتی!</b>\n"
+"برای امتیازدادن به پروفایل‌ها ‎/feed و برای ساختن پروفایل خودت ‎/create "
+"را بفرست."
+
+#: src/presentation/bot/handlers/start.py:48
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
-"You don't have a profile yet - send /create to make one."
+"Set where you want to browse and you can start rating right away. Want to"
+" be rated too? Send /create to make your own profile."
 msgstr ""
-"<b>به RateYou خوش آمدید!</b>\n"
-"هنوز پروفایل ندارید - برای ساختن یکی /create را بفرستید."
+"<b>به RateYou خوش آمدی!</b>\n"
+"مشخص کن کجا می‌خواهی پروفایل‌ها را ببینی و بلافاصله شروع به امتیازدادن "
+"کن. می‌خواهی به تو هم امتیاز بدهند؟ ‎/create را بفرست و پروفایل خودت را "
+"بساز."
 
-#: src/presentation/bot/handlers/start.py:45
-#, python-brace-format
-msgid ""
-"<b>Welcome back, {name}!</b>\n"
-"Send /feed to rate other profiles."
-msgstr ""
-"<b>خوش برگشتی، {name}!</b>\n"
-"برای امتیازدهی به سایر پروفایل‌ها /feed را بفرست."
-
-#: src/presentation/tasks/broadcast.py:96
+#: src/presentation/tasks/broadcast.py:98
 msgid ""
 "✨ New profiles have appeared.\n"
 "Open /feed to rate them."
@@ -562,4 +606,14 @@ msgstr ""
 #~ "✨ New profiles to rate: {count}\n"
 #~ "Open /feed to see them."
 #~ msgstr ""
+
+#~ msgid "You need a profile of your own first. Send /create to make one."
+#~ msgstr "اول باید پروفایل خودت رو داشته باشی. برای ساختن /create رو بفرست."
+
+#~ msgid ""
+#~ "<b>Welcome to RateYou!</b>\n"
+#~ "You don't have a profile yet - send /create to make one."
+#~ msgstr ""
+#~ "<b>به RateYou خوش آمدید!</b>\n"
+#~ "هنوز پروفایل ندارید - برای ساختن یکی /create را بفرستید."
 

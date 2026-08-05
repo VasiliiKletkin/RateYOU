@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 02:05+0300\n"
+"POT-Creation-Date: 2026-08-05 13:26+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -129,20 +129,20 @@ msgstr "🌟 誰が私を評価したか"
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days}日"
 
-#: src/presentation/bot/handlers/create_profile.py:55
+#: src/presentation/bot/handlers/create_profile.py:56
 msgid "Nothing to cancel."
 msgstr "キャンセルするものがありません。"
 
-#: src/presentation/bot/handlers/create_profile.py:58
+#: src/presentation/bot/handlers/create_profile.py:59
 msgid "Cancelled."
 msgstr "キャンセルしました。"
 
-#: src/presentation/bot/handlers/create_profile.py:77
-#: src/presentation/bot/handlers/create_profile.py:318
+#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/create_profile.py:320
 msgid "You already have a profile."
 msgstr "すでにプロフィールをお持ちです。"
 
-#: src/presentation/bot/handlers/create_profile.py:82
+#: src/presentation/bot/handlers/create_profile.py:83
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -150,44 +150,46 @@ msgstr ""
 "プロフィールを作成しましょう。\n"
 "お名前は何ですか?"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:89
 #: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "テキストで送ってください。"
 
-#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/create_profile.py:94
 #: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ 名前は1〜50文字で入力してください。もう一度どうぞ:"
 
-#: src/presentation/bot/handlers/create_profile.py:97
+#: src/presentation/bot/handlers/create_profile.py:98
 msgid "How old are you?"
 msgstr "おいくつですか?"
 
-#: src/presentation/bot/handlers/create_profile.py:103
+#: src/presentation/bot/handlers/create_profile.py:104
 #: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "数字で送ってください。"
 
-#: src/presentation/bot/handlers/create_profile.py:108
+#: src/presentation/bot/handlers/create_profile.py:109
 #: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ それは数字ではありません。もう一度どうぞ:"
 
-#: src/presentation/bot/handlers/create_profile.py:111
+#: src/presentation/bot/handlers/create_profile.py:112
 #: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ 年齢は18〜100の間で入力してください。もう一度どうぞ:"
 
-#: src/presentation/bot/handlers/create_profile.py:115
+#: src/presentation/bot/handlers/create_profile.py:116
 #: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "性別を選んでください:"
 
-#: src/presentation/bot/handlers/create_profile.py:128
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/create_profile.py:129
+#: src/presentation/bot/handlers/create_profile.py:151
+#: src/presentation/bot/handlers/create_profile.py:239
 #: src/presentation/bot/handlers/edit_profile.py:341
+#: src/presentation/bot/handlers/search_location.py:89
+#: src/presentation/bot/handlers/search_location.py:203
 #: src/presentation/bot/handlers/settings.py:219
 #: src/presentation/bot/handlers/settings.py:255
 #: src/presentation/bot/handlers/settings.py:282
@@ -195,65 +197,72 @@ msgstr "性別を選んでください:"
 msgid "Invalid choice"
 msgstr "無効な選択です"
 
-#: src/presentation/bot/handlers/create_profile.py:134
+#: src/presentation/bot/handlers/create_profile.py:135
+#: src/presentation/bot/handlers/feed.py:43
+#: src/presentation/bot/handlers/search_location.py:48
+#: src/presentation/bot/handlers/search_location.py:110
 msgid "Who would you like to rate?"
 msgstr "誰を評価しますか?"
 
-#: src/presentation/bot/handlers/create_profile.py:156
+#: src/presentation/bot/handlers/create_profile.py:157
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "位置情報を共有してください — 近くのプロフィールを探すのに使います:"
 
-#: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/create_profile.py:159
 #: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:159
+#: src/presentation/bot/handlers/create_profile.py:160
 #: src/presentation/bot/handlers/edit_profile.py:151
+#: src/presentation/bot/handlers/search_location.py:65
 msgid "📍 Share location"
 msgstr "📍 位置情報を共有"
 
-#: src/presentation/bot/handlers/create_profile.py:174
-#: src/presentation/bot/handlers/create_profile.py:250
+#: src/presentation/bot/handlers/create_profile.py:175
+#: src/presentation/bot/handlers/create_profile.py:251
 msgid "Tell something about yourself (or /skip):"
 msgstr "自己紹介を書いてください (または /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:195
-#: src/presentation/bot/handlers/create_profile.py:257
+#: src/presentation/bot/handlers/create_profile.py:196
+#: src/presentation/bot/handlers/create_profile.py:258
 msgid "Please share a location to continue."
 msgstr "続けるには位置情報を共有してください。"
 
-#: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/create_profile.py:205
 #: src/presentation/bot/handlers/edit_profile.py:308
+#: src/presentation/bot/handlers/search_location.py:164
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/create_profile.py:210
 #: src/presentation/bot/handlers/edit_profile.py:313
+#: src/presentation/bot/handlers/search_location.py:169
 msgid "No such place found. Check the spelling, or share your location."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/create_profile.py:221
 #: src/presentation/bot/handlers/edit_profile.py:322
+#: src/presentation/bot/handlers/search_location.py:180
 msgid "Pick your city:"
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:264
-#: src/presentation/bot/handlers/create_profile.py:279
+#: src/presentation/bot/handlers/create_profile.py:265
+#: src/presentation/bot/handlers/create_profile.py:280
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "最大{max}枚の写真を送ってください:"
 
-#: src/presentation/bot/handlers/create_profile.py:270
+#: src/presentation/bot/handlers/create_profile.py:271
 msgid "Please send text or /skip."
 msgstr "テキストを送るか /skip してください。"
 
-#: src/presentation/bot/handlers/create_profile.py:275
+#: src/presentation/bot/handlers/create_profile.py:276
 #: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ 自己紹介が長すぎます (最大500文字)。もう一度どうぞ、または /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:330
+#: src/presentation/bot/handlers/create_profile.py:335
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -266,7 +275,7 @@ msgstr ""
 "年齢: {age}\n"
 "/feed を送ってプロフィールの評価を始めましょう。"
 
-#: src/presentation/bot/handlers/create_profile.py:380
+#: src/presentation/bot/handlers/create_profile.py:387
 msgid "Please send a photo (not text)."
 msgstr "写真を送ってください (テキストではなく)。"
 
@@ -340,48 +349,59 @@ msgstr "写真を送ってください。"
 msgid "Please share a location."
 msgstr "位置情報を共有してください。"
 
-#: src/presentation/bot/handlers/feed.py:60
+#: src/presentation/bot/handlers/feed.py:87
+msgid "Set your search area first — send /setcity."
+msgstr "まず検索エリアを設定してください — /setcity を送信してください。"
+
+#: src/presentation/bot/handlers/feed.py:92
+#, python-brace-format
+msgid ""
+"🔒 You've rated {count} profiles — that's the limit without a profile of "
+"your own.\n"
+"Create yours with /create to keep rating (and find out how people rate "
+"you)."
+msgstr ""
+"🔒 {count} 件のプロフィールを評価しました — 自分のプロフィールなしではここまでです。\n"
+"評価を続ける（そして自分がどう評価されるか知る）には /create でプロフィールを作成してください。"
+
+#: src/presentation/bot/handlers/feed.py:100
 msgid "No more profiles to rate. Come back later!"
 msgstr "評価するプロフィールがもうありません。また後で来てください!"
 
-#: src/presentation/bot/handlers/feed.py:87
+#: src/presentation/bot/handlers/feed.py:127
 msgid "Rate this profile:"
 msgstr "このプロフィールを評価してください:"
 
-#: src/presentation/bot/handlers/feed.py:109
+#: src/presentation/bot/handlers/feed.py:149
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
 msgstr "⭐ 誰かがあなたを評価しました: {score}/10"
 
-#: src/presentation/bot/handlers/feed.py:130
-msgid "You need a profile of your own first. Send /create to make one."
-msgstr "まず自分のプロフィールが必要です。/create を送って作成してください。"
-
-#: src/presentation/bot/handlers/feed.py:150
-#: src/presentation/bot/handlers/feed.py:156
+#: src/presentation/bot/handlers/feed.py:190
+#: src/presentation/bot/handlers/feed.py:196
 msgid "Bad payload"
 msgstr "不正なデータです"
 
-#: src/presentation/bot/handlers/feed.py:171
+#: src/presentation/bot/handlers/feed.py:211
 msgid "Can't rate yourself"
 msgstr "自分自身は評価できません"
 
-#: src/presentation/bot/handlers/feed.py:174
+#: src/presentation/bot/handlers/feed.py:214
 msgid "Bad score"
 msgstr "不正なスコアです"
 
-#: src/presentation/bot/handlers/feed.py:177
+#: src/presentation/bot/handlers/feed.py:217
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "{score}/10 で評価しました ✓"
 
-#: src/presentation/bot/handlers/feed.py:187
+#: src/presentation/bot/handlers/feed.py:227
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 平均: {avg}/10 ({count}件の評価より)"
 
-#: src/presentation/bot/handlers/feed.py:226
+#: src/presentation/bot/handlers/feed.py:267
 msgid "Skipped"
 msgstr "スキップしました"
 
@@ -401,7 +421,7 @@ msgstr "まだ誰もあなたを評価していません。"
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 最近あなたを評価した人:"
 
-#: src/presentation/bot/handlers/my_ratings.py:54
+#: src/presentation/bot/handlers/my_ratings.py:59
 msgid "Anonymous"
 msgstr "匿名"
 
@@ -486,6 +506,25 @@ msgstr ""
 "{expires}\n"
 "/settings で最低評価フィルターを選んでください。"
 
+#: src/presentation/bot/handlers/search_location.py:61
+msgid ""
+"📍 Where do you want to browse?\n"
+"Share your location, or type a city name — profiles nearest to it come "
+"first."
+msgstr ""
+"📍 どこでプロフィールを見ますか？\n"
+"位置情報を共有するか、都市名を入力してください — 近い順に表示されます。"
+
+#: src/presentation/bot/handlers/search_location.py:136
+#: src/presentation/bot/handlers/search_location.py:214
+msgid "✅ Search area saved."
+msgstr "✅ 検索エリアを保存しました。"
+
+#: src/presentation/bot/handlers/search_location.py:157
+#: src/presentation/bot/handlers/search_location.py:221
+msgid "Please share a location or type a city name."
+msgstr "位置情報を共有するか、都市名を入力してください。"
+
 #: src/presentation/bot/handlers/settings.py:75
 #, python-brace-format
 msgid "👤 Show me: {current}"
@@ -530,24 +569,24 @@ msgstr "プレミアム限定"
 msgid "Updated"
 msgstr "保存しました"
 
-#: src/presentation/bot/handlers/start.py:39
+#: src/presentation/bot/handlers/start.py:41
+msgid ""
+"<b>Welcome back!</b>\n"
+"Send /feed to rate profiles, or /create to set up your own."
+msgstr ""
+"<b>おかえりなさい！</b>\n"
+"プロフィールを評価するには /feed、自分のプロフィールを作るには /create を送信してください。"
+
+#: src/presentation/bot/handlers/start.py:48
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
-"You don't have a profile yet - send /create to make one."
+"Set where you want to browse and you can start rating right away. Want to"
+" be rated too? Send /create to make your own profile."
 msgstr ""
-"<b>RateYou へようこそ!</b>\n"
-"まだプロフィールがありません - /create を送って作成してください。"
+"<b>RateYouへようこそ！</b>\n"
+"見たい場所を設定すれば、すぐに評価を始められます。自分も評価されたいですか？ /create でプロフィールを作成しましょう。"
 
-#: src/presentation/bot/handlers/start.py:45
-#, python-brace-format
-msgid ""
-"<b>Welcome back, {name}!</b>\n"
-"Send /feed to rate other profiles."
-msgstr ""
-"<b>おかえりなさい、{name}さん!</b>\n"
-"/feed を送って他のプロフィールを評価しましょう。"
-
-#: src/presentation/tasks/broadcast.py:96
+#: src/presentation/tasks/broadcast.py:98
 msgid ""
 "✨ New profiles have appeared.\n"
 "Open /feed to rate them."
@@ -560,4 +599,14 @@ msgstr ""
 #~ "✨ New profiles to rate: {count}\n"
 #~ "Open /feed to see them."
 #~ msgstr ""
+
+#~ msgid "You need a profile of your own first. Send /create to make one."
+#~ msgstr "まず自分のプロフィールが必要です。/create を送って作成してください。"
+
+#~ msgid ""
+#~ "<b>Welcome to RateYou!</b>\n"
+#~ "You don't have a profile yet - send /create to make one."
+#~ msgstr ""
+#~ "<b>RateYou へようこそ!</b>\n"
+#~ "まだプロフィールがありません - /create を送って作成してください。"
 

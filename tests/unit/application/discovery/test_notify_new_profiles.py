@@ -67,6 +67,9 @@ class FakeRatingRepo:
     async def list_for_rated(self, rated_id: UserId, limit: int) -> list[Rating]:
         return []
 
+    async def count_by_rater(self, rater_id: UserId) -> int:
+        return 0
+
 
 def _make_user(telegram_id: int, *, banned: bool = False, role: Role = Role.USER) -> User:
     user = User.register(

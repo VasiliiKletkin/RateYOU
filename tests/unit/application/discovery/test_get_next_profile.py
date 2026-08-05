@@ -4,9 +4,12 @@ from uuid import uuid4
 
 import pytest
 
-from src.application.discovery.get_next_profile import GetNextProfileForRatingUseCase
+from src.application.discovery.get_next_profile import (
+    FREE_RATINGS_WITHOUT_PROFILE,
+    GetNextProfileForRatingUseCase,
+)
 from src.domain.discovery.entities import SearchPreferences
-from src.domain.discovery.exceptions import SearchLocationNotSet
+from src.domain.discovery.exceptions import ProfileRequiredToContinue, SearchLocationNotSet
 from src.domain.discovery.repositories import DiscoveryMatch
 from src.domain.discovery.specifications import (
     ProfileAverageRatingAtLeast,
@@ -100,6 +103,66 @@ class FakeSkipRegistry:
         return list(self.skipped)
 
 
+@dataclass
+class FakeProfileRepository:
+    """Gate input — the use case only calls `exists_for_owner`; rest are stubs."""
+
+    has_profile: bool = False
+
+    async def add(self, profile: Profile) -> None: ...
+
+    async def get_by_id(self, profile_id):  # type: ignore[no-untyped-def]
+        return None
+
+    async def get_by_owner_id(self, owner_id: UserId) -> Profile | None:
+        return None
+
+    async def exists_for_owner(self, owner_id: UserId) -> bool:
+        return self.has_profile
+
+    async def update(self, profile: Profile) -> None: ...
+
+    async def list_owner_ids_created_after(self, since: datetime) -> list[UserId]:
+        return []
+
+    async def list_visible_owner_ids(self) -> list[UserId]:
+        return []
+
+
+@dataclass
+class FakeRatingRepository:
+    """Gate input — the use case only calls `count_by_rater`; rest are stubs."""
+
+    ratings_given: int = 0
+
+    async def add(self, rating):  # type: ignore[no-untyped-def]
+        ...
+
+    async def get_by_id(self, rating_id):  # type: ignore[no-untyped-def]
+        return None
+
+    async def get_by_rater_and_rated(self, rater_id, rated_id):  # type: ignore[no-untyped-def]
+        return None
+
+    async def update(self, rating):  # type: ignore[no-untyped-def]
+        ...
+
+    async def delete(self, rating):  # type: ignore[no-untyped-def]
+        ...
+
+    async def compute_stats_for(self, rated_id: UserId) -> tuple[float, int]:
+        return 0.0, 0
+
+    async def list_for_rated(self, rated_id: UserId, limit: int):  # type: ignore[no-untyped-def]
+        return []
+
+    async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
+        return []
+
+    async def count_by_rater(self, rater_id: UserId) -> int:
+        return self.ratings_given
+
+
 def _make_profile(gender: Gender = Gender.MALE) -> Profile:
     return Profile.create(
         owner_id=UserId.new(),
@@ -135,15 +198,24 @@ def _make_use_case(
     subs: FakeSubscriptionRepository,
     skips: FakeSkipRegistry,
     prefs: FakeSearchPreferencesRepository | None = None,
+    profiles: FakeProfileRepository | None = None,
+    ratings: FakeRatingRepository | None = None,
 ) -> GetNextProfileForRatingUseCase:
     # The feed's origin comes from SearchPreferences.location, not a profile —
     # tests that don't care still need prefs with a location, else the use
-    # case raises SearchLocationNotSet.
+    # case raises SearchLocationNotSet. Defaults keep the reciprocity gate
+    # quiet: no profile but zero ratings given.
     if prefs is None:
         prefs = FakeSearchPreferencesRepository(preferences=_make_prefs())
+    if profiles is None:
+        profiles = FakeProfileRepository()
+    if ratings is None:
+        ratings = FakeRatingRepository()
     return GetNextProfileForRatingUseCase(
         discovery_repo=discovery,
         prefs_repo=prefs,
+        profile_repo=profiles,
+        rating_repo=ratings,
         subscription_repo=subs,
         skip_registry=skips,
     )
@@ -410,3 +482,43 @@ async def test_raises_when_no_prefs_row() -> None:
 
     with pytest.raises(SearchLocationNotSet):
         await use_case.execute(uuid4())
+
+
+async def test_gate_raises_when_quota_reached_without_profile() -> None:
+    discovery = FakeDiscoveryRepository(next_profile=_make_profile())
+    use_case = _make_use_case(
+        discovery,
+        FakeSubscriptionRepository(),
+        FakeSkipRegistry(),
+        profiles=FakeProfileRepository(has_profile=False),
+        ratings=FakeRatingRepository(ratings_given=FREE_RATINGS_WITHOUT_PROFILE),
+    )
+
+    with pytest.raises(ProfileRequiredToContinue):
+        await use_case.execute(uuid4())
+
+
+async def test_gate_allows_below_quota_without_profile() -> None:
+    discovery = FakeDiscoveryRepository(next_profile=_make_profile())
+    use_case = _make_use_case(
+        discovery,
+        FakeSubscriptionRepository(),
+        FakeSkipRegistry(),
+        profiles=FakeProfileRepository(has_profile=False),
+        ratings=FakeRatingRepository(ratings_given=FREE_RATINGS_WITHOUT_PROFILE - 1),
+    )
+
+    assert await use_case.execute(uuid4()) is not None
+
+
+async def test_gate_ignored_when_viewer_has_profile() -> None:
+    discovery = FakeDiscoveryRepository(next_profile=_make_profile())
+    use_case = _make_use_case(
+        discovery,
+        FakeSubscriptionRepository(),
+        FakeSkipRegistry(),
+        profiles=FakeProfileRepository(has_profile=True),
+        ratings=FakeRatingRepository(ratings_given=FREE_RATINGS_WITHOUT_PROFILE * 10),
+    )
+
+    assert await use_case.execute(uuid4()) is not None

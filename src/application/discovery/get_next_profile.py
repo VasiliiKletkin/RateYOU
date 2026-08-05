@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from src.application.discovery.dto import NextProfileResponse
-from src.domain.discovery.exceptions import SearchLocationNotSet
+from src.domain.discovery.exceptions import ProfileRequiredToContinue, SearchLocationNotSet
 from src.domain.discovery.repositories import (
     IDiscoveryRepository,
     ISearchPreferencesRepository,
@@ -16,11 +16,19 @@ from src.domain.discovery.specifications import (
     default_feed_spec,
 )
 from src.domain.discovery.value_objects import GenderPreference
+from src.domain.profile.repositories import IProfileRepository
 from src.domain.profile.value_objects import Gender
+from src.domain.rating.repositories import IRatingRepository
 from src.domain.shared.identifiers import UserId
 from src.domain.shared.specifications import Specification
 from src.domain.subscription.entities import SubscriptionStatus
 from src.domain.subscription.repositories import ISubscriptionRepository
+
+# The reciprocity gate: how many people a viewer may rate before the feed
+# demands a profile of their own. High enough to let the loop hook them,
+# low enough that active raters convert. Re-rating doesn't burn quota
+# (UNIQUE on (rater_id, rated_id) keeps the count per-person).
+FREE_RATINGS_WITHOUT_PROFILE = 15
 
 
 @dataclass
@@ -39,10 +47,16 @@ class GetNextProfileForRatingUseCase:
     location (`SearchPreferences.location`), not their own profile — so a
     user can browse without a profile of their own. No search location set
     raises `SearchLocationNotSet`, distinct from "no candidates" (None).
+
+    Browsing without a profile is capped at `FREE_RATINGS_WITHOUT_PROFILE`
+    ratings — past that, `ProfileRequiredToContinue` (also distinct from
+    "no candidates": the fix is /create, not "come back later").
     """
 
     discovery_repo: IDiscoveryRepository
     prefs_repo: ISearchPreferencesRepository
+    profile_repo: IProfileRepository
+    rating_repo: IRatingRepository
     subscription_repo: ISubscriptionRepository
     skip_registry: ISkipRegistry
 
@@ -54,6 +68,12 @@ class GetNextProfileForRatingUseCase:
             # No search area = the feed has no origin to sort around. The
             # handler catches this to prompt the user to set their city.
             raise SearchLocationNotSet
+
+        if (
+            not await self.profile_repo.exists_for_owner(viewer)
+            and await self.rating_repo.count_by_rater(viewer) >= FREE_RATINGS_WITHOUT_PROFILE
+        ):
+            raise ProfileRequiredToContinue
 
         spec: Specification = default_feed_spec(viewer)
 

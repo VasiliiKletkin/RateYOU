@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-23 02:05+0300\n"
+"POT-Creation-Date: 2026-08-05 13:26+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: th\n"
@@ -129,20 +129,20 @@ msgstr "🌟 ใครให้คะแนนฉัน"
 msgid "{name} — {price} ⭐ / {days}d"
 msgstr "{name} — {price} ⭐ / {days} วัน"
 
-#: src/presentation/bot/handlers/create_profile.py:55
+#: src/presentation/bot/handlers/create_profile.py:56
 msgid "Nothing to cancel."
 msgstr "ไม่มีอะไรให้ยกเลิก"
 
-#: src/presentation/bot/handlers/create_profile.py:58
+#: src/presentation/bot/handlers/create_profile.py:59
 msgid "Cancelled."
 msgstr "ยกเลิกแล้ว"
 
-#: src/presentation/bot/handlers/create_profile.py:77
-#: src/presentation/bot/handlers/create_profile.py:318
+#: src/presentation/bot/handlers/create_profile.py:78
+#: src/presentation/bot/handlers/create_profile.py:320
 msgid "You already have a profile."
 msgstr "คุณมีโปรไฟล์อยู่แล้ว"
 
-#: src/presentation/bot/handlers/create_profile.py:82
+#: src/presentation/bot/handlers/create_profile.py:83
 msgid ""
 "Let's create your profile.\n"
 "What's your name?"
@@ -150,44 +150,46 @@ msgstr ""
 "มาสร้างโปรไฟล์กันเลย\n"
 "คุณชื่ออะไร?"
 
-#: src/presentation/bot/handlers/create_profile.py:88
+#: src/presentation/bot/handlers/create_profile.py:89
 #: src/presentation/bot/handlers/edit_profile.py:169
 msgid "Please send text."
 msgstr "กรุณาส่งเป็นข้อความ"
 
-#: src/presentation/bot/handlers/create_profile.py:93
+#: src/presentation/bot/handlers/create_profile.py:94
 #: src/presentation/bot/handlers/edit_profile.py:174
 msgid "❌ Name must be 1-50 non-empty characters. Try again:"
 msgstr "❌ ชื่อต้องมี 1-50 ตัวอักษร ลองใหม่อีกครั้ง:"
 
-#: src/presentation/bot/handlers/create_profile.py:97
+#: src/presentation/bot/handlers/create_profile.py:98
 msgid "How old are you?"
 msgstr "คุณอายุเท่าไร?"
 
-#: src/presentation/bot/handlers/create_profile.py:103
+#: src/presentation/bot/handlers/create_profile.py:104
 #: src/presentation/bot/handlers/edit_profile.py:186
 msgid "Please send a number."
 msgstr "กรุณาส่งเป็นตัวเลข"
 
-#: src/presentation/bot/handlers/create_profile.py:108
+#: src/presentation/bot/handlers/create_profile.py:109
 #: src/presentation/bot/handlers/edit_profile.py:192
 msgid "❌ That's not a number. Try again:"
 msgstr "❌ นั่นไม่ใช่ตัวเลข ลองใหม่อีกครั้ง:"
 
-#: src/presentation/bot/handlers/create_profile.py:111
+#: src/presentation/bot/handlers/create_profile.py:112
 #: src/presentation/bot/handlers/edit_profile.py:195
 msgid "❌ Age must be between 18 and 100. Try again:"
 msgstr "❌ อายุต้องอยู่ระหว่าง 18 ถึง 100 ลองใหม่อีกครั้ง:"
 
-#: src/presentation/bot/handlers/create_profile.py:115
+#: src/presentation/bot/handlers/create_profile.py:116
 #: src/presentation/bot/handlers/edit_profile.py:141
 msgid "Pick gender:"
 msgstr "เลือกเพศ:"
 
-#: src/presentation/bot/handlers/create_profile.py:128
-#: src/presentation/bot/handlers/create_profile.py:150
-#: src/presentation/bot/handlers/create_profile.py:238
+#: src/presentation/bot/handlers/create_profile.py:129
+#: src/presentation/bot/handlers/create_profile.py:151
+#: src/presentation/bot/handlers/create_profile.py:239
 #: src/presentation/bot/handlers/edit_profile.py:341
+#: src/presentation/bot/handlers/search_location.py:89
+#: src/presentation/bot/handlers/search_location.py:203
 #: src/presentation/bot/handlers/settings.py:219
 #: src/presentation/bot/handlers/settings.py:255
 #: src/presentation/bot/handlers/settings.py:282
@@ -195,65 +197,72 @@ msgstr "เลือกเพศ:"
 msgid "Invalid choice"
 msgstr "ตัวเลือกไม่ถูกต้อง"
 
-#: src/presentation/bot/handlers/create_profile.py:134
+#: src/presentation/bot/handlers/create_profile.py:135
+#: src/presentation/bot/handlers/feed.py:43
+#: src/presentation/bot/handlers/search_location.py:48
+#: src/presentation/bot/handlers/search_location.py:110
 msgid "Who would you like to rate?"
 msgstr "อยากให้คะแนนใคร?"
 
-#: src/presentation/bot/handlers/create_profile.py:156
+#: src/presentation/bot/handlers/create_profile.py:157
 msgid "Share your location — it's used to find nearby profiles:"
 msgstr "แชร์ตำแหน่งของคุณ — ใช้เพื่อค้นหาโปรไฟล์ใกล้เคียง:"
 
-#: src/presentation/bot/handlers/create_profile.py:158
+#: src/presentation/bot/handlers/create_profile.py:159
 #: src/presentation/bot/handlers/edit_profile.py:150
 msgid "Or just type your city name."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:159
+#: src/presentation/bot/handlers/create_profile.py:160
 #: src/presentation/bot/handlers/edit_profile.py:151
+#: src/presentation/bot/handlers/search_location.py:65
 msgid "📍 Share location"
 msgstr "📍 แชร์ตำแหน่ง"
 
-#: src/presentation/bot/handlers/create_profile.py:174
-#: src/presentation/bot/handlers/create_profile.py:250
+#: src/presentation/bot/handlers/create_profile.py:175
+#: src/presentation/bot/handlers/create_profile.py:251
 msgid "Tell something about yourself (or /skip):"
 msgstr "เล่าเรื่องตัวเองสักหน่อย (หรือ /skip):"
 
-#: src/presentation/bot/handlers/create_profile.py:195
-#: src/presentation/bot/handlers/create_profile.py:257
+#: src/presentation/bot/handlers/create_profile.py:196
+#: src/presentation/bot/handlers/create_profile.py:258
 msgid "Please share a location to continue."
 msgstr "กรุณาแชร์ตำแหน่งเพื่อดำเนินการต่อ"
 
-#: src/presentation/bot/handlers/create_profile.py:204
+#: src/presentation/bot/handlers/create_profile.py:205
 #: src/presentation/bot/handlers/edit_profile.py:308
+#: src/presentation/bot/handlers/search_location.py:164
 msgid "Couldn't look that up right now — please share your location instead."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:209
+#: src/presentation/bot/handlers/create_profile.py:210
 #: src/presentation/bot/handlers/edit_profile.py:313
+#: src/presentation/bot/handlers/search_location.py:169
 msgid "No such place found. Check the spelling, or share your location."
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:220
+#: src/presentation/bot/handlers/create_profile.py:221
 #: src/presentation/bot/handlers/edit_profile.py:322
+#: src/presentation/bot/handlers/search_location.py:180
 msgid "Pick your city:"
 msgstr ""
 
-#: src/presentation/bot/handlers/create_profile.py:264
-#: src/presentation/bot/handlers/create_profile.py:279
+#: src/presentation/bot/handlers/create_profile.py:265
+#: src/presentation/bot/handlers/create_profile.py:280
 #, python-brace-format
 msgid "Send up to {max} photos:"
 msgstr "ส่งรูปได้สูงสุด {max} รูป:"
 
-#: src/presentation/bot/handlers/create_profile.py:270
+#: src/presentation/bot/handlers/create_profile.py:271
 msgid "Please send text or /skip."
 msgstr "กรุณาส่งข้อความหรือ /skip"
 
-#: src/presentation/bot/handlers/create_profile.py:275
+#: src/presentation/bot/handlers/create_profile.py:276
 #: src/presentation/bot/handlers/edit_profile.py:238
 msgid "❌ Bio is too long (max 500 chars). Try again or /skip:"
 msgstr "❌ คำแนะนำตัวยาวเกินไป (สูงสุด 500 ตัวอักษร) ลองใหม่หรือ /skip:"
 
-#: src/presentation/bot/handlers/create_profile.py:330
+#: src/presentation/bot/handlers/create_profile.py:335
 #, python-brace-format
 msgid ""
 "<b>✅ Profile created!</b>\n"
@@ -266,7 +275,7 @@ msgstr ""
 "อายุ: {age}\n"
 "ส่ง /feed เพื่อเริ่มให้คะแนนโปรไฟล์อื่น"
 
-#: src/presentation/bot/handlers/create_profile.py:380
+#: src/presentation/bot/handlers/create_profile.py:387
 msgid "Please send a photo (not text)."
 msgstr "กรุณาส่งรูปภาพ (ไม่ใช่ข้อความ)"
 
@@ -340,48 +349,61 @@ msgstr "กรุณาส่งรูปภาพ"
 msgid "Please share a location."
 msgstr "กรุณาแชร์ตำแหน่ง"
 
-#: src/presentation/bot/handlers/feed.py:60
+#: src/presentation/bot/handlers/feed.py:87
+msgid "Set your search area first — send /setcity."
+msgstr "ตั้งค่าพื้นที่ค้นหาก่อน — ส่ง /setcity"
+
+#: src/presentation/bot/handlers/feed.py:92
+#, python-brace-format
+msgid ""
+"🔒 You've rated {count} profiles — that's the limit without a profile of "
+"your own.\n"
+"Create yours with /create to keep rating (and find out how people rate "
+"you)."
+msgstr ""
+"🔒 คุณให้คะแนนไปแล้ว {count} โปรไฟล์ — "
+"นี่คือขีดจำกัดหากยังไม่มีโปรไฟล์ของตัวเอง\n"
+"สร้างโปรไฟล์ด้วย /create เพื่อให้คะแนนต่อ "
+"(และดูว่าคนอื่นให้คะแนนคุณอย่างไร)"
+
+#: src/presentation/bot/handlers/feed.py:100
 msgid "No more profiles to rate. Come back later!"
 msgstr "ไม่มีโปรไฟล์ให้ให้คะแนนแล้ว กลับมาใหม่ทีหลังนะ!"
 
-#: src/presentation/bot/handlers/feed.py:87
+#: src/presentation/bot/handlers/feed.py:127
 msgid "Rate this profile:"
 msgstr "ให้คะแนนโปรไฟล์นี้:"
 
-#: src/presentation/bot/handlers/feed.py:109
+#: src/presentation/bot/handlers/feed.py:149
 #, python-brace-format
 msgid "⭐ Someone just rated you: {score}/10"
 msgstr "⭐ มีคนเพิ่งให้คะแนนคุณ: {score}/10"
 
-#: src/presentation/bot/handlers/feed.py:130
-msgid "You need a profile of your own first. Send /create to make one."
-msgstr "คุณต้องมีโปรไฟล์ของตัวเองก่อน ส่ง /create เพื่อสร้าง"
-
-#: src/presentation/bot/handlers/feed.py:150
-#: src/presentation/bot/handlers/feed.py:156
+#: src/presentation/bot/handlers/feed.py:190
+#: src/presentation/bot/handlers/feed.py:196
 msgid "Bad payload"
 msgstr "ข้อมูลไม่ถูกต้อง"
 
-#: src/presentation/bot/handlers/feed.py:171
+#: src/presentation/bot/handlers/feed.py:211
 msgid "Can't rate yourself"
 msgstr "ให้คะแนนตัวเองไม่ได้"
 
-#: src/presentation/bot/handlers/feed.py:174
+#: src/presentation/bot/handlers/feed.py:214
 msgid "Bad score"
 msgstr "คะแนนไม่ถูกต้อง"
 
-#: src/presentation/bot/handlers/feed.py:177
+#: src/presentation/bot/handlers/feed.py:217
 #, python-brace-format
 msgid "Rated {score}/10 ✓"
 msgstr "ให้คะแนน {score}/10 แล้ว ✓"
 
-#: src/presentation/bot/handlers/feed.py:187
+#: src/presentation/bot/handlers/feed.py:227
 #, python-brace-format
 msgid "📊 Their average: {avg}/10 (from {count} rating)"
 msgid_plural "📊 Their average: {avg}/10 (from {count} ratings)"
 msgstr[0] "📊 คะแนนเฉลี่ย: {avg}/10 (จาก {count} คะแนน)"
 
-#: src/presentation/bot/handlers/feed.py:226
+#: src/presentation/bot/handlers/feed.py:267
 msgid "Skipped"
 msgstr "ข้ามแล้ว"
 
@@ -401,7 +423,7 @@ msgstr "ยังไม่มีใครให้คะแนนคุณ"
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 คนล่าสุดที่ให้คะแนนคุณ:"
 
-#: src/presentation/bot/handlers/my_ratings.py:54
+#: src/presentation/bot/handlers/my_ratings.py:59
 msgid "Anonymous"
 msgstr "ไม่ระบุชื่อ"
 
@@ -486,6 +508,25 @@ msgstr ""
 "{expires}\n"
 "เลือกตัวกรองคะแนนขั้นต่ำของคุณใน /settings"
 
+#: src/presentation/bot/handlers/search_location.py:61
+msgid ""
+"📍 Where do you want to browse?\n"
+"Share your location, or type a city name — profiles nearest to it come "
+"first."
+msgstr ""
+"📍 อยากดูโปรไฟล์ที่ไหน?\n"
+"แชร์ตำแหน่งของคุณหรือพิมพ์ชื่อเมือง — โปรไฟล์ที่อยู่ใกล้ที่สุดจะแสดงก่อน"
+
+#: src/presentation/bot/handlers/search_location.py:136
+#: src/presentation/bot/handlers/search_location.py:214
+msgid "✅ Search area saved."
+msgstr "✅ บันทึกพื้นที่ค้นหาแล้ว"
+
+#: src/presentation/bot/handlers/search_location.py:157
+#: src/presentation/bot/handlers/search_location.py:221
+msgid "Please share a location or type a city name."
+msgstr "กรุณาแชร์ตำแหน่งหรือพิมพ์ชื่อเมือง"
+
 #: src/presentation/bot/handlers/settings.py:75
 #, python-brace-format
 msgid "👤 Show me: {current}"
@@ -530,24 +571,25 @@ msgstr "เฉพาะพรีเมียม"
 msgid "Updated"
 msgstr "บันทึกแล้ว"
 
-#: src/presentation/bot/handlers/start.py:39
+#: src/presentation/bot/handlers/start.py:41
+msgid ""
+"<b>Welcome back!</b>\n"
+"Send /feed to rate profiles, or /create to set up your own."
+msgstr ""
+"<b>ยินดีต้อนรับกลับ!</b>\n"
+"ส่ง /feed เพื่อให้คะแนนโปรไฟล์ หรือ /create เพื่อสร้างโปรไฟล์ของคุณ"
+
+#: src/presentation/bot/handlers/start.py:48
 msgid ""
 "<b>Welcome to RateYou!</b>\n"
-"You don't have a profile yet - send /create to make one."
+"Set where you want to browse and you can start rating right away. Want to"
+" be rated too? Send /create to make your own profile."
 msgstr ""
 "<b>ยินดีต้อนรับสู่ RateYou!</b>\n"
-"คุณยังไม่มีโปรไฟล์ - ส่ง /create เพื่อสร้าง"
+"ตั้งค่าว่าอยากดูโปรไฟล์ที่ไหนแล้วเริ่มให้คะแนนได้ทันที "
+"อยากถูกให้คะแนนด้วยไหม? ส่ง /create เพื่อสร้างโปรไฟล์ของคุณ"
 
-#: src/presentation/bot/handlers/start.py:45
-#, python-brace-format
-msgid ""
-"<b>Welcome back, {name}!</b>\n"
-"Send /feed to rate other profiles."
-msgstr ""
-"<b>ยินดีต้อนรับกลับมา {name}!</b>\n"
-"ส่ง /feed เพื่อให้คะแนนโปรไฟล์อื่น"
-
-#: src/presentation/tasks/broadcast.py:96
+#: src/presentation/tasks/broadcast.py:98
 msgid ""
 "✨ New profiles have appeared.\n"
 "Open /feed to rate them."
@@ -560,4 +602,14 @@ msgstr ""
 #~ "✨ New profiles to rate: {count}\n"
 #~ "Open /feed to see them."
 #~ msgstr ""
+
+#~ msgid "You need a profile of your own first. Send /create to make one."
+#~ msgstr "คุณต้องมีโปรไฟล์ของตัวเองก่อน ส่ง /create เพื่อสร้าง"
+
+#~ msgid ""
+#~ "<b>Welcome to RateYou!</b>\n"
+#~ "You don't have a profile yet - send /create to make one."
+#~ msgstr ""
+#~ "<b>ยินดีต้อนรับสู่ RateYou!</b>\n"
+#~ "คุณยังไม่มีโปรไฟล์ - ส่ง /create เพื่อสร้าง"
 

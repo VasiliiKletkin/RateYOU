@@ -28,6 +28,9 @@ class FakeRatingRepo:
     async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
         return []
 
+    async def count_by_rater(self, rater_id: UserId) -> int:
+        return 0
+
     # Unused-but-required protocol methods (kept thin: tests don't exercise them)
     async def add(self, rating: Rating) -> None: ...
     async def get_by_id(self, rating_id: RatingId) -> Rating | None: ...

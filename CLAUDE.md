@@ -81,15 +81,15 @@ Cross-cutting rules first:
 
 - **Every handler starts with the idempotent `RegisterUserUseCase`**, so any command works as the user's first-ever message — /start is not a prerequisite (a user's first-ever interaction can be /refer or a `rate:` button tap).
 - `ThrottlingMiddleware` then `BanCheckMiddleware` run before every handler; banned users are silently blocked.
-- The product loop: browse & rate needs only a **search location**; having your **own profile** is what makes you ratable (and is required only for /edit and referral payout). Premium gates exactly two things: the min-rating feed filter and /my_ratings.
+- The product loop: browse & rate needs only the browse onboarding (gender preference + **search location**); having your **own profile** is what makes you ratable — and past `FREE_RATINGS_WITHOUT_PROFILE = 15` ratings, what lets you keep rating (the reciprocity gate). Premium gates exactly two things: the min-rating feed filter and /my_ratings.
 
 ### `/start [<referrer_telegram_id>]`
 
-Registration + routing. On the new-user branch (and only there), three writes land in **one transaction**: the `users` row, a `WELCOME_BONUS_DAYS = 30` premium BONUS grant (the idempotent early-return for existing users is the double-grant guard), and — when the deep-link payload resolves to a known, non-self user — a *pending* `Referral` (`rewarded_at=NULL`). Malformed/unknown/self payloads are silently dropped; registration always succeeds. /start is also where the cached `@username` is (re)captured — on every call, not just the first. Then: search location set → "welcome back" naming /feed and /create; not set → welcome text + straight into the city picker (`SetSearchLocation` FSM).
+Registration + routing. On the new-user branch (and only there), three writes land in **one transaction**: the `users` row, a `WELCOME_BONUS_DAYS = 30` premium BONUS grant (the idempotent early-return for existing users is the double-grant guard), and — when the deep-link payload resolves to a known, non-self user — a *pending* `Referral` (`rewarded_at=NULL`). Malformed/unknown/self payloads are silently dropped; registration always succeeds. /start is also where the cached `@username` is (re)captured — on every call, not just the first. Then: search location set → "welcome back" naming /feed and /create; not set → welcome text + browse onboarding (`SetSearchLocation` FSM): "who would you like to rate?" (`genderpref:` buttons → `SearchPreferences.gender_preference`), then the city picker.
 
 ### `/feed` → `rate:` / `skip:` loop
 
-The core loop; needs a search location but **not** an own profile (`show_next_or_done` catches `SearchLocationNotSet` and opens the city picker instead).
+The core loop; needs a search location but **not** an own profile (`show_next_or_done` catches `SearchLocationNotSet` and starts the browse onboarding instead). Profile-less browsing is capped: after `FREE_RATINGS_WITHOUT_PROFILE = 15` ratings the use case raises `ProfileRequiredToContinue` and the handler answers with a "/create to keep rating" prompt — the reciprocity gate that converts lurkers. Re-rating doesn't burn quota (the count is per-person), and the gate vanishes the moment a profile exists.
 
 Candidate selection (`GetNextProfileForRatingUseCase`): visible profiles, not the viewer's own, not already rated by them, matching the viewer's gender preference, above their min-rating threshold (only if premium **and** threshold > 0), excluding owners in the viewer's Redis skip set — ordered by `ST_Distance` from the viewer's search location, nearest first, NULLS LAST (profiles without location come last, not never).
 
@@ -117,9 +117,9 @@ Finalize re-resolves the user via `RegisterUserUseCase` (never trusts the FSM-st
 
 Requires a profile ("No profile to edit. Use /create first."). Inline menu `edit_field:<name|age|gender|bio|photo|location|done>`; each field edit validates with the same VOs as /create, applies **immediately** via `EditProfileUseCase` (no draft state), and returns to the menu. Location supports the same share-or-typed-city path, with its own copy of the geocode-candidates dance; photos use a separate module-level buffer from /create's. Bio: /skip *clears* it. Done → "Saved. /feed to keep rating."
 
-### `/setcity` — standalone search-origin picker (`SetSearchLocation` FSM)
+### `/setcity` — browse onboarding & search-origin picker (`SetSearchLocation` FSM)
 
-What unblocks browsing without a profile. Same share-or-type-city UX as /create's location step but writes to `SearchPreferences.location` via `UpdateSearchLocationUseCase` (creates the prefs row if missing). Entered from /start (no location yet), /feed (ditto), or explicitly via /setcity. On save: "✅ Search area saved" → **straight into the feed**. Its router is registered last and excludes `/`-prefixed text so commands typed mid-picker fall through to their own handlers.
+What unblocks browsing without a profile. Two states: `waiting_for_gender_preference` ("who would you like to rate?", entered from /start and /feed on first onboarding) → `waiting_for_location` (same share-or-type-city UX as /create's location step, writes to `SearchPreferences.location` via `UpdateSearchLocationUseCase`, which creates the prefs row if missing). The explicit /setcity command re-enters at the location step directly — existing users change city without being re-asked the gender question. On save: "✅ Search area saved" → **straight into the feed**. Its router is registered last and excludes `/`-prefixed text so commands typed mid-picker fall through to their own handlers; `feed.py` keeps a local copy of the onboarding entry (`_start_browse_onboarding`) to avoid an import cycle.
 
 ### `/cancel`
 

@@ -12,12 +12,15 @@ class CreateProfile(StatesGroup):
 
 
 class SetSearchLocation(StatesGroup):
-    """Standalone city picker for the feed's search origin.
+    """Browse onboarding: gender preference, then the feed's search origin.
 
-    Separate from CreateProfile: a user sets a search area to browse without
-    ever creating a profile of their own.
+    Separate from CreateProfile: a user sets these to browse without ever
+    creating a profile of their own. The gender step only runs on first
+    onboarding (/start, /feed with no location yet); /setcity re-enters at
+    the location step directly.
     """
 
+    waiting_for_gender_preference = State()
     waiting_for_location = State()
 
 

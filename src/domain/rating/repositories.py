@@ -34,6 +34,10 @@ class IRatingRepository(Protocol):
         """Latest ratings of `rated_id`, newest first."""
         ...
 
+    async def count_by_rater(self, rater_id: UserId) -> int:
+        """How many distinct people `rater_id` has rated (re-rating counts once)."""
+        ...
+
     async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
         """Who has rated anyone since `since` — i.e. who is still engaged.
 

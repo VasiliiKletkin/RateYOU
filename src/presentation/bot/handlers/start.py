@@ -8,7 +8,7 @@ from dishka import FromDishka
 from src.application.discovery.search_preferences import GetSearchPreferencesUseCase
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
-from src.presentation.bot.handlers.search_location import prompt_for_search_city
+from src.presentation.bot.handlers.search_location import start_browse_onboarding
 from src.presentation.bot.i18n import normalize_language
 
 router = Router(name="start")
@@ -42,7 +42,7 @@ async def on_start(
         )
         return
 
-    # No search area yet: browsing is one step away — no profile required.
+    # No search area yet: browsing is two taps away — no profile required.
     await message.answer(
         _(
             "<b>Welcome to RateYou!</b>\n"
@@ -50,7 +50,7 @@ async def on_start(
             "Want to be rated too? Send /create to make your own profile."
         )
     )
-    await prompt_for_search_city(message, state)
+    await start_browse_onboarding(message, state)
 
 
 def _extract_referrer_telegram_id(payload: str | None) -> int | None:

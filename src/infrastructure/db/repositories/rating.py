@@ -93,6 +93,12 @@ class RatingRepository:
         count = int(count_raw)
         return avg, count
 
+    async def count_by_rater(self, rater_id: UserId) -> int:
+        result = await self.session.execute(
+            select(func.count(RatingORM.id)).where(RatingORM.rater_id == rater_id.value)
+        )
+        return int(result.scalar_one())
+
     async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
         result = await self.session.execute(
             select(RatingORM.rater_id).where(RatingORM.updated_at > since).distinct()

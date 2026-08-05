@@ -46,6 +46,9 @@ class FakeRatingRepository:
     async def list_rater_ids_active_since(self, since: datetime) -> list[UserId]:
         return []
 
+    async def count_by_rater(self, rater_id: UserId) -> int:
+        return len([r for r in self.ratings.values() if r.rater_id == rater_id])
+
     async def compute_stats_for(self, rated_id: UserId) -> tuple[float, int]:
         scores = [r.score.value for r in self.ratings.values() if r.rated_id == rated_id]
         if not scores:
