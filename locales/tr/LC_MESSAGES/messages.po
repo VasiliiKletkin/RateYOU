@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "Sadece premium"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 Beni kim puanladı"
+msgid "My rating & who rated me"
+msgstr "Puanım ve beni kimler puanladı"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -404,7 +403,17 @@ msgstr[0] "📊 Ortalaması: {avg}/10 ({count} puandan)"
 msgid "Skipped"
 msgstr "Atlandı"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "Henüz seni kimse puanlamadı."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 Puanın: {avg}/10 ({count} puandan)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -412,15 +421,11 @@ msgstr ""
 "🔒 Bu bir premium özellik.\n"
 "Abone olmak için /premium kullan."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "Henüz seni kimse puanlamadı."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 Seni son puanlayanlar:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "Anonim"
 
@@ -610,4 +615,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>RateYou'ya hoş geldin!</b>\n"
 #~ "Henüz bir profilin yok — oluşturmak için /create gönder."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 Beni kim puanladı"
 

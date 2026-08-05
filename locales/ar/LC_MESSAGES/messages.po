@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -47,9 +47,8 @@ msgid "Premium subscription"
 msgstr "للمميزين فقط"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 من قيّمني"
+msgid "My rating & who rated me"
+msgstr "تقييمي ومن قيّمني"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -411,7 +410,22 @@ msgstr[5] "📊 متوسطهم: {avg}/10 (من {count} تقييم)"
 msgid "Skipped"
 msgstr "تم التخطي"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "لم يقيّمك أحد بعد."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 متوسطك: {avg}/10 (من {count} تقييم)"
+msgstr[1] "🌟 متوسطك: {avg}/10 (من تقييم واحد)"
+msgstr[2] "🌟 متوسطك: {avg}/10 (من تقييمين)"
+msgstr[3] "🌟 متوسطك: {avg}/10 (من {count} تقييمات)"
+msgstr[4] "🌟 متوسطك: {avg}/10 (من {count} تقييمًا)"
+msgstr[5] "🌟 متوسطك: {avg}/10 (من {count} تقييم)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -419,15 +433,11 @@ msgstr ""
 "🔒 هذه ميزة مميزة.\n"
 "استخدم /premium للاشتراك."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "لم يقيّمك أحد بعد."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 آخر من قيّمك:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "مجهول"
 
@@ -631,4 +641,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>مرحبًا بك في RateYou!</b>\n"
 #~ "ليس لديك ملف شخصي بعد - أرسل /create لإنشاء واحد."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 من قيّمني"
 

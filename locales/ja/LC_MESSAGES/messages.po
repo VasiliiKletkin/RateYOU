@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "プレミアム限定"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 誰が私を評価したか"
+msgid "My rating & who rated me"
+msgstr "自分の評価と評価した人"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -405,7 +404,17 @@ msgstr[0] "📊 平均: {avg}/10 ({count}件の評価より)"
 msgid "Skipped"
 msgstr "スキップしました"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "まだ誰もあなたを評価していません。"
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 あなたの評価: {avg}/10 ({count}件の評価より)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -413,15 +422,11 @@ msgstr ""
 "🔒 これはプレミアム機能です。\n"
 "登録するには /premium を使用してください。"
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "まだ誰もあなたを評価していません。"
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 最近あなたを評価した人:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "匿名"
 
@@ -609,4 +614,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>RateYou へようこそ!</b>\n"
 #~ "まだプロフィールがありません - /create を送って作成してください。"
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 誰が私を評価したか"
 

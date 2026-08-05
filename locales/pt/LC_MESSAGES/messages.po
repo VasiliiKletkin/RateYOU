@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "Apenas premium"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 Quem me avaliou"
+msgid "My rating & who rated me"
+msgstr "Minha nota e quem me avaliou"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -408,7 +407,18 @@ msgstr[1] "📊 Média dele(a): {avg}/10 (de {count} avaliações)"
 msgid "Skipped"
 msgstr "Pulado"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "Ninguém te avaliou ainda."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 Sua nota: {avg}/10 (de {count} avaliação)"
+msgstr[1] "🌟 Sua nota: {avg}/10 (de {count} avaliações)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -416,15 +426,11 @@ msgstr ""
 "🔒 Esta é uma função premium.\n"
 "Use /premium para assinar."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "Ninguém te avaliou ainda."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 Quem te avaliou recentemente:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "Anônimo"
 
@@ -620,4 +626,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>Bem-vindo ao RateYou!</b>\n"
 #~ "Você ainda não tem um perfil — envie /create para criar um."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 Quem me avaliou"
 

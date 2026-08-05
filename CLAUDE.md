@@ -81,7 +81,7 @@ Cross-cutting rules first:
 
 - **Every handler starts with the idempotent `RegisterUserUseCase`**, so any command works as the user's first-ever message — /start is not a prerequisite (a user's first-ever interaction can be /refer or a `rate:` button tap).
 - `ThrottlingMiddleware` then `BanCheckMiddleware` run before every handler; banned users are silently blocked.
-- The product loop: browse & rate needs only the browse onboarding (gender preference + **search location**); having your **own profile** is what makes you ratable — and past `FREE_RATINGS_WITHOUT_PROFILE = 15` ratings, what lets you keep rating (the reciprocity gate). Premium gates exactly two things: the min-rating feed filter and /my_ratings.
+- The product loop: browse & rate needs only the browse onboarding (gender preference + **search location**); having your **own profile** is what makes you ratable — and past `FREE_RATINGS_WITHOUT_PROFILE = 15` ratings, what lets you keep rating (the reciprocity gate). Premium gates exactly two things: the min-rating feed filter and the *who-rated-me list* inside /my_rating (the score itself is free).
 
 ### `/start [<referrer_telegram_id>]`
 
@@ -95,7 +95,7 @@ Candidate selection (`GetNextProfileForRatingUseCase`): visible profiles, not th
 
 Card rendering: caption is `<b>name, age</b>` + distance (`350 m` / `5.4 km`) + bio if present. One photo → `answer_photo` with the rating keyboard attached; 2–10 photos → `answer_media_group` + a separate "Rate this profile:" message carrying the keyboard (Telegram media groups can't have inline keyboards). Buttons: `rate:<owner_uuid>:<1-10>` and `skip:<owner_uuid>`.
 
-- **rate** → `RateUserUseCase`: `RatingFulfillmentService` gives or updates the rating (re-rating the same person replaces the score — UNIQUE on `(rater_id, rated_id)`), `RatingGiven` recomputes `ProfileScoreSummary` in the same UoW. `CannotRateSelf` → alert; then, in order: "Rated X/10 ✓" toast → the rated user gets a "⭐ Someone just rated you: X/10" DM **in their stored locale** (skipped if banned or gone; `TelegramAPIError` suppressed — a blocked bot must not break the rater's flow) → old keyboard stripped → rater sees "📊 Their average: N/10 (from M ratings)" → next card. The rater's identity is *not* revealed in the DM — that's what /my_ratings sells.
+- **rate** → `RateUserUseCase`: `RatingFulfillmentService` gives or updates the rating (re-rating the same person replaces the score — UNIQUE on `(rater_id, rated_id)`), `RatingGiven` recomputes `ProfileScoreSummary` in the same UoW. `CannotRateSelf` → alert; then, in order: "Rated X/10 ✓" toast → the rated user gets a "⭐ Someone just rated you: X/10" DM **in their stored locale** (skipped if banned or gone; `TelegramAPIError` suppressed — a blocked bot must not break the rater's flow) → old keyboard stripped → rater sees "📊 Their average: N/10 (from M ratings)" → next card. The rater's identity is *not* revealed in the DM — that's what /my_rating sells.
 - **skip** → `SkipProfileUseCase` → Redis SET `skipped:<viewer_id>` (no DB write, no UoW), TTL `skip_ttl_seconds = 3600`; the TTL is per-set, so every skip refreshes the whole set's hour. Keyboard stripped → next card.
 - No candidates left → "No more profiles to rate. Come back later!".
 
@@ -145,9 +145,13 @@ Header shows the current subscription (tier + human "Expires in N days/hours/min
 
 Subscriptions are an **append-only ledger of grants** (purchase / welcome bonus / referral bonus can coexist); "is premium" is derived from the active set at read time — nothing ever mutates or deletes a grant except refund revocation.
 
-### `/my_ratings`
+### `/my_rating`
 
-The paid value proposition: *who* rated you. No subscription → `PremiumRequired` → upsell pointing at /premium. Otherwise the last 10 incoming ratings, newest first: `⭐ score/10 — contact, dd.mm hh:mm`. Raters are identified by **User data only** (`@username` linking to `t.me/<username>`; accounts without a handle render as a localized "Anonymous" over a `tg://user?id=…` mention, which resolves because the rater has used this bot) — the use case deliberately never touches the Profile context, since raters aren't required to have a profile. Also reachable via the `show_my_ratings` button shown on /premium to active subscribers.
+Two halves, and the split *is* the funnel: **your own score is free, who gave it is premium**. Never rated → "No one has rated you yet." and nothing else. Otherwise the header is always shown — "🌟 Your rating: 7.4/10 (from 12 ratings)", read from the `ProfileScoreSummary` projection — and then either the upsell (`PremiumRequired` → "premium feature, use /premium") or the last 10 incoming ratings, newest first: `⭐ score/10 — contact, dd.mm hh:mm`. So a free user gets a real answer plus a concrete reason to pay, instead of a bare paywall.
+
+Raters are identified by **User data only** (`@username` linking to `t.me/<username>`; accounts without a handle render as a localized "Anonymous" over a `tg://user?id=…` mention, which resolves because the rater has used this bot) — the use case deliberately never touches the Profile context, since raters aren't required to have a profile.
+
+Two compatibility carry-overs from the rename (the command was `/my_ratings` before): the handler still answers to the old command name for users whose client history and autocomplete remember it, and the inline button on /premium still carries `show_my_ratings` as its callback data — keyboards already delivered to chats keep sending the old payload forever. Only `/my_rating` is advertised in the command menu.
 
 ### `/refer`
 

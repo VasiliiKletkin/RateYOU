@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-11 23:03+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -43,8 +43,8 @@ msgid "Premium subscription"
 msgstr ""
 
 #: src/presentation/bot/commands.py:22
-msgid "Who rated me (premium)"
-msgstr "Who rated me (premium)"
+msgid "My rating & who rated me"
+msgstr "My rating & who rated me"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -398,7 +398,18 @@ msgstr[1] ""
 msgid "Skipped"
 msgstr "Skipped"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "No one has rated you yet."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgstr[1] "🌟 Your rating: {avg}/10 (from {count} ratings)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -406,15 +417,11 @@ msgstr ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "No one has rated you yet."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 Latest people who rated you:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "Anonymous"
 
@@ -598,4 +605,7 @@ msgstr ""
 #~ "<b>Welcome to RateYou!</b>\n"
 #~ "You don't have a profile yet - send /create to make one."
 #~ msgstr ""
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "Who rated me (premium)"
 

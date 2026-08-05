@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: id\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "Hanya premium"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 Siapa yang menilai aku"
+msgid "My rating & who rated me"
+msgstr "Nilaiku & siapa yang menilaiku"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -407,7 +406,18 @@ msgstr[1] "📊 Rata-rata mereka: {avg}/10 (dari {count} penilaian)"
 msgid "Skipped"
 msgstr "Dilewati"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "Belum ada yang menilai kamu."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 Nilaimu: {avg}/10 (dari {count} penilaian)"
+msgstr[1] "🌟 Nilaimu: {avg}/10 (dari {count} penilaian)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -415,15 +425,11 @@ msgstr ""
 "🔒 Ini fitur premium.\n"
 "Gunakan /premium untuk berlangganan."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "Belum ada yang menilai kamu."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 Orang terakhir yang menilai kamu:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "Anonim"
 
@@ -615,4 +621,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>Selamat datang di RateYou!</b>\n"
 #~ "Kamu belum punya profil - kirim /create untuk membuatnya."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 Siapa yang menilai aku"
 

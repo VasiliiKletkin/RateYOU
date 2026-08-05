@@ -19,7 +19,7 @@ def _build_commands() -> list[BotCommand]:
         BotCommand(command="feed", description=_("Rate other profiles")),
         BotCommand(command="settings", description=_("Rating preferences")),
         BotCommand(command="premium", description=_("Premium subscription")),
-        BotCommand(command="my_ratings", description=_("Who rated me (premium)")),
+        BotCommand(command="my_rating", description=_("My rating & who rated me")),
         BotCommand(command="refer", description=_("Invite friends and earn premium")),
         BotCommand(command="cancel", description=_("Cancel current action")),
     ]

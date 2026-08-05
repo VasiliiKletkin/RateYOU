@@ -4,7 +4,7 @@ from src.presentation.bot.handlers import (
     create_profile,
     edit_profile,
     feed,
-    my_ratings,
+    my_rating,
     premium,
     refer,
     search_location,
@@ -20,7 +20,7 @@ def all_routers() -> list[Router]:
         edit_profile.router,
         feed.router,
         premium.router,
-        my_ratings.router,
+        my_rating.router,
         refer.router,
         settings.router,
         # Last: its in-state catch-all must not shadow other routers' commands

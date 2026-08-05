@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: bn\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "শুধু প্রিমিয়াম"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 কে আমাকে রেট করেছে"
+msgid "My rating & who rated me"
+msgstr "আমার রেটিং ও কারা আমাকে রেট করেছে"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -407,7 +406,18 @@ msgstr[1] "📊 তাদের গড়: {avg}/10 ({count} রেটিং থ
 msgid "Skipped"
 msgstr "এড়িয়ে গেছ"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "এখনো তোমাকে কেউ রেট করেনি।"
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 আপনার রেটিং: {avg}/10 ({count} রেটিং থেকে)"
+msgstr[1] "🌟 আপনার রেটিং: {avg}/10 ({count} রেটিং থেকে)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -415,15 +425,11 @@ msgstr ""
 "🔒 এটি একটি প্রিমিয়াম ফিচার।\n"
 "সাবস্ক্রাইব করতে /premium ব্যবহার করো।"
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "এখনো তোমাকে কেউ রেট করেনি।"
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 সাম্প্রতিক যারা তোমাকে রেট করেছে:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "অজ্ঞাত"
 
@@ -616,4 +622,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>RateYou-তে স্বাগতম!</b>\n"
 #~ "তোমার এখনো প্রোফাইল নেই - বানাতে /create পাঠাও।"
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 কে আমাকে রেট করেছে"
 

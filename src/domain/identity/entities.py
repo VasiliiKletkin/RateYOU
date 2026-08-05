@@ -36,7 +36,7 @@ class User:
     created_at: datetime
     # Cached Telegram handle without the leading '@'. Optional — a large share
     # of accounts have none. Refreshed on /start since users can change or
-    # drop it at any time; used to let raters be contacted from /my_ratings.
+    # drop it at any time; used to let raters be contacted from /my_rating.
     username: str | None = None
     # Opt-out for bot-initiated broadcasts (e.g. "new profiles appeared").
     # Only gates outbound nudges — replies to the user's own actions and

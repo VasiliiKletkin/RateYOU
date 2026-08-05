@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fa\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "فقط پریمیوم"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 چه کسی به من امتیاز داد"
+msgid "My rating & who rated me"
+msgstr "امتیاز من و چه کسانی به من امتیاز داده‌اند"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -408,7 +407,17 @@ msgstr[0] "📊 میانگین آن‌ها: {avg}/10 (از {count} امتیاز)
 msgid "Skipped"
 msgstr "رد شد"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "هنوز کسی به تو امتیاز نداده است."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 امتیاز شما: {avg}/10 (از {count} امتیاز)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -416,15 +425,11 @@ msgstr ""
 "🔒 این یک ویژگی پریمیوم است.\n"
 "برای اشتراک از /premium استفاده کن."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "هنوز کسی به تو امتیاز نداده است."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 آخرین کسانی که به تو امتیاز دادند:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "ناشناس"
 
@@ -616,4 +621,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>به RateYou خوش آمدید!</b>\n"
 #~ "هنوز پروفایل ندارید - برای ساختن یکی /create را بفرستید."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 چه کسی به من امتیاز داد"
 

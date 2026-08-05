@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 14:34+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uk\n"
@@ -47,9 +47,8 @@ msgid "Premium subscription"
 msgstr "Лише преміум"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 Хто мене оцінив"
+msgid "My rating & who rated me"
+msgstr "Мій рейтинг і хто мене оцінив"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -407,7 +406,19 @@ msgstr[2] "📊 Середня оцінка: {avg}/10 (з {count} оцінок)"
 msgid "Skipped"
 msgstr "Пропущено"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "Тебе ще ніхто не оцінив."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 Твій рейтинг: {avg}/10 (з {count} оцінки)"
+msgstr[1] "🌟 Твій рейтинг: {avg}/10 (з {count} оцінок)"
+msgstr[2] "🌟 Твій рейтинг: {avg}/10 (з {count} оцінок)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -415,15 +426,11 @@ msgstr ""
 "🔒 Це преміум-функція.\n"
 "Підпишись через /premium."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "Тебе ще ніхто не оцінив."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 Останні, хто тебе оцінив:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "Анонім"
 
@@ -619,4 +626,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>Ласкаво просимо до RateYou!</b>\n"
 #~ "У тебе ще немає анкети — надішли /create, щоб її створити."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 Хто мене оцінив"
 

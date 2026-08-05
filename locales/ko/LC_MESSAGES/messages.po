@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ko\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "프리미엄 전용"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 누가 나를 평가했나"
+msgid "My rating & who rated me"
+msgstr "내 평점 및 나를 평가한 사람"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -405,7 +404,17 @@ msgstr[0] "📊 평균: {avg}/10 (평가 {count}개 기준)"
 msgid "Skipped"
 msgstr "건너뛰었어요"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "아직 아무도 당신을 평가하지 않았어요."
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 내 평점: {avg}/10 (평가 {count}개 기준)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -413,15 +422,11 @@ msgstr ""
 "🔒 이것은 프리미엄 기능이에요.\n"
 "구독하려면 /premium 을 사용하세요."
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "아직 아무도 당신을 평가하지 않았어요."
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 최근에 당신을 평가한 사람들:"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "익명"
 
@@ -609,4 +614,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>RateYou에 오신 것을 환영해요!</b>\n"
 #~ "아직 프로필이 없네요 - /create 를 보내서 만들어 주세요."
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 누가 나를 평가했나"
 

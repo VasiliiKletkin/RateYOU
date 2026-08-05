@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-05 13:26+0300\n"
+"POT-Creation-Date: 2026-08-05 13:58+0300\n"
 "PO-Revision-Date: 2026-05-12 15:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: am\n"
@@ -46,9 +46,8 @@ msgid "Premium subscription"
 msgstr "ፕሪሚየም ብቻ"
 
 #: src/presentation/bot/commands.py:22
-#, fuzzy
-msgid "Who rated me (premium)"
-msgstr "🌟 ማን ገመገመኝ"
+msgid "My rating & who rated me"
+msgstr "የእኔ ደረጃ እና ማን እንደገመገመኝ"
 
 #: src/presentation/bot/commands.py:23
 msgid "Invite friends and earn premium"
@@ -406,7 +405,18 @@ msgstr[1] "📊 አማካዩ: {avg}/10 (ከ{count} ግምገማዎች)"
 msgid "Skipped"
 msgstr "ተዘሏል"
 
-#: src/presentation/bot/handlers/my_ratings.py:30
+#: src/presentation/bot/handlers/my_rating.py:39
+msgid "No one has rated you yet."
+msgstr "ገና ማንም አልገመገመህም።"
+
+#: src/presentation/bot/handlers/my_rating.py:44
+#, python-brace-format
+msgid "🌟 Your rating: {avg}/10 (from {count} rating)"
+msgid_plural "🌟 Your rating: {avg}/10 (from {count} ratings)"
+msgstr[0] "🌟 የእርስዎ ደረጃ: {avg}/10 (ከ{count} ግምገማ)"
+msgstr[1] "🌟 የእርስዎ ደረጃ: {avg}/10 (ከ{count} ግምገማዎች)"
+
+#: src/presentation/bot/handlers/my_rating.py:54
 msgid ""
 "🔒 This is a premium feature.\n"
 "Use /premium to subscribe."
@@ -414,15 +424,11 @@ msgstr ""
 "🔒 ይህ የፕሪሚየም ባህሪ ነው።\n"
 "ለመመዝገብ /premium ተጠቀም።"
 
-#: src/presentation/bot/handlers/my_ratings.py:34
-msgid "No one has rated you yet."
-msgstr "ገና ማንም አልገመገመህም።"
-
-#: src/presentation/bot/handlers/my_ratings.py:37
+#: src/presentation/bot/handlers/my_rating.py:64
 msgid "🌟 Latest people who rated you:"
 msgstr "🌟 ቅርብ ጊዜ የገመገሙህ ሰዎች፦"
 
-#: src/presentation/bot/handlers/my_ratings.py:59
+#: src/presentation/bot/handlers/my_rating.py:87
 msgid "Anonymous"
 msgstr "ስም-አልባ"
 
@@ -614,4 +620,7 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>ወደ RateYou እንኳን ደህና መጣህ!</b>\n"
 #~ "ገና መገለጫ የለህም - ለመፍጠር /create ላክ።"
+
+#~ msgid "Who rated me (premium)"
+#~ msgstr "🌟 ማን ገመገመኝ"
 
