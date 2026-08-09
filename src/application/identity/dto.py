@@ -20,6 +20,11 @@ class RegisterUserRequest:
     # "caller doesn't know it" and leaves the stored value untouched — only
     # callers holding a fresh `from_user` should pass it.
     username: str | None = None
+    # Acquisition tag from a non-numeric `/start <tag>` payload
+    # (`?start=habr`). Recorded once, on registration only. Values that
+    # don't survive `AcquisitionSource` validation are dropped without
+    # failing the registration.
+    acquisition_source: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

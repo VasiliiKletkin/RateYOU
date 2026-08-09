@@ -11,13 +11,17 @@ class CreateProfile(StatesGroup):
     waiting_for_photo = State()
 
 
-class SetSearchLocation(StatesGroup):
+class BrowseOnboarding(StatesGroup):
     """Browse onboarding: gender preference, then the feed's search origin.
 
     Separate from CreateProfile: a user sets these to browse without ever
     creating a profile of their own. The gender step only runs on first
     onboarding (/start, /feed with no location yet); /setcity re-enters at
     the location step directly.
+
+    Renaming this group after deploy would strand users mid-flow: aiogram
+    stores the active state as the literal string "BrowseOnboarding:<step>"
+    in Redis, and old strings stop matching handlers.
     """
 
     waiting_for_gender_preference = State()

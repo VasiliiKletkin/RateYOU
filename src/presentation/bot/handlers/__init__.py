@@ -1,13 +1,13 @@
 from aiogram import Router
 
 from src.presentation.bot.handlers import (
+    browse_onboarding,
     create_profile,
     edit_profile,
     feed,
     my_rating,
     premium,
     refer,
-    search_location,
     settings,
     start,
 )
@@ -24,6 +24,6 @@ def all_routers() -> list[Router]:
         refer.router,
         settings.router,
         # Last: its in-state catch-all must not shadow other routers' commands
-        # (/feed, /settings, …) typed while the city picker is open.
-        search_location.router,
+        # (/feed, /settings, …) typed while the onboarding picker is open.
+        browse_onboarding.router,
     ]

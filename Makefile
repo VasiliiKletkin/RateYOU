@@ -114,6 +114,34 @@ dbconns-detail:
 dbconns-queries:
 	docker compose exec postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT application_name, left(query, 200) AS query, state, now() - state_change AS idle_duration FROM pg_stat_activity WHERE datname = current_database() AND state = 'idle' ORDER BY idle_duration DESC;"
 
+## Воронка привлечения по источникам за N дней (по умолчанию 30):
+## make funnel [D=7]. Источник — payload диплинка /start: метка кампании
+## (?start=habr) или пригласивший человек (?start=<telegram_id>); справочник
+## в acquisition_sources, связка user->источник в acquisitions, пишется один
+## раз при регистрации. Люди-источники схлопнуты в строку (referral), чтобы
+## не раздувать отчёт; пусто = органика.
+## Все join'ы строго 1:1 (acquisitions/search_preferences — PK по user_id,
+## profiles.owner_id — UNIQUE, source — PK справочника), поэтому count(*)
+## не задваивает. Оценки — через EXISTS: join к ratings размножил бы строки.
+D ?= 30
+funnel:
+	docker compose exec postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "\
+	SELECT coalesce(CASE WHEN s.referrer_id IS NOT NULL \
+	                     THEN '(referral)' ELSE s.code END, \
+	                '(organic)') AS source, \
+	       count(*) AS started, \
+	       count(*) FILTER (WHERE sp.location IS NOT NULL) AS onboarded, \
+	       count(*) FILTER (WHERE EXISTS ( \
+	           SELECT 1 FROM ratings r WHERE r.rater_id = u.id)) AS rated, \
+	       count(p.id) AS profiles \
+	FROM users u \
+	LEFT JOIN acquisitions a ON a.user_id = u.id \
+	LEFT JOIN acquisition_sources s ON s.id = a.source_id \
+	LEFT JOIN search_preferences sp ON sp.user_id = u.id \
+	LEFT JOIN profiles p ON p.owner_id = u.id \
+	WHERE u.created_at > now() - interval '$(D) days' \
+	GROUP BY 1 ORDER BY started DESC;"
+
 ## Размеры таблиц
 dbsizes:
 	docker compose exec postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT relname AS table, pg_size_pretty(pg_total_relation_size(relid)) AS total_size FROM pg_catalog.pg_statio_user_tables ORDER BY pg_total_relation_size(relid) DESC;"

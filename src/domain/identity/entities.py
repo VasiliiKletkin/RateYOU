@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from src.domain.identity.exceptions import InvalidBanReason, UserIsBanned
-from src.domain.identity.value_objects import Language, Role, TelegramId
+from src.domain.identity.value_objects import AcquisitionSource, Language, Role, TelegramId
 from src.domain.shared.identifiers import UserId
 
 
@@ -24,8 +24,8 @@ class User:
 
     Models who can act in the system. Profile data (photos, bio, etc.)
     lives in the Profile bounded context, not here. Who-invited-whom is
-    owned by the Referral context — the `referrals` table is the single
-    source of truth for that link.
+    owned by the Referral context; it persists into the unified acquisition
+    tables (a referral is an acquisition whose source is a person).
 
     The user's own referral handle is their `telegram_id` — shared via
     `/refer` as part of the start link.
@@ -99,3 +99,29 @@ class User:
     @property
     def is_admin(self) -> bool:
         return self.role == Role.ADMIN
+
+
+@dataclass
+class Acquisition:
+    """Which channel brought a user in — written once, never updated.
+
+    Deliberately its own row rather than a field on `User`: acquisition is
+    a marketing fact with its own lifecycle, and the aggregate that answers
+    "who is this account" should not grow campaign columns.
+
+    Written only on the new-user branch of registration, so it always means
+    "where they came from", never "where they last came from".
+    """
+
+    user_id: UserId
+    source: AcquisitionSource
+    created_at: datetime
+
+    @classmethod
+    def record(
+        cls,
+        user_id: UserId,
+        source: AcquisitionSource,
+        now: datetime,
+    ) -> "Acquisition":
+        return cls(user_id=user_id, source=source, created_at=now)

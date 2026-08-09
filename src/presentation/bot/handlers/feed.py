@@ -27,18 +27,18 @@ from src.domain.rating.exceptions import CannotRateSelf, InvalidScore
 from src.domain.shared.identifiers import UserId
 from src.presentation.bot.i18n import i18n, normalize_language
 from src.presentation.bot.keyboards import gender_preference_keyboard, rating_keyboard
-from src.presentation.bot.states import SetSearchLocation
+from src.presentation.bot.states import BrowseOnboarding
 
 router = Router(name="feed")
 
 
 async def _start_browse_onboarding(message: Message, state: FSMContext) -> None:
-    """First-time setup: gender preference, then city (search_location owns it).
+    """First-time setup: gender preference, then city (browse_onboarding owns it).
 
-    Kept local to avoid a feed <-> search_location import cycle; search_location
-    imports `show_next_or_done` from here.
+    Kept local to avoid a feed <-> browse_onboarding import cycle;
+    browse_onboarding imports `show_next_or_done` from here.
     """
-    await state.set_state(SetSearchLocation.waiting_for_gender_preference)
+    await state.set_state(BrowseOnboarding.waiting_for_gender_preference)
     await message.answer(
         _("Who would you like to rate?"),
         reply_markup=gender_preference_keyboard(),

@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import WELCOME_BONUS_DAYS, RegisterUserUseCase
-from src.domain.identity.entities import User
+from src.domain.identity.entities import Acquisition, User
 from src.domain.identity.value_objects import TelegramId
 from src.domain.payment.value_objects import TransactionId
 from src.domain.referral.entities import Referral
@@ -84,6 +84,17 @@ class FakeSubscriptionRepo:
 
 
 @dataclass
+class FakeAcquisitionRepo:
+    rows: list[Acquisition] = field(default_factory=list)
+
+    async def add(self, acquisition: Acquisition) -> None:
+        self.rows.append(acquisition)
+
+    async def get_for(self, user_id: UserId) -> Acquisition | None:
+        return next((a for a in self.rows if a.user_id == user_id), None)
+
+
+@dataclass
 class FakeUoW:
     committed: bool = False
 
@@ -99,16 +110,19 @@ def _make_use_case(
     referrals: FakeReferralRepo | None = None,
     uow: FakeUoW | None = None,
     subs: FakeSubscriptionRepo | None = None,
+    acquisitions: FakeAcquisitionRepo | None = None,
 ) -> tuple[RegisterUserUseCase, FakeUserRepository, FakeReferralRepo, FakeUoW]:
     users = users or FakeUserRepository()
     referrals = referrals or FakeReferralRepo()
     uow = uow or FakeUoW()
     subs = subs or FakeSubscriptionRepo()
+    acquisitions = acquisitions or FakeAcquisitionRepo()
     return (
         RegisterUserUseCase(
             user_repo=users,
             referral_repo=referrals,
             subscription_repo=subs,
+            acquisition_repo=acquisitions,
             uow=uow,
         ),
         users,
@@ -260,6 +274,85 @@ async def test_register_with_invalid_referrer_id_creates_no_referral() -> None:
     )
 
     assert referrals.referrals == []
+
+
+async def test_source_tag_is_recorded_on_registration() -> None:
+    acq = FakeAcquisitionRepo()
+    use_case, _, _, _ = _make_use_case(acquisitions=acq)
+
+    response = await use_case.execute(
+        RegisterUserRequest(telegram_id=12345, acquisition_source="Habr")
+    )
+
+    assert len(acq.rows) == 1
+    assert acq.rows[0].user_id == UserId(response.id)
+    assert acq.rows[0].source.value == "habr"  # lowercased by the VO
+
+
+async def test_source_is_not_rewritten_for_returning_user() -> None:
+    """Attribution means "where they came from", not "where they last came from"."""
+    acq = FakeAcquisitionRepo()
+    use_case, _, _, _ = _make_use_case(acquisitions=acq)
+
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, acquisition_source="habr"))
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, acquisition_source="tiktok"))
+
+    assert len(acq.rows) == 1
+    assert acq.rows[0].source.value == "habr"
+
+
+async def test_no_payload_records_no_source() -> None:
+    """Organic arrivals stay unattributed — a missing row reads as organic."""
+    acq = FakeAcquisitionRepo()
+    use_case, _, _, _ = _make_use_case(acquisitions=acq)
+
+    await use_case.execute(RegisterUserRequest(telegram_id=12345))
+
+    assert acq.rows == []
+
+
+async def test_referral_arrival_records_no_separate_acquisition() -> None:
+    """The referral IS the attribution: it lands in the same acquisition
+    tables via the referral repository, so recording a second acquisition
+    row here would violate the one-source-per-user PK."""
+    acq = FakeAcquisitionRepo()
+    use_case, repo, referrals, _ = _make_use_case(acquisitions=acq)
+    inviter = _seed_user(repo, 111)
+
+    await use_case.execute(
+        RegisterUserRequest(
+            telegram_id=12345,
+            referrer_telegram_id=inviter.telegram_id.value,
+        )
+    )
+
+    assert acq.rows == []
+    assert len(referrals.referrals) == 1
+
+
+async def test_unknown_referrer_records_no_source() -> None:
+    """No Referral row means no referral channel to credit."""
+    acq = FakeAcquisitionRepo()
+    use_case, _, _, _ = _make_use_case(acquisitions=acq)
+
+    await use_case.execute(
+        RegisterUserRequest(telegram_id=12345, referrer_telegram_id=999999999)
+    )
+
+    assert acq.rows == []
+
+
+async def test_malformed_source_is_dropped_without_failing_registration() -> None:
+    acq = FakeAcquisitionRepo()
+    use_case, repo, _, _ = _make_use_case(acquisitions=acq)
+
+    response = await use_case.execute(
+        RegisterUserRequest(telegram_id=12345, acquisition_source="not a valid tag!")
+    )
+
+    assert response.telegram_id == 12345
+    assert len(repo.users) == 1
+    assert acq.rows == []
 
 
 async def test_returning_user_with_referrer_payload_ignores_it() -> None:

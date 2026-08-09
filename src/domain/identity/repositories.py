@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from src.domain.identity.entities import User
+from src.domain.identity.entities import Acquisition, User
 from src.domain.identity.value_objects import TelegramId
 from src.domain.shared.identifiers import UserId
 
@@ -20,3 +20,11 @@ class IUserRepository(Protocol):
     async def update(self, user: User) -> None: ...
 
     async def list_by_ids(self, user_ids: list[UserId]) -> list[User]: ...
+
+
+class IAcquisitionRepository(Protocol):
+    """Write-only in practice: the funnel is read with SQL, not through here."""
+
+    async def add(self, acquisition: Acquisition) -> None: ...
+
+    async def get_for(self, user_id: UserId) -> Acquisition | None: ...

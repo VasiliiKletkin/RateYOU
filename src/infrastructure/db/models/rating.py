@@ -14,9 +14,9 @@ class RatingORM(Base, CreatedAtMixin, UpdatedAtMixin):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     rater_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     rated_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
-    # Admin-only conveniences: two FKs to users need explicit foreign_keys
-    # (same pattern as ReferralORM). The bot-side repository never touches
-    # these, so no lazy-load can fire in the async request path.
+    # Admin-only conveniences: two FKs to users need explicit foreign_keys.
+    # The bot-side repository never touches these, so no lazy-load can fire
+    # in the async request path.
     rater: Mapped[UserORM] = relationship(UserORM, foreign_keys=[rater_id])
     rated: Mapped[UserORM] = relationship(UserORM, foreign_keys=[rated_id])
     score: Mapped[int]

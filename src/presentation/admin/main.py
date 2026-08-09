@@ -9,11 +9,12 @@ from starlette_admin.contrib.sqla import Admin
 
 from src.infrastructure.config import get_settings
 from src.infrastructure.db.models import (
+    AcquisitionORM,
+    AcquisitionSourceORM,
     ProfileORM,
     ProfilePhotoORM,
     ProfileScoreSummaryORM,
     RatingORM,
-    ReferralORM,
     SearchPreferencesORM,
     SubscriptionORM,
     TransactionORM,
@@ -22,11 +23,12 @@ from src.infrastructure.db.models import (
 from src.infrastructure.observability import init_sentry
 from src.presentation.admin.auth import AdminAuthProvider
 from src.presentation.admin.views import (
+    AcquisitionAdmin,
+    AcquisitionSourceAdmin,
     ProfileAdmin,
     ProfilePhotoAdmin,
     ProfileScoreSummaryAdmin,
     RatingAdmin,
-    ReferralAdmin,
     SearchPreferencesAdmin,
     SubscriptionAdmin,
     TransactionAdmin,
@@ -60,7 +62,8 @@ def create_app() -> FastAPI:
     admin.add_view(SubscriptionAdmin(SubscriptionORM))
     admin.add_view(SearchPreferencesAdmin(SearchPreferencesORM))
     admin.add_view(TransactionAdmin(TransactionORM))
-    admin.add_view(ReferralAdmin(ReferralORM))
+    admin.add_view(AcquisitionSourceAdmin(AcquisitionSourceORM))
+    admin.add_view(AcquisitionAdmin(AcquisitionORM))
 
     admin.mount_to(app)
 

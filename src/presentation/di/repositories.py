@@ -5,7 +5,7 @@ from src.domain.discovery.repositories import (
     IDiscoveryRepository,
     ISearchPreferencesRepository,
 )
-from src.domain.identity.repositories import IUserRepository
+from src.domain.identity.repositories import IAcquisitionRepository, IUserRepository
 from src.domain.payment.repositories import ITransactionRepository
 from src.domain.profile.repositories import IProfileRepository
 from src.domain.rating.repositories import (
@@ -14,6 +14,7 @@ from src.domain.rating.repositories import (
 )
 from src.domain.referral.repositories import IReferralRepository
 from src.domain.subscription.repositories import ISubscriptionRepository
+from src.infrastructure.db.repositories.acquisition import AcquisitionRepository
 from src.infrastructure.db.repositories.discovery import DiscoveryRepository
 from src.infrastructure.db.repositories.payment import TransactionRepository
 from src.infrastructure.db.repositories.profile import ProfileRepository
@@ -35,6 +36,10 @@ class RepositoryProvider(Provider):
     @provide
     def user_repo(self, session: AsyncSession) -> IUserRepository:
         return UserRepository(session=session)
+
+    @provide
+    def acquisition_repo(self, session: AsyncSession) -> IAcquisitionRepository:
+        return AcquisitionRepository(session=session)
 
     @provide
     def profile_repo(self, session: AsyncSession) -> IProfileRepository:

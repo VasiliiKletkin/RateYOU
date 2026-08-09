@@ -33,9 +33,9 @@ from src.presentation.bot.keyboards import (
     geocode_candidates_keyboard,
     share_location_keyboard,
 )
-from src.presentation.bot.states import SetSearchLocation
+from src.presentation.bot.states import BrowseOnboarding
 
-router = Router(name="search_location")
+router = Router(name="browse_onboarding")
 
 
 async def start_browse_onboarding(message: Message, state: FSMContext) -> None:
@@ -43,7 +43,7 @@ async def start_browse_onboarding(message: Message, state: FSMContext) -> None:
 
     Entered from /start and /feed when no search location is set yet.
     """
-    await state.set_state(SetSearchLocation.waiting_for_gender_preference)
+    await state.set_state(BrowseOnboarding.waiting_for_gender_preference)
     await message.answer(
         _("Who would you like to rate?"),
         reply_markup=gender_preference_keyboard(),
@@ -55,7 +55,7 @@ async def prompt_for_search_city(message: Message, state: FSMContext) -> None:
 
     Reused by the onboarding gender step above and by /setcity directly.
     """
-    await state.set_state(SetSearchLocation.waiting_for_location)
+    await state.set_state(BrowseOnboarding.waiting_for_location)
     await message.answer(
         _(
             "📍 Where do you want to browse?\n"
@@ -73,7 +73,7 @@ async def cmd_set_city(message: Message, state: FSMContext) -> None:
 
 @router.callback_query(
     F.data.startswith("genderpref:"),
-    SetSearchLocation.waiting_for_gender_preference,
+    BrowseOnboarding.waiting_for_gender_preference,
 )
 async def process_gender_preference(
     callback: CallbackQuery,
@@ -102,7 +102,7 @@ async def process_gender_preference(
         await prompt_for_search_city(callback.message, state)
 
 
-@router.message(SetSearchLocation.waiting_for_gender_preference)
+@router.message(BrowseOnboarding.waiting_for_gender_preference)
 async def process_gender_preference_invalid(message: Message) -> None:
     # Re-show the buttons; typed commands never reach here — this router is
     # registered last, so /feed and friends win in their own routers first.
@@ -112,7 +112,7 @@ async def process_gender_preference_invalid(message: Message) -> None:
     )
 
 
-@router.message(F.location, SetSearchLocation.waiting_for_location)
+@router.message(F.location, BrowseOnboarding.waiting_for_location)
 async def process_shared_location(
     message: Message,
     state: FSMContext,
@@ -145,7 +145,7 @@ async def process_shared_location(
 @router.message(
     F.text,
     ~F.text.startswith("/"),
-    SetSearchLocation.waiting_for_location,
+    BrowseOnboarding.waiting_for_location,
 )
 async def process_typed_city(
     message: Message,
@@ -184,7 +184,7 @@ async def process_typed_city(
 
 @router.callback_query(
     F.data.startswith("geopick:"),
-    SetSearchLocation.waiting_for_location,
+    BrowseOnboarding.waiting_for_location,
 )
 async def process_city_picked(
     callback: CallbackQuery,
@@ -216,6 +216,6 @@ async def process_city_picked(
         await show_next_or_done(callback.message, user.id, get_next)
 
 
-@router.message(SetSearchLocation.waiting_for_location)
+@router.message(BrowseOnboarding.waiting_for_location)
 async def process_location_invalid(message: Message) -> None:
     await message.answer(_("Please share a location or type a city name."))

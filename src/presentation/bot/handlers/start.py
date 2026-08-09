@@ -8,7 +8,7 @@ from dishka import FromDishka
 from src.application.discovery.search_preferences import GetSearchPreferencesUseCase
 from src.application.identity.dto import RegisterUserRequest
 from src.application.identity.register_user import RegisterUserUseCase
-from src.presentation.bot.handlers.search_location import start_browse_onboarding
+from src.presentation.bot.handlers.browse_onboarding import start_browse_onboarding
 from src.presentation.bot.i18n import normalize_language
 
 router = Router(name="start")
@@ -29,6 +29,7 @@ async def on_start(
             telegram_id=message.from_user.id,
             language=normalize_language(message.from_user.language_code),
             referrer_telegram_id=_extract_referrer_telegram_id(command.args),
+            acquisition_source=_extract_acquisition_source(command.args),
             # /start is the one handler every user passes through, so it is
             # where the cached @username gets (re)captured.
             username=message.from_user.username,
@@ -67,3 +68,23 @@ def _extract_referrer_telegram_id(payload: str | None) -> int | None:
     except ValueError:
         return None
     return value if value > 0 else None
+
+
+def _extract_acquisition_source(payload: str | None) -> str | None:
+    """Parses a `/start <tag>` payload as an acquisition source.
+
+    The two payload kinds share one slot and are told apart by shape:
+    numeric means a referral link (`/refer` hands out `?start=<telegram_id>`),
+    anything else is a channel tag — `?start=habr`, `?start=tiktok_jan`.
+    Numeric payloads are left to `_extract_referrer_telegram_id` above.
+
+    Charset and length are validated downstream by `AcquisitionSource`; a
+    tag that fails is dropped without failing the registration.
+    """
+    if not payload:
+        return None
+    try:
+        int(payload)
+    except ValueError:
+        return payload
+    return None

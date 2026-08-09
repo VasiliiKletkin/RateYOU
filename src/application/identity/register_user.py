@@ -1,10 +1,12 @@
+from contextlib import suppress
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
 from src.application.identity.dto import RegisterUserRequest, UserResponse
-from src.domain.identity.entities import User, normalize_username
-from src.domain.identity.repositories import IUserRepository
-from src.domain.identity.value_objects import Language, TelegramId
+from src.domain.identity.entities import Acquisition, User, normalize_username
+from src.domain.identity.exceptions import InvalidAcquisitionSource
+from src.domain.identity.repositories import IAcquisitionRepository, IUserRepository
+from src.domain.identity.value_objects import AcquisitionSource, Language, TelegramId
 from src.domain.referral.entities import Referral
 from src.domain.referral.repositories import IReferralRepository
 from src.domain.shared.uow import UnitOfWork
@@ -38,11 +40,15 @@ class RegisterUserUseCase:
     New users also receive a ``WELCOME_BONUS_DAYS`` premium grant. It rides
     the new-user branch only, so the idempotent early return above doubles as
     the guard against handing out a second month on every later /start.
+
+    The acquisition source rides that same branch, which is what makes it
+    mean "where they came from" rather than "where they last came from".
     """
 
     user_repo: IUserRepository
     referral_repo: IReferralRepository
     subscription_repo: ISubscriptionRepository
+    acquisition_repo: IAcquisitionRepository
     uow: UnitOfWork
 
     async def execute(self, request: RegisterUserRequest) -> UserResponse:
@@ -109,6 +115,17 @@ class RegisterUserUseCase:
                 )
             )
 
+        # A referral IS the attribution (the Referral above lands in the
+        # same acquisition tables with the referrer as a person-source), so
+        # a campaign tag is only recorded for non-referred arrivals.
+        source = self._resolve_acquisition_source(
+            request.acquisition_source, has_referrer=referrer is not None
+        )
+        if source is not None:
+            await self.acquisition_repo.add(
+                Acquisition.record(user_id=user.id, source=source, now=now)
+            )
+
         await self.uow.commit()
         return UserResponse(
             id=user.id.value,
@@ -118,6 +135,22 @@ class RegisterUserUseCase:
             language=user.language,
             notifications_enabled=user.notifications_enabled,
         )
+
+    @staticmethod
+    def _resolve_acquisition_source(
+        raw: str | None, *, has_referrer: bool
+    ) -> AcquisitionSource | None:
+        """A referred arrival records no campaign tag — the referral owns
+        the (single, PK-enforced) acquisition row for this user.
+
+        A malformed tag is dropped rather than raised: attribution is
+        best-effort telemetry and must never cost someone their account.
+        """
+        if has_referrer or raw is None:
+            return None
+        with suppress(InvalidAcquisitionSource):
+            return AcquisitionSource(raw)
+        return None
 
     async def _resolve_referrer(
         self,

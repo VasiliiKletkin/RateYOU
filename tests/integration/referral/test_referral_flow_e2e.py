@@ -23,6 +23,7 @@ from src.domain.referral.services import (
 )
 from src.domain.shared.identifiers import UserId
 from src.domain.subscription.value_objects import SubscriptionSource
+from src.infrastructure.db.repositories.acquisition import AcquisitionRepository
 from src.infrastructure.db.repositories.profile import ProfileRepository
 from src.infrastructure.db.repositories.referral import ReferralRepository
 from src.infrastructure.db.repositories.subscription import SubscriptionRepository
@@ -42,6 +43,7 @@ def _register_uc(session: AsyncSession) -> RegisterUserUseCase:
         user_repo=UserRepository(session=session),
         referral_repo=ReferralRepository(session=session),
         subscription_repo=SubscriptionRepository(session=session),
+        acquisition_repo=AcquisitionRepository(session=session),
         uow=SqlAlchemyUnitOfWork(session=session),
     )
 

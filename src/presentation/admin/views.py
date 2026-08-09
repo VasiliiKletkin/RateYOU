@@ -21,6 +21,44 @@ class UserAdmin(ModelView):
     sortable_fields = ["created_at", "telegram_id", "role"]
 
 
+class AcquisitionSourceAdmin(ModelView):
+    label = "Sources"
+    icon = "fa fa-bullhorn"
+    # Source dictionary: campaign tags AND referrers, unified. A row with
+    # `referrer` set is a person (code = their telegram_id, auto-created
+    # when their first invitee arrives); a row without is a campaign tag
+    # (auto-created on first arrival, or pre-created here before a campaign
+    # starts). Tag codes must be lowercase latin, digits, `_` or `-` — the
+    # bot lowercases arrivals, so an uppercase entry would just gain a
+    # lowercase twin.
+    fields = [
+        "id",
+        "code",
+        "referrer",
+        "created_at",
+    ]
+    searchable_fields = ["code"]
+    sortable_fields = ["created_at", "code"]
+
+
+class AcquisitionAdmin(ModelView):
+    label = "Acquisition"
+    icon = "fa fa-user-tag"
+    # One row per user: which source brought them in (`source` renders as a
+    # link to the dictionary row). Written once at registration; the only
+    # column that ever changes is `rewarded_at` — the referral-reward
+    # lifecycle (NULL = pending, set = paid; always NULL for campaign
+    # sources). The funnel itself is read with SQL (`make funnel`).
+    fields = [
+        "user_id",
+        "source",
+        "created_at",
+        "rewarded_at",
+    ]
+    sortable_fields = ["created_at", "rewarded_at"]
+    fields_default_sort = [("created_at", True)]  # DESC
+
+
 class ProfileAdmin(ModelView):
     label = "Profiles"
     icon = "fa fa-id-card"
@@ -148,17 +186,3 @@ class TransactionAdmin(ModelView):
     sortable_fields = ["created_at", "amount"]
 
 
-class ReferralAdmin(ModelView):
-    label = "Referrals"
-    icon = "fa fa-user-plus"
-    # One row per referrer→referee invite. `rewarded_at` distinguishes
-    # pending (NULL) from paid-out (set).
-    fields = [
-        "id",
-        "referrer",
-        "referee",
-        "created_at",
-        "rewarded_at",
-    ]
-    sortable_fields = ["created_at", "rewarded_at"]
-    fields_default_sort = [("created_at", True)]  # DESC

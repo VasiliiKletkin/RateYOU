@@ -12,3 +12,7 @@ class UserIsBanned(IdentityError):
 
 class InvalidBanReason(IdentityError):
     pass
+
+
+class InvalidAcquisitionSource(IdentityError):
+    """Source tag doesn't fit Telegram's deep-link payload rules."""
