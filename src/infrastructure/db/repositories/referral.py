@@ -35,9 +35,7 @@ class ReferralRepository:
     async def add(self, referral: Referral) -> None:
         referrer = await self.session.get(UserORM, referral.referrer_id.value)
         if referrer is None:
-            raise ValueError(
-                f"User {referral.referrer_id.value} not found to create referral"
-            )
+            raise ValueError(f"User {referral.referrer_id.value} not found to create referral")
         source_id = await get_or_create_source_id(
             self.session,
             code=str(referrer.telegram_id),
@@ -67,9 +65,7 @@ class ReferralRepository:
         )
 
     async def update(self, referral: Referral) -> None:
-        row = (
-            await self.session.execute(self._referral_stmt(referral.referee_id))
-        ).one_or_none()
+        row = (await self.session.execute(self._referral_stmt(referral.referee_id))).one_or_none()
         if row is None:
             raise ValueError(f"Referral {referral.id.value} not found for update")
         link, _ = row
@@ -98,9 +94,7 @@ class ReferralRepository:
             )
         )
 
-    async def _count_for_referrer(
-        self, referrer_id: UserId, *, rewarded_only: bool
-    ) -> int:
+    async def _count_for_referrer(self, referrer_id: UserId, *, rewarded_only: bool) -> int:
         stmt = (
             select(func.count(AcquisitionORM.user_id))
             .join(

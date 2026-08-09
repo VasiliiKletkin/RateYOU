@@ -78,6 +78,4 @@ class AcquisitionORM(Base, CreatedAtMixin):
         index=True,
     )
     source: Mapped[AcquisitionSourceORM] = relationship(AcquisitionSourceORM)
-    rewarded_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), default=None
-    )
+    rewarded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)

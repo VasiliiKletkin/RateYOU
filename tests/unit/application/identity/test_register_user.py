@@ -335,9 +335,7 @@ async def test_unknown_referrer_records_no_source() -> None:
     acq = FakeAcquisitionRepo()
     use_case, _, _, _ = _make_use_case(acquisitions=acq)
 
-    await use_case.execute(
-        RegisterUserRequest(telegram_id=12345, referrer_telegram_id=999999999)
-    )
+    await use_case.execute(RegisterUserRequest(telegram_id=12345, referrer_telegram_id=999999999))
 
     assert acq.rows == []
 

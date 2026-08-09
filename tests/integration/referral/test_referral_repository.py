@@ -30,7 +30,13 @@ async def test_add_pending_then_get_by_referee(
 
     fetched = await repo.get_by_referee(referee.id)
     assert fetched is not None
-    assert fetched.id == pending.id
+    # `Referral.id` is deliberately not persisted: the unified storage keys
+    # a referral by its referee (acquisitions PK), so the repo derives the
+    # id from the referee's UUID — stable across reads, but not the value
+    # `create_pending` generated.
+    assert fetched.id.value == referee.id.value
+    assert fetched.referrer_id == referrer.id
+    assert fetched.referee_id == referee.id
     assert fetched.rewarded_at is None
     assert fetched.is_rewarded is False
 

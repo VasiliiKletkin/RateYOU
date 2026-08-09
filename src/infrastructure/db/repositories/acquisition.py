@@ -51,9 +51,7 @@ class AcquisitionRepository:
     session: AsyncSession
 
     async def add(self, acquisition: Acquisition) -> None:
-        source_id = await get_or_create_source_id(
-            self.session, code=acquisition.source.value
-        )
+        source_id = await get_or_create_source_id(self.session, code=acquisition.source.value)
         self.session.add(
             AcquisitionORM(
                 user_id=acquisition.user_id.value,

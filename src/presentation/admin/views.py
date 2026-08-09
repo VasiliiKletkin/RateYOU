@@ -184,5 +184,3 @@ class TransactionAdmin(ModelView):
     ]
     searchable_fields = ["status", "purpose"]
     sortable_fields = ["created_at", "amount"]
-
-
